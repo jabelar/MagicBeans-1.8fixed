@@ -1,0 +1,69 @@
+{
+  "mob.giant.living": 
+ {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/giant/fi_fi_fo_fum1",
+      "mob/giant/fi_fi_fo_fum2",
+      "mob/giant/fi_fi_fo_fum3",
+      "mob/giant/fi_fi_fo_fum4",
+      "mob/giant/groan1",
+      "mob/giant/groan2"
+    ]
+  },
+  "mob.giant.death": 
+ {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/giant/groan3"
+    ]
+  },
+  "mob.giant.hurt": 
+ {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/giant/giant_attack3"
+    ]
+  },
+    "mob.giant.attack": 
+ {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/giant/giant_attack1",
+      "mob/giant/giant_attack2"
+    ]
+  },
+  
+ "mob.goose.honk": 
+ {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/goose/goose_honk_once_1",
+      "mob/goose/goose_honk_once_2",
+      "mob/goose/goose_honk_once_3"
+    ]
+  },
+ "mob.goose.eat": 
+ {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/goose/eat1",
+      "mob/goose/eat2",
+      "mob/goose/eat3"
+    ]
+  },
+  "mob.goose.death": 
+  {
+    "category": "neutral",
+    "sounds": 
+    [
+      "mob/goose/goose_honk_twice"
+    ]
+  }
+}

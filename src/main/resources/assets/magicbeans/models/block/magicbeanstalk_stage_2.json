@@ -1,0 +1,6 @@
+{
+    "parent": "block/cross",
+    "textures": {
+        "cross": "magicbeans:blocks/magicbeanstalk_stage_2"
+    }
+}
