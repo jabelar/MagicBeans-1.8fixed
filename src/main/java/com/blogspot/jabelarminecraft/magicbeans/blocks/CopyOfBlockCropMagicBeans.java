@@ -32,34 +32,41 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 // import net.minecraft.util.IIcon;
 
-public class BlockCropMagicBeans extends BlockBush implements IGrowable
+public class CopyOfBlockCropMagicBeans extends BlockBush implements IGrowable
 {
 
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
 
     protected boolean isFullyGrown = false;
 
-    public BlockCropMagicBeans()
+    public CopyOfBlockCropMagicBeans()
     {
-    	this(Material.wood); // chop like wood and block movement
-    }
-    
-    public BlockCropMagicBeans(Material parMaterial)
-    {
-    	super(parMaterial);
+    	super();
         // Basic block setup
-        setDefaultState(blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
         setTickRandomly(true);
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         setCreativeTab((CreativeTabs)null);
         setHardness(0.0F);
         setStepSound(soundTypeGrass);
         disableStats();
+        setDefaultState(blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
     }
+
+    public CopyOfBlockCropMagicBeans(Material parMaterial) 
+    {
+		super(parMaterial);
+        // Basic block setup
+        setTickRandomly(true);
+        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
+        setCreativeTab((CreativeTabs)null);
+        setHardness(0.0F);
+        setStepSound(soundTypeGrass);
+        disableStats();
+        setDefaultState(blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
+	}
 
 	/**
      * is the block grass, dirt or farmland
@@ -69,50 +76,7 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable
     {
         return parBlockToTest == Blocks.farmland;
     }
-
-    @Override
-	public void updateTick(World parWorld, BlockPos parPos, IBlockState parState, Random parRand)
-    {
-    	// DEBUG
-    	System.out.println("BlockCropMagicBeans updateTick()");
-    	
-        super.updateTick(parWorld, parPos, parState, parRand); // this just checks canBlockStay and deletes block if it can't
-
-        if (parWorld.getLightFromNeighbors(parPos.offsetUp()) >= 9)
-        {
-            int i = ((Integer)parState.getValue(AGE)).intValue();
-            // DEBUG
-            System.out.println("Current grow stage = "+i);
-
-            if (i < 7)
-            {
-            	// DEBUG
-            	System.out.println("Increasing grow stage");
-            	
-                parWorld.setBlockState(parPos, parState.withProperty(AGE, Integer.valueOf(i + 1)), 2);
-            }
-        }
-    }
     
-    public void growCrops(World worldIn, BlockPos p_176487_2_, IBlockState p_176487_3_)
-    {
-        int i = ((Integer)p_176487_3_.getValue(AGE)).intValue() + MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
-
-        if (i > 7)
-        {
-            i = 7;
-        }
-
-        worldIn.setBlockState(p_176487_2_, p_176487_3_.withProperty(AGE, Integer.valueOf(i)), 2);
-    }
-    
-    @Override
-	public boolean canBlockStay(World worldIn, BlockPos p_180671_2_, IBlockState p_180671_3_)
-    {
-        return (worldIn.getLight(p_180671_2_) >= 8 || worldIn.canSeeSky(p_180671_2_)) && worldIn.getBlockState(p_180671_2_.offsetDown()).getBlock().canSustainPlant(worldIn, p_180671_2_.offsetDown(), net.minecraft.util.EnumFacing.UP, this);
-    }
-
-
     public boolean isFullyGrown()
     {
     	return isFullyGrown;
@@ -134,7 +98,7 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable
 		// DEBUG
 		System.out.println("BlockCropsMagicBeans isStillGrowing()");
 		
-        return ((Integer)parState.getValue(AGE)).intValue() < 7;
+        return true;
 	}
 
 	@Override
@@ -158,9 +122,7 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable
 	{
 		// DEBUG
 		System.out.println("BlockCropMagicBeans grow()");
-
-        growCrops(parWorld, parPos, parState);
-
+		
 //    	if (!isFullyGrown)
 //    	{
 //			int i = ((Integer)parState.getValue(AGE)).intValue() + 1;

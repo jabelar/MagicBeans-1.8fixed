@@ -76,7 +76,7 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
             // check that the soil is a type that can sustain the plant
             // and check that there is air above to give plant room to grow
             if (parWorld.getBlockState(parPos).getBlock() == Blocks.farmland 
-            		&& parWorld.isAirBlock(parPos))
+            		&& parWorld.isAirBlock(parPos.offset(parSide)))
             {
             	// DEBUG
             	System.out.println("Block can sustain plant so planting");

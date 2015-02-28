@@ -22,11 +22,14 @@ package com.blogspot.jabelarminecraft.magicbeans.blocks;
 import java.util.Random;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 // import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
@@ -36,13 +39,14 @@ import net.minecraft.world.World;
 import net.minecraftforge.common.IPlantable;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.tileentities.TileEntityMagicBeanStalk;
 
-public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITileEntityProvider
+public class CopyOfBlockMagicBeanStalk extends BlockCropMagicBeans implements ITileEntityProvider
 {
 
-    public BlockMagicBeanStalk()
+    public CopyOfBlockMagicBeanStalk()
     {
-    	super(); 
+    	super(Material.wood); // should chop like wood, block movement
     	// DEBUG
     	System.out.println("BlockMagicBeanStalk constructor()");
 
@@ -150,13 +154,13 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
     	super.updateTick(parWorld, parPos, parState, parRand);
     }
 
-//	@Override
-//	public TileEntity createNewTileEntity(World parWorld, int parMetadata) 
-//	{
-//		// DEBUG
-//		System.out.println("BlockMagicBeans createNewTileEntity()");
-//		return new TileEntityMagicBeanStalk();
-//	}
+	@Override
+	public TileEntity createNewTileEntity(World parWorld, int parMetadata) 
+	{
+		// DEBUG
+		System.out.println("BlockMagicBeans createNewTileEntity()");
+		return new TileEntityMagicBeanStalk();
+	}
 
 	@Override
 	public boolean isLadder(IBlockAccess parWord, BlockPos parPos, EntityLivingBase parEntity)
