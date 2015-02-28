@@ -22,6 +22,7 @@ package com.blogspot.jabelarminecraft.magicbeans.items;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.BlockPos;
@@ -74,9 +75,8 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
         	
             // check that the soil is a type that can sustain the plant
             // and check that there is air above to give plant room to grow
-            if (true) // (parWorld.getBlockState(parPos).getBlock().canSustainPlant(parWorld, 
-                  // parPos, EnumFacing.UP, this) && parWorld
-                  // .isAirBlock(parPos))
+            if (parWorld.getBlockState(parPos).getBlock() == Blocks.farmland 
+            		&& parWorld.isAirBlock(parPos))
             {
             	// DEBUG
             	System.out.println("Block can sustain plant so planting");
@@ -86,7 +86,7 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
             	{
             		System.out.println("The plant block is null!");
             	}
-                parWorld.setBlockState(parPos, theBlockPlant);
+                parWorld.setBlockState(parPos.offset(parSide), theBlockPlant);
                 // decrement the seed item stack                
                 --parItemStack.stackSize;
                 return true;

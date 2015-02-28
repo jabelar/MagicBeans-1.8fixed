@@ -38,8 +38,6 @@ import net.minecraft.world.World;
 
 public class BlockCropMagicBeans extends BlockBush implements IGrowable
 {
-//    @SideOnly(Side.CLIENT)
-//    protected IIcon[] iconArray;
 
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
 

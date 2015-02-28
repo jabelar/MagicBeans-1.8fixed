@@ -70,34 +70,7 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans implements ITileEnt
     {
         return 0; // will make this a configurable quantity
     }
-    
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerBlockIcons(IIconRegister iconReg)
-//    {
-//    	// DEBUG
-//    	System.out.println("Registering icons for Magic Bean Stalk");
-//	    iconArray = new IIcon[8];
-//	    // seems that crops like to have 8 growth icons, but okay to 
-//	    // repeat actual texture if you want
-//	    iconArray[0] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_0");
-//	    iconArray[1] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_0");
-//	    iconArray[2] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_1");
-//	    iconArray[3] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_1");
-//	    iconArray[4] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_2");
-//	    iconArray[5] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_2");
-//	    iconArray[6] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_3");
-//	    iconArray[7] = iconReg.registerIcon("magicbeans:magicbeanstalk_stage_3");
-//    }
-//    
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//	public IIcon getIcon(int parSide, int parMetadata)
-//    {
-//    	blockIcon = iconArray[parMetadata];
-//		return blockIcon;
-//    }
-    
+     
     @Override
 	public boolean canPlaceBlockAt(World parWorld, BlockPos parPos) 
     {
