@@ -24,6 +24,7 @@ import java.util.Random;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.IGrowable;
+import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
@@ -31,12 +32,15 @@ import net.minecraft.block.state.BlockState;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 // import net.minecraft.util.IIcon;
 
-public class BlockCropMagicBeans extends BlockBush implements IGrowable
+import com.blogspot.jabelarminecraft.magicbeans.tileentities.TileEntityMagicBeanStalk;
+
+public class BlockCropMagicBeans extends BlockBush implements IGrowable, ITileEntityProvider
 {
 
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
@@ -78,20 +82,13 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable
     	
         super.updateTick(parWorld, parPos, parState, parRand); // this just checks canBlockStay and deletes block if it can't
 
-        if (parWorld.getLightFromNeighbors(parPos.offsetUp()) >= 9)
-        {
-            int i = ((Integer)parState.getValue(AGE)).intValue();
-            // DEBUG
-            System.out.println("Current grow stage = "+i);
-
-            if (i < 7)
-            {
-            	// DEBUG
-            	System.out.println("Increasing grow stage");
-            	
-                parWorld.setBlockState(parPos, parState.withProperty(AGE, Integer.valueOf(i + 1)), 2);
-            }
-        }
+//        TileEntityMagicBeanStalk theTileEntity = (TileEntityMagicBeanStalk) parWorld.getTileEntity(parPos);
+//        int growStage = theTileEntity.getGrowStage();
+//
+//        // DEBUG
+//        System.out.println("Setting grow stage = "+growStage);	
+//        
+//        parWorld.setBlockState(parPos, parState.withProperty(AGE, Integer.valueOf(growStage)), 2);
     }
     
     public void growCrops(World worldIn, BlockPos p_176487_2_, IBlockState p_176487_3_)
@@ -206,4 +203,13 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable
     {
         return new BlockState(this, new IProperty[] {AGE});
     }
+    
+	@Override
+	public TileEntity createNewTileEntity(World parWorld, int parMetadata) 
+	{
+		// DEBUG
+		System.out.println("BlockMagicBeans createNewTileEntity()");
+		return new TileEntityMagicBeanStalk();
+	}
+
 }
