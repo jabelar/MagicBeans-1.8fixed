@@ -28,6 +28,7 @@ import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.tileentity.TileEntityFurnace;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.WeightedRandomChestContent;
 import net.minecraftforge.common.ChestGenHooks;
@@ -60,16 +61,17 @@ public class StructureCastleTalia extends Structure
 	public void customizeTileEntity(Block theBlock, int theMetadata, int parX,
 			int parY, int parZ) 
 	{
+		BlockPos thePos = new BlockPos(parX, parY, parZ);
 		if (theBlock == Blocks.chest)
 		{
-			TileEntityChest theTileEntity = (TileEntityChest) theWorld.getTileEntity(parX, parY, parZ);
+			TileEntityChest theTileEntity = (TileEntityChest) theWorld.getTileEntity(thePos);
 			// populate regular dungeon chest items
-            WeightedRandomChestContent.generateChestContents(theTileEntity.getWorldObj().rand, ChestGenHooks.getItems(DUNGEON_CHEST, theTileEntity.getWorldObj().rand), theTileEntity, ChestGenHooks.getCount(DUNGEON_CHEST, theTileEntity.getWorldObj().rand));
+            WeightedRandomChestContent.generateChestContents(theTileEntity.getWorld().rand, ChestGenHooks.getItems(DUNGEON_CHEST, theTileEntity.getWorld().rand), theTileEntity, ChestGenHooks.getCount(DUNGEON_CHEST, theTileEntity.getWorld().rand));
 
 		}
 		if (theBlock == Blocks.furnace)
 		{
-			TileEntityFurnace theTileEntity = (TileEntityFurnace) theWorld.getTileEntity(parX, parY, parZ);
+			TileEntityFurnace theTileEntity = (TileEntityFurnace) theWorld.getTileEntity(thePos);
 			int chanceOfMeatType = theWorld.rand.nextInt(10);
 			if (chanceOfMeatType <= 3) // randomize meat
 			{
@@ -89,7 +91,7 @@ public class StructureCastleTalia extends Structure
 		}
 		if (theBlock == Blocks.dispenser)
 		{
-			TileEntityDispenser theTileEntity = (TileEntityDispenser) theWorld.getTileEntity(parX, parY, parZ);
+			TileEntityDispenser theTileEntity = (TileEntityDispenser) theWorld.getTileEntity(thePos);
 			int inventorySize = theTileEntity.getSizeInventory();
 			for (int i=0; i < inventorySize; i++)
 			{
@@ -98,8 +100,7 @@ public class StructureCastleTalia extends Structure
 		}
 		if (theBlock == Blocks.brewing_stand)
 		{
-			TileEntityBrewingStand theTileEntity = (TileEntityBrewingStand) theWorld.getTileEntity(parX, parY, parZ);
-			
+			TileEntityBrewingStand theTileEntity = (TileEntityBrewingStand) theWorld.getTileEntity(thePos);			
 			// got potion damage values from http://minecraft.gamepedia.com/Potion#Data_value_table
 			int chanceOfPotionType = theWorld.rand.nextInt(10);
 			if (chanceOfPotionType <= 3) // randomize potion

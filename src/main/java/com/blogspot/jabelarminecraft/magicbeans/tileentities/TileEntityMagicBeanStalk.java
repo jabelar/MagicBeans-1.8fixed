@@ -68,7 +68,7 @@ public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlaye
 		BlockCropMagicBeans theCrop = (BlockCropMagicBeans)worldObj.getBlockState(pos).getBlock();
 		theCrop.grow(worldObj, pos, growStage);
 		
-		if (ticksExisted >= MagicBeans.configTicksPerGrowStage * 9) 
+		if (ticksExisted >= MagicBeans.configTicksPerGrowStage * 8) 
 		{
 			// check if still need to grow to get to max height (default cloud level)
 			if (this.getPos().getY() < MagicBeans.configMaxStalkHeight)

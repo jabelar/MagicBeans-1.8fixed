@@ -23,7 +23,6 @@ import java.util.Random;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBush;
-import net.minecraft.block.IGrowable;
 import net.minecraft.block.ITileEntityProvider;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
@@ -34,13 +33,12 @@ import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 // import net.minecraft.util.IIcon;
 
 import com.blogspot.jabelarminecraft.magicbeans.tileentities.TileEntityMagicBeanStalk;
 
-public class BlockCropMagicBeans extends BlockBush implements IGrowable, ITileEntityProvider
+public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvider
 {
 
     public static final PropertyInteger AGE = PropertyInteger.create("age", 0, 7);
@@ -57,7 +55,7 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable, ITileEn
     	super(parMaterial);
         // Basic block setup
         setDefaultState(blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
-        setTickRandomly(true);
+        setTickRandomly(false);
         setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         setCreativeTab((CreativeTabs)null);
         setHardness(0.0F);
@@ -77,30 +75,10 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable, ITileEn
     @Override
 	public void updateTick(World parWorld, BlockPos parPos, IBlockState parState, Random parRand)
     {
-    	// DEBUG
-    	System.out.println("BlockCropMagicBeans updateTick()");
+//    	// DEBUG
+//    	System.out.println("BlockCropMagicBeans updateTick()");
     	
         super.updateTick(parWorld, parPos, parState, parRand); // this just checks canBlockStay and deletes block if it can't
-
-//        TileEntityMagicBeanStalk theTileEntity = (TileEntityMagicBeanStalk) parWorld.getTileEntity(parPos);
-//        int growStage = theTileEntity.getGrowStage();
-//
-//        // DEBUG
-//        System.out.println("Setting grow stage = "+growStage);	
-//        
-//        parWorld.setBlockState(parPos, parState.withProperty(AGE, Integer.valueOf(growStage)), 2);
-    }
-    
-    public void growCrops(World worldIn, BlockPos p_176487_2_, IBlockState p_176487_3_)
-    {
-        int i = ((Integer)p_176487_3_.getValue(AGE)).intValue() + MathHelper.getRandomIntegerInRange(worldIn.rand, 2, 5);
-
-        if (i > 7)
-        {
-            i = 7;
-        }
-
-        worldIn.setBlockState(p_176487_2_, p_176487_3_.withProperty(AGE, Integer.valueOf(i)), 2);
     }
     
     @Override
@@ -124,60 +102,12 @@ public class BlockCropMagicBeans extends BlockBush implements IGrowable, ITileEn
         return 3; // This has changed in 1.8.  1 seems to be liquids, 2 seems to be chest, 3 normal block
     }
 
-	@Override
-	public boolean isStillGrowing(World parWorld, BlockPos parPos,
-			IBlockState parState, boolean parWorldIsRemote) 
-	{
-		// DEBUG
-		System.out.println("BlockCropsMagicBeans isStillGrowing()");
-		
-        return ((Integer)parState.getValue(AGE)).intValue() < 7;
-	}
-
-	@Override
-	public boolean canUseBonemeal(World parWorld, Random parRand,
-			BlockPos parPos, IBlockState parState) 
-	{
-		return true;
-	}
-
 	public void grow(World parWorld, BlockPos parPos, int parGrowStage)
 	{
-		// DEBUG
-		System.out.println("BlockCropMagicBeans custom grow()");
+//		// DEBUG
+//		System.out.println("BlockCropMagicBeans custom grow()");
 		
 		parWorld.setBlockState(parPos, parWorld.getBlockState(parPos).withProperty(AGE, Integer.valueOf(parGrowStage)));
-	}
-	
-	@Override
-	public void grow(World parWorld, Random parRand, BlockPos parPos,
-			IBlockState parState) 
-	{
-		// DEBUG
-		System.out.println("BlockCropMagicBeans grow()");
-
-        growCrops(parWorld, parPos, parState);
-
-//    	if (!isFullyGrown)
-//    	{
-//			int i = ((Integer)parState.getValue(AGE)).intValue() + 1;
-//			
-//			if (i > 7)
-//			{
-//			    i = 7;
-//			}
-//			
-//			parWorld.setBlockState(parPos, parState.withProperty(AGE, Integer.valueOf(i)));
-//       	}
-//    	else // fully grown so create the stalk above
-//    	{
-//    		// check if air above
-//    	    if(parWorld.isAirBlock(parPos.add(0, 1, 0)))
-//    	    {
-//    	        parWorld.setBlockState(parPos.add(0, 1, 0), parState.withProperty(AGE, Integer.valueOf(0)), 2);
-//    	    }
-//    		
-//    	}
 	}
 	
 	 /**

@@ -27,6 +27,7 @@ import java.io.InputStreamReader;
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
@@ -48,6 +49,7 @@ public class Structure implements IStructure
 	protected int startX;
 	protected int startY;
 	protected int startZ;
+	protected BlockPos startPos;
 	
 	protected int cloudMarginX = 15;
 	protected int cloudMarginZ = 15;
@@ -165,7 +167,7 @@ public class Structure implements IStructure
 		}
 		
 		theTileEntity = parEntity;
-		theWorld = theTileEntity.getWorldObj();
+		theWorld = theTileEntity.getWorld();
 
 		if (theWorld.isRemote)
 		{
@@ -180,9 +182,9 @@ public class Structure implements IStructure
 			return;
 		}
 
-		startX = theTileEntity.xCoord+parOffsetX;
-		startY = theTileEntity.yCoord+parOffsetY;
-		startZ = theTileEntity.zCoord+parOffsetZ;
+		startX = theTileEntity.getPos().getX()+parOffsetX;
+		startY = theTileEntity.getPos().getY()+parOffsetY;
+		startZ = theTileEntity.getPos().getZ()+parOffsetZ;
 		
 		totalVolume = dimX * dimY * dimZ;
 		
@@ -236,15 +238,14 @@ public class Structure implements IStructure
 					String blockName = blockNameArray[indX][indY][indZ];
 					if (!(blockName.equals("minecraft:tripwire"))) // tripwire/string needs to be placed after other blocks
 					{
+						BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
 						if (!(blockName.equals("minecraft:dirt")) && !(blockName.equals("minecraft:grass")))
 						{
-							theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-									Block.getBlockFromName(blockName), 0, 2);
+							theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
 						}
 						else
 						{
-							theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-									MagicBeans.blockCloud, 0, 2);
+							theWorld.setBlockState(thePos, MagicBeans.blockCloud.getDefaultState());
 						}
 					}
 				}
@@ -276,10 +277,10 @@ public class Structure implements IStructure
 				if (!(blockMetaArray[indX][indY][indZ]==0))
 				{
 					Block theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
+					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
 					int theMetadata = blockMetaArray[indX][indY][indZ];
-					theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-							theBlock, theMetadata, 2);
-					if (theBlock.hasTileEntity(theMetadata))
+					theWorld.setBlockState(thePos, theBlock.getStateFromMeta(theMetadata));
+					if (theBlock.hasTileEntity())
 					{
 						customizeTileEntity(theBlock, theMetadata, startX+indX, startY+indY, startZ+indZ);
 					}
@@ -323,8 +324,9 @@ public class Structure implements IStructure
 				String blockName = blockNameArray[indX][indY][indZ];
 				if (blockName.equals("minecraft:tripwire"))
 				{
-					theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-							Block.getBlockFromName(blockName), 0, 2);
+					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
+
+					theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
 				}	    	
 			}
 		}
@@ -351,9 +353,11 @@ public class Structure implements IStructure
 			// DEBUG
 			// System.out.println("Generating cloud blocks at "+parX+", "+parY+", "+indZ);
 			// let the beanstalk go through the clouds
-			if (!((Math.abs(posX-theTileEntity.xCoord)<2)&&(Math.abs(indZ-theTileEntity.zCoord)<2)))
+			if (!((Math.abs(posX-theTileEntity.getPos().getX())<2)&&(Math.abs(indZ-theTileEntity.getPos().getZ())<2)))
 			{
-				theWorld.setBlock(posX, startY+1, indZ, MagicBeans.blockCloud, 0, 2);
+				BlockPos thePos = new BlockPos(posX, startY+1, indZ);
+
+				theWorld.setBlockState(thePos, MagicBeans.blockCloud.getDefaultState());
 			}
 		}
 		ticksGenerating += dimZ+2*cloudMarginZ;
@@ -393,8 +397,10 @@ public class Structure implements IStructure
 		{
 			for (int indZ = parZ-parCloudSize/2; indZ < parZ+parCloudSize/2; indZ++)
 			{
-				parWorld.setBlockToAir(indX, parY-1, indZ);
-				parWorld.setBlock(indX, parY-1, indZ, MagicBeans.blockCloud, 0, 2);
+				BlockPos thePos = new BlockPos(indX, parY-1, indZ);
+				
+				// parWorld.setBlockToAir(thePos);
+				parWorld.setBlockState(thePos, MagicBeans.blockCloud.getDefaultState());
 			}
 		}
 	}
@@ -423,8 +429,8 @@ public class Structure implements IStructure
 	    				String blockName = blockNameArray[indX][indY][indZ];
 	    				if (!(blockName.equals("minecraft:tripwire"))) // tripwire/string needs to be placed after other blocks
 	    				{
-							theWorld.setBlock(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ, 
-									Block.getBlockFromName(blockName), 0, 2);
+	    					BlockPos thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
+							theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
 	    				}
 	    			}	    			
 	    		}
@@ -439,8 +445,9 @@ public class Structure implements IStructure
 	    		{
 	    			if (!(blockMetaArray[indX][indY][indZ]==0))
 	    			{
-						theWorld.setBlock(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ, 
-								Block.getBlockFromName(blockNameArray[indX][indY][indZ]), blockMetaArray[indX][indY][indZ], 2);
+    					BlockPos thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
+						theWorld.setBlockState(thePos, Block.getBlockFromName(blockNameArray[indX][indY][indZ])
+								.getStateFromMeta(blockMetaArray[indX][indY][indZ]));
 	    			}	    			
 	    		}
 	    	}
@@ -455,8 +462,8 @@ public class Structure implements IStructure
     				String blockName = blockNameArray[indX][indY][indZ];
     				if (blockName.equals("minecraft:tripwire"))
     				{
-						theWorld.setBlock(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ, 
-								Block.getBlockFromName(blockName), 0, 2);
+    					BlockPos thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
+						theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
     				}	    			
 	    		}
 	    	}
@@ -472,7 +479,7 @@ public class Structure implements IStructure
 	public void generate(TileEntity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
 	{
 		TileEntity theEntity = parEntity;
-		theWorld = theEntity.getWorldObj();
+		theWorld = theEntity.getWorld();
 
 		// DEBUG
 		System.out.println("Generating castle in the clouds. IsRemote = "+theWorld.isRemote);
@@ -482,9 +489,9 @@ public class Structure implements IStructure
 			return;
 		}
 
-		startX = theEntity.xCoord+parOffsetX;
-		startY = theEntity.yCoord+parOffsetY;
-		startZ = theEntity.zCoord+parOffsetZ;
+		startX = theEntity.getPos().getX()+parOffsetX;
+		startY = theEntity.getPos().getY()+parOffsetY;
+		startZ = theEntity.getPos().getZ()+parOffsetZ;
 		
 		// generate the cloud
 		generateCloud(theWorld, startX, startY, startZ, 75);
@@ -500,8 +507,8 @@ public class Structure implements IStructure
 	    				String blockName = blockNameArray[indX][indY][indZ];
 	    				if (!(blockName.equals("minecraft:tripwire"))) // tripwire/string needs to be placed after other blocks
 	    				{
-							theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-									Block.getBlockFromName(blockName), 0, 2);
+	    					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
+							theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
 	    				}
 	    			}	    			
 	    		}
@@ -516,8 +523,9 @@ public class Structure implements IStructure
 	    		{
 	    			if (!(blockMetaArray[indX][indY][indZ]==0))
 	    			{
-						theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-								Block.getBlockFromName(blockNameArray[indX][indY][indZ]), blockMetaArray[indX][indY][indZ], 2);
+    					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
+						theWorld.setBlockState(thePos, Block.getBlockFromName(blockNameArray[indX][indY][indZ])
+								.getStateFromMeta(blockMetaArray[indX][indY][indZ]));
 	    			}	    			
 	    		}
 	    	}
@@ -532,8 +540,8 @@ public class Structure implements IStructure
     				String blockName = blockNameArray[indX][indY][indZ];
     				if (blockName.equals("minecraft:tripwire"))
     				{
-						theWorld.setBlock(startX+indX, startY+indY, startZ+indZ, 
-								Block.getBlockFromName(blockName), 0, 2);
+    					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
+						theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
     				}	    			
 	    		}
 	    	}
