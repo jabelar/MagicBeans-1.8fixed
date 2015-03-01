@@ -16,8 +16,8 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.structures;
 
-import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author jabelar
@@ -113,5 +113,5 @@ public interface IStructure
 	 * During block placement, if block has a tile entity, process it.
 	 * For example you can put things in inventory, etc.
 	 */
-	void customizeTileEntity(Block parBlock, int parMetadata, int parX, int parY, int parZ);
+	void customizeTileEntity(BlockPos parPos);
 }

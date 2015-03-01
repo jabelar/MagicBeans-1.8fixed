@@ -16,6 +16,8 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.items;
 
+import java.util.List;
+
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -51,7 +53,6 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
 {
     @SideOnly(Side.CLIENT)
-//    private IIcon theIcon;
     protected int colorBase = 0x000000;
     protected int colorSpots = 0xFFFFFF;
     protected String entityToSpawnName = "";
@@ -75,6 +76,14 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         // DEBUG
         System.out.println("Spawn egg constructor for "+entityToSpawnName);
     }
+    
+    @Override
+	@SideOnly(Side.CLIENT)
+    public void getSubItems(Item parItem, CreativeTabs parTab, List parListSubItems)
+    {
+    	parListSubItems.add(new ItemStack(this, 1));
+    }
+
     
     /**
      * Called when a Block is right-clicked with this Item
@@ -222,7 +231,6 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
                       MathHelper.wrapAngleTo180_float(parWorld.rand.nextFloat()
                       * 360.0F), 0.0F);
                 parWorld.spawnEntityInWorld(entityToSpawn);
-//                entityToSpawn.onSpawnWithEgg((IEntityLivingData)null);
                 entityToSpawn.playLivingSound();
             }
             else
@@ -235,31 +243,13 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         return entityToSpawn;
     }
 
-
-//    /**
-//     * returns a list of items with the same ID, but different meta (eg: dye returns 16 items)
-//     */
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void getSubItems(Item parItem, CreativeTabs parTab, List parList)
-//    {
-//        parList.add(new ItemStack(parItem, 1, 0));     
-//    }
-
     @Override
     @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int parColorType)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int parRenderPass)
     {
-        return (parColorType == 0) ? colorBase : colorSpots;
+        return (parRenderPass == 0) ? colorBase : colorSpots;
     }
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public boolean requiresMultipleRenderPasses()
-//    {
-//        return true;
-//    }
-    
+   
     @Override
     // Doing this override means that there is no localization for language
     // unless you specifically check for localization here and convert
@@ -267,26 +257,6 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
     {
         return MagicBeansUtilities.stringToRainbow("Spawn "+entityToSpawnName);
     }  
-
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerIcons(IIconRegister par1IconRegister)
-//    {
-//        super.registerIcons(par1IconRegister);
-//        theIcon = par1IconRegister.registerIcon(getIconString() + "_overlay");
-//    }
-//    
-//    /**
-//     * Gets an icon index based on an item's damage value and the given render pass
-//     */
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public IIcon getIconFromDamageForRenderPass(int parDamageVal, int parRenderPass)
-//    {
-//        return parRenderPass > 0 ? theIcon : super.getIconFromDamageForRenderPass(parDamageVal, 
-//              parRenderPass);
-//    }
     
     public void setColors(int parColorBase, int parColorSpots)
     {

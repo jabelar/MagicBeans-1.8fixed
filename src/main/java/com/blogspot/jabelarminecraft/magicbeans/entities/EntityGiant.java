@@ -266,11 +266,23 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
         entityAttackedBy = damageSource.getEntity();
 
         // DEBUG
-    	// System.out.println("EntityGiant attackEntityFrom()");
-        if (ForgeHooks.onLivingAttack(this, damageSource, damageAmount)) return false;
+    	System.out.println("EntityGiant attackEntityFrom()");
+    	
+        if (!ForgeHooks.onLivingAttack(this, damageSource, damageAmount)) // in 1.8 this hook returns opposite of 1.7.10
+        {
+        	// DEBUG
+        	System.out.println("LivingAttackEvent must have been canceled");
+        	return false;
+        }
 
+        // DEBUG
+        System.out.println("OnLivingAttack event was not canceled");
+        
         if (conditionsPreventDamage(damageSource))
         {
+            // DEBUG
+        	System.out.println("There are conditions preventing damage");
+        	
         	return false;
         }
 
@@ -299,7 +311,8 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
         if (entityAttackedBy != null)
         {
         	// DEBUG
-        	// System.out.println("Attacked by an entity");
+        	System.out.println("Attacked by an entity");
+        	
             if (entityAttackedBy instanceof EntityLivingBase)
             {
                 setRevengeTarget((EntityLivingBase)entityAttackedBy);
@@ -459,7 +472,7 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
         if (hurtResistantTime > maxHurtResistantTime / 2.0F)
         {
         	// DEBUG
-        	// System.out.println("Reduced damage done, damage amount ="+damageAmount+". health remaining ="+getHealth());
+        	System.out.println("Reduced damage done, damage amount ="+damageAmount+". health remaining ="+getHealth());
             if (damageAmount <= lastDamage)
             {
                 return false;
@@ -477,7 +490,7 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
             damageEntity(damageSource, damageAmount);
             hurtTime = maxHurtTime = 10;
         	// DEBUG
-        	// System.out.println("Normal damage done, damage amount ="+damageAmount+". health remaining ="+getHealth());
+        	System.out.println("Normal damage done, damage amount ="+damageAmount+". health remaining ="+getHealth());
         }
         
 		return wasDamageDoneOutsideResistancePeriod;
@@ -523,6 +536,9 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
     @Override
 	protected void damageEntity(DamageSource parDamageSource, float parDamageAmount)
     {
+    	// DEBUG
+    	System.out.println("EntityGiant damageEntity()");
+    	
         if (!func_180431_b(parDamageSource))
         {
             parDamageAmount = ForgeHooks.onLivingHurt(this, parDamageSource, parDamageAmount);
