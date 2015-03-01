@@ -35,17 +35,12 @@ import net.minecraftforge.common.IPlantable;
 public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
 {
     private final IBlockState theBlockPlant;
-    /**
-     * Block ID of the soil this seed food should be planted on.
-     */
-    private final Block soilId;
 
     public ItemSeedFoodMagicBeans(int parHealAmount, float parSaturationModifier, 
-          Block parBlockPlant, Block parSoilBlock)
+          Block parBlockPlant)
     {
         super(parHealAmount, parSaturationModifier, false);
         theBlockPlant = parBlockPlant.getDefaultState();
-        soilId = parSoilBlock;
     }
 
     @Override
@@ -119,15 +114,4 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
     {
         return theBlockPlant;
     }
-
-//    @Override
-//    public int getPlantMetadata(IBlockAccess world, BlockPos pos)
-//    {
-//        return 0;
-//    }
-
-    public Block getSoilId()
-    {
-        return soilId;
-     }
 }

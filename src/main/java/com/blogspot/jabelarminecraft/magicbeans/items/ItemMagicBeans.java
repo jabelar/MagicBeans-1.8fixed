@@ -20,7 +20,6 @@
 package com.blogspot.jabelarminecraft.magicbeans.items;
 
 import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.StatCollector;
 
@@ -33,7 +32,7 @@ public class ItemMagicBeans extends ItemSeedFoodMagicBeans
 
 	public ItemMagicBeans() 
     {
-        super(1, 0.3F, MagicBeans.blockMagicBeanStalk, Blocks.farmland);
+        super(1, 0.3F, MagicBeans.blockMagicBeanStalk);
         setUnlocalizedName("magicbeans");
         setCreativeTab(CreativeTabs.tabMaterials);
     }

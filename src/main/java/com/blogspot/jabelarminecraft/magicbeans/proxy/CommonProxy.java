@@ -255,17 +255,18 @@ public class CommonProxy
         // DEBUG
         System.out.println("Registering items");
 
-        // spawn eggs are registered during entity registration
- 
         GameRegistry.registerItem(MagicBeans.itemGoldenEgg, MagicBeans.itemGoldenEgg.getUnlocalizedName().substring(5));
         GameRegistry.registerItem(MagicBeans.magicBeans, MagicBeans.magicBeans.getUnlocalizedName().substring(5));
+        GameRegistry.registerItem(MagicBeans.goldenGooseMeat, MagicBeans.goldenGooseMeat.getUnlocalizedName().substring(5));
+
         // GameRegistry.registerItem(MagicBeans.helmetOfSafeFalling, MagicBeans.helmetOfSafeFalling.getName());
         // GameRegistry.registerItem(MagicBeans.chestplateOfSafeFalling, MagicBeans.chestplateOfSafeFalling.getName());
         // GameRegistry.registerItem(MagicBeans.leggingsOfSafeFalling, MagicBeans.leggingsOfSafeFalling.getName());
         GameRegistry.registerItem(MagicBeans.bootsOfSafeFalling, MagicBeans.bootsOfSafeFalling.getUnlocalizedName().substring(5));
-        GameRegistry.registerItem(MagicBeans.goldenGooseMeat, MagicBeans.goldenGooseMeat.getUnlocalizedName().substring(5));
 
         GameRegistry.registerItem(MagicBeans.spawnFamilyCow, MagicBeans.spawnFamilyCow.getUnlocalizedName().substring(5));
+        GameRegistry.registerItem(MagicBeans.spawnGiant, MagicBeans.spawnGiant.getUnlocalizedName().substring(5));
+        GameRegistry.registerItem(MagicBeans.spawnMysteriousStranger, MagicBeans.spawnMysteriousStranger.getUnlocalizedName().substring(5));
 
         // example: GameRegistry.registerCustomItemStack(name, itemStack);
     }
@@ -325,9 +326,8 @@ public class CommonProxy
         registerModEntity(EntityGoldenGoose.class, "golden_goose");
         registerModEntityFastTracking(EntityGoldenEggThrown.class, "golden_egg");
         registerModEntity(EntityCowMagicBeans.class, "family_cow");
-//        registerModEntityWithEgg(EntityCowMagicBeans.class, "family_cow", 0x4EF56D, 0xFCFC03);
-        registerModEntityWithEgg(EntityMysteriousStranger.class, "mysterious_stranger", 0x8C6620, 0xA100B3);
-        registerModEntityWithEgg(EntityGiant.class, "giant", 0xDB9112, 0x0AC798);
+        registerModEntity(EntityMysteriousStranger.class, "mysterious_stranger");
+        registerModEntity(EntityGiant.class, "giant");
     }
  
     /**

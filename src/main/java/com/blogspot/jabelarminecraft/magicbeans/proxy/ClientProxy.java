@@ -165,7 +165,8 @@ public class ClientProxy extends CommonProxy
     	renderItem.getItemModelMesher().register(MagicBeans.goldenGooseMeat, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.goldenGooseMeat.getUnlocalizedName().substring(5), "inventory"));
     	renderItem.getItemModelMesher().register(MagicBeans.bootsOfSafeFalling, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.bootsOfSafeFalling.getUnlocalizedName().substring(5), "inventory"));
     	renderItem.getItemModelMesher().register(MagicBeans.spawnFamilyCow, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.spawnFamilyCow.getUnlocalizedName().substring(5), "inventory"));
-
+    	renderItem.getItemModelMesher().register(MagicBeans.spawnGiant, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.spawnGiant.getUnlocalizedName().substring(5), "inventory"));
+    	renderItem.getItemModelMesher().register(MagicBeans.spawnMysteriousStranger, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.spawnMysteriousStranger.getUnlocalizedName().substring(5), "inventory"));
 	}
 	
 	public void registerBlockRenderers()

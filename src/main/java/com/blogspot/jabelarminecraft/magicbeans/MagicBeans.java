@@ -117,7 +117,9 @@ public class MagicBeans
     public final static ItemGoldenGooseMeat goldenGooseMeat = new ItemGoldenGooseMeat(4, 1.2F, false);
     
     public final static MagicBeansMonsterPlacer spawnFamilyCow = new MagicBeansMonsterPlacer("family_cow", "spawn_egg_family_cow", 0x4EF56D, 0xFCFC03);
-    
+    public final static MagicBeansMonsterPlacer spawnGiant = new MagicBeansMonsterPlacer("giant", "spawn_egg_giant", 0xDB9112, 0x0AC798);
+    public final static MagicBeansMonsterPlacer spawnMysteriousStranger = new MagicBeansMonsterPlacer("mysterious_stranger", "spawn_egg_mysterious_stranger", 0x8C6620, 0xA100B3);
+   
     // instantiate structures
     // important to do this after blocks in case structure uses custom block
     public final static StructureCastleTalia structureCastleTalia = new StructureCastleTalia();
