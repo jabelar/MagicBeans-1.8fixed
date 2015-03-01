@@ -64,17 +64,18 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         super();
     }
     
-    public MagicBeansMonsterPlacer(String parEntityToSpawnName, int parPrimaryColor, 
+    public MagicBeansMonsterPlacer(String parEntityToSpawnName, String parEggName, int parPrimaryColor, 
           int parSecondaryColor)
     {
         setHasSubtypes(false);
         maxStackSize = 64;
         setCreativeTab(CreativeTabs.tabMisc);
+        setUnlocalizedName(parEggName);
         setEntityToSpawnName(parEntityToSpawnName);
         colorBase = parPrimaryColor;
         colorSpots = parSecondaryColor;
         // DEBUG
-        System.out.println("Spawn egg constructor for "+entityToSpawnName);
+        System.out.println("Spawn egg constructor for "+entityToSpawnName+"with unlocalized name "+getUnlocalizedName());
     }
     
     @Override

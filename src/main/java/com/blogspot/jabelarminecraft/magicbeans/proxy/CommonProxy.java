@@ -264,7 +264,9 @@ public class CommonProxy
         // GameRegistry.registerItem(MagicBeans.leggingsOfSafeFalling, MagicBeans.leggingsOfSafeFalling.getName());
         GameRegistry.registerItem(MagicBeans.bootsOfSafeFalling, MagicBeans.bootsOfSafeFalling.getUnlocalizedName().substring(5));
         GameRegistry.registerItem(MagicBeans.goldenGooseMeat, MagicBeans.goldenGooseMeat.getUnlocalizedName().substring(5));
-        
+
+        GameRegistry.registerItem(MagicBeans.spawnFamilyCow, MagicBeans.spawnFamilyCow.getUnlocalizedName().substring(5));
+
         // example: GameRegistry.registerCustomItemStack(name, itemStack);
     }
     
@@ -322,7 +324,8 @@ public class CommonProxy
 
         registerModEntity(EntityGoldenGoose.class, "golden_goose");
         registerModEntityFastTracking(EntityGoldenEggThrown.class, "golden_egg");
-        registerModEntityWithEgg(EntityCowMagicBeans.class, "family_cow", 0x4EF56D, 0xFCFC03);
+        registerModEntity(EntityCowMagicBeans.class, "family_cow");
+//        registerModEntityWithEgg(EntityCowMagicBeans.class, "family_cow", 0x4EF56D, 0xFCFC03);
         registerModEntityWithEgg(EntityMysteriousStranger.class, "mysterious_stranger", 0x8C6620, 0xA100B3);
         registerModEntityWithEgg(EntityGiant.class, "giant", 0xDB9112, 0x0AC798);
     }
@@ -358,8 +361,9 @@ public class CommonProxy
      // name passed must match entity name string
      public void registerSpawnEgg(String parSpawnName, int parEggColor, int parEggSpotsColor)
      {
-       Item itemSpawnEgg = new MagicBeansMonsterPlacer(parSpawnName, parEggColor, parEggSpotsColor).setUnlocalizedName("spawn_egg_"+parSpawnName.toLowerCase());
-       GameRegistry.registerItem(itemSpawnEgg, itemSpawnEgg.getUnlocalizedName().substring(5));
+    	 String eggName = "spawn_egg_"+parSpawnName.toLowerCase();
+    	 Item itemSpawnEgg = new MagicBeansMonsterPlacer(parSpawnName, eggName, parEggColor, parEggSpotsColor);
+    	 GameRegistry.registerItem(itemSpawnEgg, itemSpawnEgg.getUnlocalizedName().substring(5));
      }
 
      /**

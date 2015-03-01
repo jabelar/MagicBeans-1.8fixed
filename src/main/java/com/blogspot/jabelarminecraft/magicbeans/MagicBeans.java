@@ -51,6 +51,7 @@ import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockSimple;
 import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenEgg;
 import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenGooseMeat;
 import com.blogspot.jabelarminecraft.magicbeans.items.ItemMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.items.MagicBeansMonsterPlacer;
 import com.blogspot.jabelarminecraft.magicbeans.materials.MaterialCloud;
 import com.blogspot.jabelarminecraft.magicbeans.proxy.CommonProxy;
 import com.blogspot.jabelarminecraft.magicbeans.structures.StructureCastleTalia;
@@ -114,6 +115,8 @@ public class MagicBeans
     // public final static ItemArmor leggingsOfSafeFalling = new ItemArmorSafeFalling("leggings_safe_falling", SAFEFALLINGLEATHER, "safe_falling", 2);
     public final static ItemArmor bootsOfSafeFalling = new ItemArmorSafeFalling("boots_safe_falling", SAFEFALLINGLEATHER, 3);
     public final static ItemGoldenGooseMeat goldenGooseMeat = new ItemGoldenGooseMeat(4, 1.2F, false);
+    
+    public final static MagicBeansMonsterPlacer spawnFamilyCow = new MagicBeansMonsterPlacer("family_cow", "spawn_egg_family_cow", 0x4EF56D, 0xFCFC03);
     
     // instantiate structures
     // important to do this after blocks in case structure uses custom block
