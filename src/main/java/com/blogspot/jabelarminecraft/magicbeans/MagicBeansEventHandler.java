@@ -20,7 +20,6 @@
 package com.blogspot.jabelarminecraft.magicbeans;
 
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -541,12 +540,12 @@ public class MagicBeansEventHandler
 	        	    		// System.out.println("On server so converting to family cow");
 	        	    		
 	        	    		EntityPlayer thePlayer = event.entityPlayer;
-	        	    		
+        	    		
 	        	    		if (!((EntityCow) theEntity).isChild())
 	        	    		{
 			    	    		thePlayer.addChatMessage(new ChatComponentText(MagicBeansUtilities.stringToRainbow("This cow is now your Family Cow!")));
 				        
-			    	    		EntityLiving entityToSpawn = new EntityCowMagicBeans(world);
+			    	    		EntityCowMagicBeans entityToSpawn = new EntityCowMagicBeans(world);
 				        		entityToSpawn.setLocationAndAngles(theEntity.posX, theEntity.posY, theEntity.posZ, 
 				                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
 				                    * 360.0F), 0.0F);
