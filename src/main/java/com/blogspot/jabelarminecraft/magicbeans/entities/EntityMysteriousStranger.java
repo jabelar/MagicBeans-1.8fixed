@@ -39,13 +39,27 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 public class EntityMysteriousStranger extends EntityCreature implements IEntityMagicBeans, IEntityAdditionalSpawnData
 {
     private NBTTagCompound syncDataCompound = new NBTTagCompound();
+    private EntityCowMagicBeans cowSummonedBy = null;
+    private EntityPlayer thePlayer = null;
+
+	public EntityMysteriousStranger(World parWorld) 
+	{
+		super(parWorld);
+				
+		setupAI();
+		// DEBUG
+		System.out.println("EntityMysteriousStranger constructor for entity ID = "+getEntityId());
+	}
 
 	/**
 	 * @param parWorld
 	 */
-	public EntityMysteriousStranger(World parWorld) 
+	public EntityMysteriousStranger(World parWorld, EntityCowMagicBeans parCowSummonedBy, EntityPlayer parPlayer) 
 	{
 		super(parWorld);
+		
+		cowSummonedBy = parCowSummonedBy;
+		thePlayer = parPlayer;
 		
 		setupAI();
 		// DEBUG
@@ -193,8 +207,8 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 	{
 		// don't use setters because it might be too early to send sync packet
         syncDataCompound.setFloat("scaleFactor", 1.0F);
-        syncDataCompound.setInteger("cowSummonedById", -1);
-        syncDataCompound.setInteger("playerSummonedById", -1);		
+        syncDataCompound.setInteger("cowSummonedById", cowSummonedBy.getEntityId());
+        syncDataCompound.setInteger("playerSummonedById", thePlayer.getEntityId());		
 	}
 
 	/* (non-Javadoc)
@@ -250,6 +264,7 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 	
 	public void setCowSummonedBy(EntityCowMagicBeans parCowMagicBeans)
 	{
+		cowSummonedBy = parCowMagicBeans;
 		int cowSummonedById = parCowMagicBeans.getEntityId();
 		
 		// DEBUG
@@ -272,6 +287,7 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 
 	public void setPlayerSummonedBy(EntityPlayer parPlayerSummonedBy) 
 	{
+		thePlayer = parPlayerSummonedBy;
 		int playerSummonedById = parPlayerSummonedBy.getEntityId();
 		
 		// DEBUG

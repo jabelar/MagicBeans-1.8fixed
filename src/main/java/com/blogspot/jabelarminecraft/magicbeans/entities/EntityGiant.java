@@ -166,15 +166,6 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
 		}
 		return false;
 	}
-	
-//    /**
-//     * Returns true if the newer Entity AI code should be run
-//     */
-//    @Override
-//	public boolean isAIEnabled()
-//    {
-//        return true;
-//    }
 
 	/* (non-Javadoc)
 	 * @see com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans#setupAI()
@@ -265,8 +256,8 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
     	damageAmount = parDamageAmount;
         entityAttackedBy = damageSource.getEntity();
 
-        // DEBUG
-    	System.out.println("EntityGiant attackEntityFrom()");
+//        // DEBUG
+//    	System.out.println("EntityGiant attackEntityFrom()");
     	
         if (!ForgeHooks.onLivingAttack(this, damageSource, damageAmount)) // in 1.8 this hook returns opposite of 1.7.10
         {
@@ -280,8 +271,8 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
         
         if (conditionsPreventDamage(damageSource))
         {
-            // DEBUG
-        	System.out.println("There are conditions preventing damage");
+//            // DEBUG
+//        	System.out.println("There are conditions preventing damage");
         	
         	return false;
         }

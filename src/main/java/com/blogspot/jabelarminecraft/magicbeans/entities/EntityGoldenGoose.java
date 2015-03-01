@@ -63,18 +63,10 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntityMagicBeans
         super(parWorld);
         setSize(0.6F, 1.4F); // twice size of EntityChicken
         setGrowingAge(-24000); // start as child
+        isImmuneToFire = true ;
         timeUntilNextEgg = rand.nextInt(MagicBeans.configTimeUntilNextEgg) + MagicBeans.configTimeUntilNextEgg;
         setupAI();
     }
-
-//    /**
-//     * Returns true if the newer Entity AI code should be run
-//     */
-//    @Override
-//	public boolean isAIEnabled()
-//    {
-//        return true;
-//    }
 
     @Override
 	protected void applyEntityAttributes()
@@ -136,7 +128,7 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntityMagicBeans
             }
         }
     }
-
+    
     /**
      * Called when the mob is falling. Calculates and applies fall damage.
      */

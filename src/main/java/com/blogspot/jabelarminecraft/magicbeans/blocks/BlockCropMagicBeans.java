@@ -137,8 +137,8 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
 	@Override
 	public TileEntity createNewTileEntity(World parWorld, int parMetadata) 
 	{
-		// DEBUG
-		System.out.println("BlockMagicBeans createNewTileEntity()");
+//		// DEBUG
+//		System.out.println("BlockMagicBeans createNewTileEntity()");
 		return new TileEntityMagicBeanStalk();
 	}
 

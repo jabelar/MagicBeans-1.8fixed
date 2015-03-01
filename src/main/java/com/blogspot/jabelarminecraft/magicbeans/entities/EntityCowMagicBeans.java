@@ -20,7 +20,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityList;
-import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
@@ -76,12 +75,13 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
         			EntityPlayer playerLeashedTo = (EntityPlayer) entityLeashedTo;
         			Vec3 playerLookVector = playerLeashedTo.getLookVec();
         			playerLeashedTo.addChatMessage(new ChatComponentText(MagicBeansUtilities.stringToRainbow("A mysterious stranger appears!")));
-		            String entityToSpawnNameFull = MagicBeans.MODID+".Mysterious Stranger";
+		            String entityToSpawnNameFull = MagicBeans.MODID+".mysterious_stranger";
 		            if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
 		            {
-		                EntityLiving entityToSpawn = (EntityLiving) EntityList
-		                      .createEntityByName(entityToSpawnNameFull, worldObj);
-		                
+//		                EntityLiving entityToSpawn = (EntityLiving) EntityList
+//		                      .createEntityByName(entityToSpawnNameFull, worldObj);
+
+		            	EntityMysteriousStranger entityToSpawn = new EntityMysteriousStranger(worldObj, this, playerLeashedTo);
 		                double spawnX = playerLeashedTo.posX+5*playerLookVector.xCoord;
 		                double spawnZ = playerLeashedTo.posZ+5*playerLookVector.zCoord;
 		                double spawnY = MagicBeansUtilities.getHeightValue(worldObj, spawnX, spawnZ);
@@ -98,8 +98,8 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 			                      * 360.0F), 0.0F);
 			                worldObj.spawnEntityInWorld(entityToSpawn);
 			                entityToSpawn.playLivingSound();
-			                ((EntityMysteriousStranger)entityToSpawn).setCowSummonedBy(this);
-			                ((EntityMysteriousStranger)entityToSpawn).setPlayerSummonedBy(playerLeashedTo);
+//			                entityToSpawn.setCowSummonedBy(this);
+//			                entityToSpawn.setPlayerSummonedBy(playerLeashedTo);
 			                setHasSpawnedMysteriousStranger(true);
 			        		// DEBUG
 			        		System.out.println("A mysterious stranger appears with entity ID = "+entityToSpawn.getEntityId());
