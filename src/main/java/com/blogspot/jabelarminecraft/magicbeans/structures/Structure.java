@@ -282,7 +282,7 @@ public class Structure implements IStructure
 					theWorld.setBlockState(thePos, theBlock.getStateFromMeta(theMetadata));
 					if (theBlock.hasTileEntity())
 					{
-						customizeTileEntity(theBlock, theMetadata, startX+indX, startY+indY, startZ+indZ);
+						customizeTileEntity(thePos);
 					}
 				}	
 			}
@@ -303,8 +303,7 @@ public class Structure implements IStructure
 	 * such as putting contents into the inventory.
 	 */
 	@Override
-	public void customizeTileEntity(Block theBlock, int theMetadata, int parX,
-			int parY, int parZ) 
+	public void customizeTileEntity(BlockPos parPos) 
 	{
 		
 	}

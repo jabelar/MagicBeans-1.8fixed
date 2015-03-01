@@ -58,67 +58,96 @@ public class StructureCastleTalia extends Structure
 	}
 
 	@Override
-	public void customizeTileEntity(Block theBlock, int theMetadata, int parX,
-			int parY, int parZ) 
+	public void customizeTileEntity(BlockPos parPos) 
 	{
-		BlockPos thePos = new BlockPos(parX, parY, parZ);
+		Block theBlock = theWorld.getBlockState(parPos).getBlock();
 		if (theBlock == Blocks.chest)
 		{
-			TileEntityChest theTileEntity = (TileEntityChest) theWorld.getTileEntity(thePos);
+			TileEntityChest theTileEntity = (TileEntityChest) theWorld.getTileEntity(parPos);
 			// populate regular dungeon chest items
-            WeightedRandomChestContent.generateChestContents(theTileEntity.getWorld().rand, ChestGenHooks.getItems(DUNGEON_CHEST, theTileEntity.getWorld().rand), theTileEntity, ChestGenHooks.getCount(DUNGEON_CHEST, theTileEntity.getWorld().rand));
-
-		}
-		if (theBlock == Blocks.furnace)
-		{
-			TileEntityFurnace theTileEntity = (TileEntityFurnace) theWorld.getTileEntity(thePos);
-			int chanceOfMeatType = theWorld.rand.nextInt(10);
-			if (chanceOfMeatType <= 3) // randomize meat
+			if (theTileEntity != null)
 			{
-				theTileEntity.setInventorySlotContents(0, new ItemStack(Items.beef, 5));
-				theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
-			}
-			else if (chanceOfMeatType <=8)
-			{
-				theTileEntity.setInventorySlotContents(0, new ItemStack(Items.chicken, 5));
-				theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+				WeightedRandomChestContent.generateChestContents(theWorld.rand, ChestGenHooks.getItems(DUNGEON_CHEST, theWorld.rand), theTileEntity, ChestGenHooks.getCount(DUNGEON_CHEST, theWorld.rand));
 			}
 			else
 			{
-				theTileEntity.setInventorySlotContents(0, new ItemStack(Items.porkchop, 5));
-				theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+				// DEBUG
+				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
+			}
+		}
+		if (theBlock == Blocks.furnace)
+		{
+			TileEntityFurnace theTileEntity = (TileEntityFurnace) theWorld.getTileEntity(parPos);
+			if (theTileEntity != null)
+			{
+				int chanceOfMeatType = theWorld.rand.nextInt(10);
+				if (chanceOfMeatType <= 3) // randomize meat
+				{
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.beef, 5));
+					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+				}
+				else if (chanceOfMeatType <=8)
+				{
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.chicken, 5));
+					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+				}
+				else
+				{
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.porkchop, 5));
+					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+				}
+			}
+			else
+			{
+				// DEBUG
+				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
 		}
 		if (theBlock == Blocks.dispenser)
 		{
-			TileEntityDispenser theTileEntity = (TileEntityDispenser) theWorld.getTileEntity(thePos);
-			int inventorySize = theTileEntity.getSizeInventory();
-			for (int i=0; i < inventorySize; i++)
+			TileEntityDispenser theTileEntity = (TileEntityDispenser) theWorld.getTileEntity(parPos);
+			if (theTileEntity != null)
 			{
-				theTileEntity.setInventorySlotContents(i, new ItemStack(Items.arrow, 5));
+				int inventorySize = theTileEntity.getSizeInventory();
+				for (int i=0; i < inventorySize; i++)
+				{
+					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.arrow, 5));
+				}
+			}
+			else
+			{
+				// DEBUG
+				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
 		}
 		if (theBlock == Blocks.brewing_stand)
 		{
-			TileEntityBrewingStand theTileEntity = (TileEntityBrewingStand) theWorld.getTileEntity(thePos);			
-			// got potion damage values from http://minecraft.gamepedia.com/Potion#Data_value_table
-			int chanceOfPotionType = theWorld.rand.nextInt(10);
-			if (chanceOfPotionType <= 3) // randomize potion
+			TileEntityBrewingStand theTileEntity = (TileEntityBrewingStand) theWorld.getTileEntity(parPos);	
+			if (theTileEntity != null)
 			{
-				// fire resistance
-				theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8259));
-			}
-			else if (chanceOfPotionType <= 8) 
-			{
-				// regeneration
-				theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8257));
+				// got potion damage values from http://minecraft.gamepedia.com/Potion#Data_value_table
+				int chanceOfPotionType = theWorld.rand.nextInt(10);
+				if (chanceOfPotionType <= 3) // randomize potion
+				{
+					// fire resistance
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8259));
+				}
+				else if (chanceOfPotionType <= 8) 
+				{
+					// regeneration
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8257));
+				}
+				else
+				{
+					// water breathing
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8269));
+				}
 			}
 			else
 			{
-				// water breathing
-				theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8269));
+				// DEBUG
+				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
-
 		}
 	}
 
@@ -127,7 +156,7 @@ public class StructureCastleTalia extends Structure
 	{
 		if (!theWorld.isRemote)
 		{
-			String entityToSpawnName = "Golden Goose";
+			String entityToSpawnName = "golden_goose";
 	        String entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
 	        if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
 	        {
@@ -146,7 +175,7 @@ public class StructureCastleTalia extends Structure
 	            System.out.println("Entity not found "+entityToSpawnName);
 	        }
 
-			entityToSpawnName = "Giant";
+			entityToSpawnName = "giant";
 	        entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
 	        if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
 	        {

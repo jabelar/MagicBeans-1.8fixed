@@ -114,7 +114,7 @@ public class GiantAttack
                     knockbackFactorX /= knockbackMagnitude;
                     knockbackFactorY /= knockbackMagnitude;
                     knockbackFactorZ /= knockbackMagnitude;
-                    double protectionFromBlocks = worldObj.getBlockDensity(vec3, theEntity.getBoundingBox());
+                    double protectionFromBlocks = worldObj.getBlockDensity(vec3, theEntity.getEntityBoundingBox());
                     theEntity.motionX += knockbackFactorX / 2;
                     theEntity.motionY += knockbackFactorY / 2;
                     theEntity.motionZ += knockbackFactorZ / 2;
