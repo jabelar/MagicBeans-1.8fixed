@@ -60,7 +60,6 @@ import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderMysteriousStrang
 
 public class ClientProxy extends CommonProxy 
 {
-
 	/*
 	 * Fields related to key binding
 	 */
@@ -158,15 +157,20 @@ public class ClientProxy extends CommonProxy
 		// DEBUG
 		System.out.println("Registering item renderers");
 		
-    	RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
+		registerItemRenderer(MagicBeans.magicBeans);
+		registerItemRenderer(MagicBeans.bootsOfSafeFalling);
+		registerItemRenderer(MagicBeans.goldenGooseMeat);
+		registerItemRenderer(MagicBeans.itemGoldenEgg);
+		registerItemRenderer(MagicBeans.spawnFamilyCow);
+		registerItemRenderer(MagicBeans.spawnGiant);
+		registerItemRenderer(MagicBeans.spawnMysteriousStranger);
+	}
+	
+	public void registerItemRenderer(Item parItem)
+	{
+		RenderItem renderItem = Minecraft.getMinecraft().getRenderItem();
 
-    	renderItem.getItemModelMesher().register(MagicBeans.magicBeans, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.magicBeans.getUnlocalizedName().substring(5), "inventory"));
-    	renderItem.getItemModelMesher().register(MagicBeans.itemGoldenEgg, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.itemGoldenEgg.getUnlocalizedName().substring(5), "inventory"));
-    	renderItem.getItemModelMesher().register(MagicBeans.goldenGooseMeat, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.goldenGooseMeat.getUnlocalizedName().substring(5), "inventory"));
-    	renderItem.getItemModelMesher().register(MagicBeans.bootsOfSafeFalling, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.bootsOfSafeFalling.getUnlocalizedName().substring(5), "inventory"));
-    	renderItem.getItemModelMesher().register(MagicBeans.spawnFamilyCow, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.spawnFamilyCow.getUnlocalizedName().substring(5), "inventory"));
-    	renderItem.getItemModelMesher().register(MagicBeans.spawnGiant, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.spawnGiant.getUnlocalizedName().substring(5), "inventory"));
-    	renderItem.getItemModelMesher().register(MagicBeans.spawnMysteriousStranger, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.spawnMysteriousStranger.getUnlocalizedName().substring(5), "inventory"));
+    	renderItem.getItemModelMesher().register(parItem, 0, new ModelResourceLocation(MagicBeans.MODID + ":" + parItem.getUnlocalizedName().substring(5), "inventory"));
 	}
 	
 	public void registerBlockRenderers()

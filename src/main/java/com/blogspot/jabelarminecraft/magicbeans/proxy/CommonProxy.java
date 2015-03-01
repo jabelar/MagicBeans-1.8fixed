@@ -361,8 +361,7 @@ public class CommonProxy
      // name passed must match entity name string
      public void registerSpawnEgg(String parSpawnName, int parEggColor, int parEggSpotsColor)
      {
-    	 String eggName = "spawn_egg_"+parSpawnName.toLowerCase();
-    	 Item itemSpawnEgg = new MagicBeansMonsterPlacer(parSpawnName, eggName, parEggColor, parEggSpotsColor);
+    	 Item itemSpawnEgg = new MagicBeansMonsterPlacer(parSpawnName, parEggColor, parEggSpotsColor);
     	 GameRegistry.registerItem(itemSpawnEgg, itemSpawnEgg.getUnlocalizedName().substring(5));
      }
 

@@ -39,6 +39,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
 import net.minecraft.util.MathHelper;
 import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
@@ -64,10 +65,10 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         super();
     }
     
-    public MagicBeansMonsterPlacer(String parEntityToSpawnName, String parEggName, int parPrimaryColor, 
+    public MagicBeansMonsterPlacer(String parEntityToSpawnName, int parPrimaryColor, 
           int parSecondaryColor)
     {
-        setUnlocalizedName(parEggName);
+        setUnlocalizedName("spawn_egg_"+parEntityToSpawnName);
         setHasSubtypes(false);
         maxStackSize = 64;
         setCreativeTab(CreativeTabs.tabMisc);
@@ -257,7 +258,7 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
     // unless you specifically check for localization here and convert
     public String getItemStackDisplayName(ItemStack par1ItemStack)
     {
-        return MagicBeansUtilities.stringToRainbow("Spawn "+entityToSpawnName);
+        return MagicBeansUtilities.stringToRainbow("Spawn "+StatCollector.translateToLocal("entity."+MagicBeans.MODID+"."+entityToSpawnName+".name"));
     }  
     
     public void setColors(int parColorBase, int parColorSpots)
