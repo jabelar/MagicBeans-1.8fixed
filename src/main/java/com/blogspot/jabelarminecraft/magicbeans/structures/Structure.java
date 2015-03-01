@@ -26,6 +26,7 @@ import java.io.InputStreamReader;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
@@ -239,9 +240,17 @@ public class Structure implements IStructure
 					if (!(blockName.equals("minecraft:tripwire"))) // tripwire/string needs to be placed after other blocks
 					{
 						BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
+						// perform some block substitutions if interested
 						if (!(blockName.equals("minecraft:dirt")) && !(blockName.equals("minecraft:grass")))
 						{
-							theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
+							if (blockName.equals("minecraft:lava"))
+							{
+								theWorld.setBlockState(thePos,  Blocks.glowstone.getDefaultState());
+							}
+							else
+							{
+								theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
+							}
 						}
 						else
 						{
