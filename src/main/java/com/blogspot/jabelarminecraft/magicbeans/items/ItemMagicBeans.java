@@ -38,6 +38,6 @@ public class ItemMagicBeans extends ItemSeedFoodMagicBeans
     @Override
     public String getItemStackDisplayName(ItemStack parItemStack) 
     {
-        return (MagicBeansUtilities.stringToRainbow(StatCollector.translateToLocal(getUnlocalizedNameInefficiently(new ItemStack(this)) + ".name")).trim());
+        return (MagicBeansUtilities.stringToRainbow(StatCollector.translateToLocal(getUnlocalizedNameInefficiently(parItemStack) + ".name")).trim());
     }
 }
