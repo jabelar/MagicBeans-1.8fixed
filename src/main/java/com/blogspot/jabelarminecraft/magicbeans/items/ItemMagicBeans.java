@@ -28,8 +28,6 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
 public class ItemMagicBeans extends ItemSeedFoodMagicBeans 
 {
-    private static final ItemStack p_77653_1_ = null;
-
 	public ItemMagicBeans() 
     {
         super(1, 0.3F, MagicBeans.blockMagicBeanStalk);
@@ -40,6 +38,6 @@ public class ItemMagicBeans extends ItemSeedFoodMagicBeans
     @Override
     public String getItemStackDisplayName(ItemStack parItemStack) 
     {
-        return (MagicBeansUtilities.stringToRainbow(StatCollector.translateToLocal(getUnlocalizedNameInefficiently(p_77653_1_) + ".name")).trim());
+        return (MagicBeansUtilities.stringToRainbow(StatCollector.translateToLocal(getUnlocalizedNameInefficiently(new ItemStack(this)) + ".name")).trim());
     }
 }
