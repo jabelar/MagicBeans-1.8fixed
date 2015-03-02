@@ -66,7 +66,7 @@ public class MagicBeans
     public static final String MODID = "magicbeans";
     public static final String MODNAME = "Magic Beans";
     public static final String MODVERSION = "1.0.0";
-    public static final String MODDESCRIPTION = "Start the adventure by feeding a golden carrot to a cow.";
+    public static final String MODDESCRIPTION = "Start the adventure by feeding a golden carrot to a grown-up cow.";
     public static final String MODAUTHOR = "jabelar";
     public static final String MODCREDITS = "Taliaailat, Jnaejnae";
     public static final String MODURL = "www.jabelarminecraft.blogspot.com";

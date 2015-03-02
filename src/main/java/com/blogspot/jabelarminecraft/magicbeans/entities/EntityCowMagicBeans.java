@@ -78,9 +78,6 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 		            String entityToSpawnNameFull = MagicBeans.MODID+".mysterious_stranger";
 		            if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
 		            {
-//		                EntityLiving entityToSpawn = (EntityLiving) EntityList
-//		                      .createEntityByName(entityToSpawnNameFull, worldObj);
-
 		            	EntityMysteriousStranger entityToSpawn = new EntityMysteriousStranger(worldObj, this, playerLeashedTo);
 		                double spawnX = playerLeashedTo.posX+5*playerLookVector.xCoord;
 		                double spawnZ = playerLeashedTo.posZ+5*playerLookVector.zCoord;
@@ -98,8 +95,6 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 			                      * 360.0F), 0.0F);
 			                worldObj.spawnEntityInWorld(entityToSpawn);
 			                entityToSpawn.playLivingSound();
-//			                entityToSpawn.setCowSummonedBy(this);
-//			                entityToSpawn.setPlayerSummonedBy(playerLeashedTo);
 			                setHasSpawnedMysteriousStranger(true);
 			        		// DEBUG
 			        		System.out.println("A mysterious stranger appears with entity ID = "+entityToSpawn.getEntityId());
