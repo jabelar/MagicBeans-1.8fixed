@@ -20,6 +20,7 @@
 package com.blogspot.jabelarminecraft.magicbeans;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
@@ -197,97 +198,19 @@ public class MagicBeansEventHandler
     	{
     		return;
     	}
-//    	if ((event.entity instanceof EntityCow) && !(event.entity instanceof EntityCowMagicBeans))
-//    	{
-//	    	float chance = world.rand.nextFloat();
-//	    	// DEBUG
-//	    	System.out.println("cow spawn replacement rand = "+chance);
-//	    	if (chance < MagicBeans.configChanceCowIsMagic)
-//	    	{
-//        		EntityLiving entityToSpawn = new EntityCowMagicBeans(world);
-//        		entityToSpawn.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, 
-//                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
-//                    * 360.0F), 0.0F);
-//        		world.spawnEntityInWorld(entityToSpawn);
-//        		// DEBUG
-//        		System.out.println("Replacing EntityCow with EntityCowMagicBeans");
-//        		event.entity.setDead();       
-//        		// event.setResult(Result.DENY);
-//	    	}
-//    	}
-//    	if (event.entity instanceof EntityPig)
-//    	{
-//	    	float chance = world.rand.nextFloat();
-//	    	// DEBUG
-//	    	// System.out.println("pig spawn replacement rand = "+chance);
-//	    	if (chance < MagicBeans.configChanceCowIsMagic)
-//	    	{
-//        		EntityLiving entityToSpawn = new EntityCowMagicBeans(world);
-//        		entityToSpawn.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, 
-//                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
-//                    * 360.0F), 0.0F);
-//        		world.spawnEntityInWorld(entityToSpawn);
-//        		// DEBUG
-//        		System.out.println("Replacing EntityPig with EntityCowMagicBeans");
-//        		event.entity.setDead();       
-//        		event.setResult(Result.DENY);
-//	    	}
-//    	}
-//    	if (event.entity instanceof EntityChicken)
-//    	{
-//	    	float chance = world.rand.nextFloat();
-//	    	// DEBUG
-//	    	// System.out.println("Chicken spawn replacement rand = "+chance);
-//	    	if (chance < MagicBeans.configChanceCowIsMagic)
-//	    	{
-//        		EntityLiving entityToSpawn = new EntityCowMagicBeans(world);
-//        		entityToSpawn.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, 
-//                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
-//                    * 360.0F), 0.0F);
-//        		world.spawnEntityInWorld(entityToSpawn);
-//        		// DEBUG
-//        		System.out.println("Replacing EntityChicken with EntityCowMagicBeans");
-//        		event.entity.setDead();       
-//        		event.setResult(Result.DENY);
-//	    	}
-//    	}
-//    	if (event.entity instanceof EntityHorse)
-//    	{
-//	    	float chance = world.rand.nextFloat();
-//	    	// DEBUG
-//	    	// System.out.println("Horse spawn replacement rand = "+chance);
-//	    	if (chance < MagicBeans.configChanceCowIsMagic)
-//	    	{
-//        		EntityLiving entityToSpawn = new EntityCowMagicBeans(world);
-//        		entityToSpawn.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, 
-//                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
-//                    * 360.0F), 0.0F);
-//        		world.spawnEntityInWorld(entityToSpawn);
-//        		// DEBUG
-//        		System.out.println("Replacing EntityHorse with EntityCowMagicBeans");
-//        		event.entity.setDead();       
-//        		event.setResult(Result.DENY);
-//	    	}
-//    	}        
-//    	if (event.entity instanceof EntitySheep)
-//    	{
-//	    	float chance = world.rand.nextFloat();
-//	    	// DEBUG
-//	    	// System.out.println("Sheep spawn replacement rand = "+chance);
-//	    	if (chance < MagicBeans.configChanceCowIsMagic)
-//	    	{
-//        		EntityLiving entityToSpawn = new EntityCowMagicBeans(world);
-//        		entityToSpawn.setLocationAndAngles(event.entity.posX, event.entity.posY, event.entity.posZ, 
-//                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
-//                    * 360.0F), 0.0F);
-//        		world.spawnEntityInWorld(entityToSpawn);
-//        		// DEBUG
-//        		System.out.println("Replacing EntitySheep with EntityCowMagicBeans");
-//        		event.entity.setDead();       
-//        		event.setResult(Result.DENY);
-//	    	}
-//    	}  
-
+    	
+    	Entity theEntity = event.entity;
+    	if (theEntity instanceof EntityCreeper)
+    	{
+    		// DEBUG
+    		System.out.println("EntityJoinWorldEvent creeper at height = "+theEntity.posY);
+    		if (theEntity.posZ > MagicBeans.configMaxStalkHeight)
+    		{
+    			// assumes that must be in castle at this height
+    			event.setCanceled(true); // creepers would wreck castle
+    			return;
+    		}
+    	}
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
