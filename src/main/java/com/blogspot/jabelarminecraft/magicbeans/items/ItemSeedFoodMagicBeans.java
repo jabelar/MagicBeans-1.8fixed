@@ -48,14 +48,14 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
           World parWorld, BlockPos parPos, EnumFacing parSide, float parHitX, 
           float parHitY, float parHitZ)
     {
-    	// DEBUG
-    	System.out.println("ItemMagicBeans onItemUse()");
+//    	// DEBUG
+//    	System.out.println("ItemMagicBeans onItemUse()");
     	
         // only plant on top of a block
         if (parSide != EnumFacing.UP)
         {
-        	// DEBUG
-        	System.out.println("Can't plant since not top of block");
+//        	// DEBUG
+//        	System.out.println("Can't plant since not top of block");
         	
             return false;
         }        
@@ -65,16 +65,16 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
         // and item capability to edit
         else if (parPlayer.func_175151_a(parPos, parSide, parItemStack)) //  .canPlayerEdit(parX, parY+1, parZ, par7, parItemStack))
         {
-        	// DEBUG
-        	System.out.println("Player is allowed to edit");
+//        	// DEBUG
+//        	System.out.println("Player is allowed to edit");
         	
             // check that the soil is a type that can sustain the plant
             // and check that there is air above to give plant room to grow
             if (parWorld.getBlockState(parPos).getBlock() == Blocks.farmland 
             		&& parWorld.isAirBlock(parPos.offset(parSide)))
             {
-            	// DEBUG
-            	System.out.println("Block can sustain plant so planting");
+//            	// DEBUG
+//            	System.out.println("Block can sustain plant so planting");
             	
                 // place the plant block
             	if (theBlockPlant==null)
@@ -88,16 +88,16 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
             }
             else
             {
-            	// DEBUG
-            	System.out.println("This block cannot sustain the plant");
+//            	// DEBUG
+//            	System.out.println("This block cannot sustain the plant");
             	
                 return false;
             }
         }
         else
         {
-        	// DEBUG
-        	System.out.println("Player is not allowed to edit");
+//        	// DEBUG
+//        	System.out.println("Player is not allowed to edit");
         	
             return false;
         }

@@ -183,35 +183,46 @@ public class Structure implements IStructure
 			return;
 		}
 
-		startX = theTileEntity.getPos().getX()+parOffsetX;
-		startY = theTileEntity.getPos().getY()+parOffsetY;
-		startZ = theTileEntity.getPos().getZ()+parOffsetZ;
+		startX = theTileEntity.getPos().getX()-9; // +parOffsetX;
+		startY = theTileEntity.getPos().getY()-3; // +parOffsetY;
+		startZ = theTileEntity.getPos().getZ()-12; // +parOffsetZ;
 		
 		totalVolume = dimX * dimY * dimZ;
 		
-		// generate the cloud
-		if (!finishedGeneratingCloud)
+//		// generate the cloud
+//		if (!finishedGeneratingCloud)
+//		{
+//			generateCloudTick();
+//		}
+//		else if (!finishedGeneratingBasic)
+		if (!finishedGeneratingBasic)
 		{
-			generateCloudTick();
-		}
-		else if (!finishedGeneratingBasic)
-		{
+			// DEBUG
+			System.out.println("Generating basic blocks");
 			generateBasicBlocksTick();
 		}
 		else if (!finishedGeneratingMeta)
 		{
+			// DEBUG
+			System.out.println("Generating metadata blocks");
 			generateMetaBlocksTick();
 		}
 		else if (!finishedGeneratingSpecial)
 		{
+			// DEBUG
+			System.out.println("Generating special blocks");
 			generateSpecialBlocksTick();
 		}
 		else if (!finishedPopulatingItems)
 		{
+			// DEBUG
+			System.out.println("Populating items");
 			populateItems();
 		}
 		else if (!finishedPopulatingEntities)
 		{
+			// DEBUG
+			System.out.println("Populating Entities");
 			populateEntities();
 		}
 		else

@@ -285,6 +285,10 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
         if (getHealth() <= 0.0F)
         {
         	onDeath(damageSource);
+        	if (entityAttackedBy instanceof EntityPlayer)
+        	{
+        		((EntityPlayer)entityAttackedBy).addStat(MagicBeans.achievementGiantSlayer, 1);
+        	}
         }
         
         playHurtOrDeathSound();

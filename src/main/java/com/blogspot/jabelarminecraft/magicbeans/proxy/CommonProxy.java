@@ -25,8 +25,10 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.AchievementPage;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.FMLCommonHandler;
@@ -101,6 +103,9 @@ public class CommonProxy
          
         // register recipes here to allow use of items from other mods
         registerRecipes();
+        
+        // register achievements here to allow use of items from other mods
+        registerAchievements();
     }
     
     public void fmlLifeCycleEvent(FMLPostInitializationEvent event)
@@ -206,13 +211,11 @@ public class CommonProxy
         System.out.println("Giant can regen = "+MagicBeans.configGiantCanRegen);
         MagicBeans.configGiantAttackDamage = config.get(Configuration.CATEGORY_GENERAL, "GiantAttackDamage", 8, "He's surprisingly resilient").getInt(8);
         System.out.println("Giant Attack Damage = "+MagicBeans.configGiantAttackDamage);
-        MagicBeans.configGoldForBeans = config.get(Configuration.CATEGORY_GENERAL, "GoldForBeans", 100, MagicBeansUtilities.stringToRainbow("Magic beans")+EnumChatFormatting.YELLOW+" are priceless!").getInt(100);
-        System.out.println("Gold for beans = "+MagicBeans.configGoldForBeans);
         MagicBeans.configChanceCowIsMagic = config.get(Configuration.CATEGORY_GENERAL, "ChanceCowIsMagic", 0.1D, "Chance that a cow spawns as "+MagicBeansUtilities.stringToRainbow("Family Cow"), 0.0D, 1.0D).getDouble(0.1D);
         System.out.println("Chance cow is magic = "+MagicBeans.configChanceCowIsMagic);
         MagicBeans.configMaxStalkHeight = config.get(Configuration.CATEGORY_GENERAL, "MaxStalkHeight", 133, "Cloud level is 133", 40, 150).getInt(133);
         System.out.println("Maximum stalk height = "+MagicBeans.configMaxStalkHeight);
-        MagicBeans.configTicksPerGrowStage = config.get(Configuration.CATEGORY_GENERAL, "TicksPerGrowStage", 20, "Patience is a virtue", 1, 1200).getInt(20);
+        MagicBeans.configTicksPerGrowStage = config.get(Configuration.CATEGORY_GENERAL, "TicksPerGrowStage", 2, "Patience is a virtue", 1, 1200).getInt(2);
         System.out.println("Ticks per grow stage = "+MagicBeans.configTicksPerGrowStage);
         MagicBeans.configTimeUntilNextEgg = config.get(Configuration.CATEGORY_GENERAL, "TimeUntilNextEgg", 600, "Don't be greedy!", 200, 1800).getInt(600);
         System.out.println("Time until next egg = "+MagicBeans.configTimeUntilNextEgg);
@@ -433,5 +436,18 @@ public class CommonProxy
         // some events, especially tick, is handled on FML bus
         FMLCommonHandler.instance().bus().register(new MagicBeansFMLEventHandler());
     }
+	
+	/**
+	 * Register achievements
+	 */
+	protected void registerAchievements()
+	{
+		MagicBeans.achievementStartMagicBeans = new Achievement("achievement.startmagicbeans", "startmagicbeans", 0, 0, MagicBeans.magicBeans, (Achievement)null);
+		MagicBeans.achievementStartMagicBeans.registerStat().initIndependentStat(); // Eclipse is having trouble chaining these in previous line
+		MagicBeans.achievementGiantSlayer = new Achievement("achievement.giantslayer", "giantslayer", 2, 1, MagicBeans.bootsOfSafeFalling, MagicBeans.achievementStartMagicBeans).setSpecial();
+		MagicBeans.achievementGiantSlayer.registerStat(); // Eclipse is having trouble chaining this in previous line
+		
+		AchievementPage.registerAchievementPage(new AchievementPage("Magic Beans Achievements", new Achievement[] {MagicBeans.achievementStartMagicBeans, MagicBeans.achievementGiantSlayer}));
+	}
 
 }

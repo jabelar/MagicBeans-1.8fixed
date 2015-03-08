@@ -103,7 +103,7 @@ public class CommandStructure implements ICommand
 
 			if(argString.length==0)
 			{
-				Structure theStructure = MagicBeans.structureCastleTalia;
+				Structure theStructure = MagicBeans.structureCastle;
 				theStructure.generate(thePlayer, 0, -2, 0);
 			}
 			if(argString.length == 1)

@@ -26,6 +26,7 @@ import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemArmor.ArmorMaterial;
+import net.minecraft.stats.Achievement;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.common.util.EnumHelper;
@@ -54,7 +55,8 @@ import com.blogspot.jabelarminecraft.magicbeans.items.ItemMagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.items.MagicBeansMonsterPlacer;
 import com.blogspot.jabelarminecraft.magicbeans.materials.MaterialCloud;
 import com.blogspot.jabelarminecraft.magicbeans.proxy.CommonProxy;
-import com.blogspot.jabelarminecraft.magicbeans.structures.StructureCastleTalia;
+import com.blogspot.jabelarminecraft.magicbeans.structures.Structure;
+import com.blogspot.jabelarminecraft.magicbeans.structures.StructureCastleJaden;
 
 @Mod(modid = 
       MagicBeans.MODID, 
@@ -85,7 +87,6 @@ public class MagicBeans
     public static File configFile;
     public static Configuration config;
     public static Boolean configGiantIsHostile = true;
-    public static int configGoldForBeans = 100;
     public static int configGiantHealth = 10;
 	public static boolean configGiantCanRegen = true;
     public static int configGiantAttackDamage = 4;
@@ -122,7 +123,13 @@ public class MagicBeans
    
     // instantiate structures
     // important to do this after blocks in case structure uses custom block
-    public final static StructureCastleTalia structureCastleTalia = new StructureCastleTalia();
+    public final static Structure structureCastle = new StructureCastleJaden();
+
+    public static Achievement achievementStartMagicBeans;
+    public static Achievement achievementGiantSlayer;
+
+    // instantiate achievements
+    
     
     // instantiate the mod
     @Instance(MODID)
