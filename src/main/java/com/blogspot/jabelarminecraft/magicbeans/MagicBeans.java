@@ -120,6 +120,7 @@ public class MagicBeans
     public final static MagicBeansMonsterPlacer spawnFamilyCow = new MagicBeansMonsterPlacer("family_cow",  0x4EF56D, 0xFCFC03);
     public final static MagicBeansMonsterPlacer spawnGiant = new MagicBeansMonsterPlacer("giant", 0xDB9112, 0x0AC798);
     public final static MagicBeansMonsterPlacer spawnMysteriousStranger = new MagicBeansMonsterPlacer("mysterious_stranger", 0x8C6620, 0xA100B3);
+    public final static MagicBeansMonsterPlacer spawnGoldenGoose = new MagicBeansMonsterPlacer("golden_goose", 0xFCF6A2, 0xF5E400);
    
     // instantiate structures
     // important to do this after blocks in case structure uses custom block

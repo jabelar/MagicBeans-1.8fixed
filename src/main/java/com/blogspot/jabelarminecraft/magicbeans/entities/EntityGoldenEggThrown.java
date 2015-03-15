@@ -67,6 +67,7 @@ public class EntityGoldenEggThrown extends EntityThrowable
         	{
                 EntityAnimal entityToSpawn = new EntityGoldenGoose(worldObj); // (EntityAnimal) EntityList.createEntityByName("magicbeans.Golden Goose", worldObj);
                 entityToSpawn.setLocationAndAngles(posX, posY, posZ, rotationYaw, 0.0F);
+                entityToSpawn.setGrowingAge(-24000); // start as child
                 worldObj.spawnEntityInWorld(entityToSpawn);
         	}
         	else

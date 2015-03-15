@@ -164,6 +164,7 @@ public class ClientProxy extends CommonProxy
 		registerItemRenderer(MagicBeans.spawnFamilyCow);
 		registerItemRenderer(MagicBeans.spawnGiant);
 		registerItemRenderer(MagicBeans.spawnMysteriousStranger);
+		registerItemRenderer(MagicBeans.spawnGoldenGoose);
 	}
 	
 	public void registerItemRenderer(Item parItem)
