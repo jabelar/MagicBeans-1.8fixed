@@ -48,7 +48,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 import com.blogspot.jabelarminecraft.magicbeans.armor.ItemArmorSafeFalling;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockCloud;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
-import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockSimple;
 import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenEgg;
 import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenGooseMeat;
 import com.blogspot.jabelarminecraft.magicbeans.items.ItemMagicBeans;
@@ -104,7 +103,6 @@ public class MagicBeans
     // need to instantiate beanstalk block before item as the item constructor associates with block
     public final static Block blockMagicBeanStalk = new BlockMagicBeanStalk();
 	public final static Block blockCloud = new BlockCloud();
-    public final static Block blockSimple = new BlockSimple().setUnlocalizedName("mbe01_block_simple");
 
     // instantiate items
 	// important to do this after blocks where item is associate with custom block

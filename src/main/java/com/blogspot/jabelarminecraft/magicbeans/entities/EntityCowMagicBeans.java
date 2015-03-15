@@ -19,6 +19,7 @@ package com.blogspot.jabelarminecraft.magicbeans.entities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
@@ -200,6 +201,12 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
     {
     	// want to allow mating with regular cows as well as itself
     	return (parAnimal instanceof EntityCow && isInLove() && parAnimal.isInLove());
+    }
+
+    @Override
+	public EntityCow createChild(EntityAgeable parAgeable)
+    {
+        return new EntityCowMagicBeans(worldObj);
     }
 
     @Override
