@@ -222,7 +222,7 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 	public boolean canMateWith(EntityAnimal parAnimal)
     {
     	// want to allow mating with regular cows as well as itself
-    	return (parAnimal instanceof EntityCow && isInLove() && parAnimal.isInLove());
+    	return parAnimal == this ? false :(parAnimal instanceof EntityCow && isInLove() && parAnimal.isInLove());
     }
 
     @Override

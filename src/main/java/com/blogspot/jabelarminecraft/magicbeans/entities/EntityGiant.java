@@ -94,9 +94,9 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
 	{
 		super(parWorld);
 		
-// 		initSyncDataCompound(); // no longer need this here, as it is done in the write spawn data method
 		setupAI();
 		setSize(1.0F, 4.5F);
+        isImmuneToFire = true ;
 		specialAttack = new GiantAttack(this, 12);
 	}
 
