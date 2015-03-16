@@ -21,6 +21,13 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
+import net.minecraft.entity.ai.EntityAIFollowParent;
+import net.minecraft.entity.ai.EntityAILookIdle;
+import net.minecraft.entity.ai.EntityAIPanic;
+import net.minecraft.entity.ai.EntityAISwimming;
+import net.minecraft.entity.ai.EntityAITempt;
+import net.minecraft.entity.ai.EntityAIWander;
+import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.passive.EntityAnimal;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
@@ -38,6 +45,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeansWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.ai.EntityCowMagicBeansAIMate;
 import com.blogspot.jabelarminecraft.magicbeans.gui.GuiFamilyCow;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
@@ -57,8 +65,22 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 		super(parWorld);
 		// DEBUG
 		System.out.println("EntityCowMagicBeans constructor");
+		setupAI();
 	}
 	
+	@Override
+	public void setupAI()
+	{
+        tasks.taskEntries.clear();
+        tasks.addTask(0, new EntityAISwimming(this));
+        tasks.addTask(1, new EntityAIPanic(this, 2.0D));
+        tasks.addTask(2, new EntityCowMagicBeansAIMate(this, 1.0D));
+        tasks.addTask(3, new EntityAITempt(this, 1.25D, Items.wheat, false));
+        tasks.addTask(4, new EntityAIFollowParent(this, 1.25D));
+        tasks.addTask(5, new EntityAIWander(this, 1.0D));
+        tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
+        tasks.addTask(7, new EntityAILookIdle(this));
+	}
     
     @Override
 	public void onUpdate()
@@ -220,15 +242,6 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
     {
     	return 1;
     }
-
-	/* (non-Javadoc)
-	 * @see com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans#setupAI()
-	 */
-	@Override
-	public void setupAI() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	/* (non-Javadoc)
 	 * @see com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans#clearAITasks()
