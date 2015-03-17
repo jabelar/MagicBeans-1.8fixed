@@ -123,7 +123,7 @@ public class EntityCowMagicBeansAIMate extends EntityAIBase
     private EntityAnimal getNearbyMate()
     {
         float matingRange = 8.0F;
-        List list = theWorld.getEntitiesWithinAABB(EntityCow.class, theAnimal.getBoundingBox().expand(matingRange, matingRange, matingRange));
+        List list = theWorld.getEntitiesWithinAABB(EntityCow.class, theAnimal.getEntityBoundingBox().expand(matingRange, matingRange, matingRange));
         double d0 = Double.MAX_VALUE;
         EntityAnimal theMate = null;
         Iterator iterator = list.iterator();

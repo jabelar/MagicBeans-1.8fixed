@@ -33,7 +33,7 @@ import com.blogspot.jabelarminecraft.magicbeans.entities.EntityCowMagicBeans;
 public class RenderCowMagicBeans extends RenderLiving
 {
 
-	private ResourceLocation cowMagicBeansTexture;
+	private final ResourceLocation[] cowMagicBeansTexture = new ResourceLocation[3];
 
 	/**
 	 * @param parModelBase
@@ -63,7 +63,9 @@ public class RenderCowMagicBeans extends RenderLiving
 
     protected void setEntityTexture()
     {
-        cowMagicBeansTexture = new ResourceLocation(MagicBeans.MODID+":textures/entities/cow_magic_beans.png");
+        cowMagicBeansTexture[0] = new ResourceLocation(MagicBeans.MODID+":textures/entities/cow_magic_beans_0.png");
+        cowMagicBeansTexture[1] = new ResourceLocation(MagicBeans.MODID+":textures/entities/cow_magic_beans_1.png");
+        cowMagicBeansTexture[2] = new ResourceLocation(MagicBeans.MODID+":textures/entities/cow_magic_beans_2.png");
     }
 
     /**
@@ -73,6 +75,6 @@ public class RenderCowMagicBeans extends RenderLiving
     @Override
     protected ResourceLocation getEntityTexture(Entity par1Entity)
     {
-        return cowMagicBeansTexture;
+        return cowMagicBeansTexture[MagicBeans.configCowTextureType];
     }
 }

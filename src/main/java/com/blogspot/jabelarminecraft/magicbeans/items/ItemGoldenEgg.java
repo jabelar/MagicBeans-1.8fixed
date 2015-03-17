@@ -24,31 +24,19 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
-import net.minecraftforge.fml.relauncher.Side;
-import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenEggThrown;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
 public class ItemGoldenEgg extends Item
 {
-    public int colorBase;
-    public int colorSpots;
     protected EntityGoldenEggThrown entityEgg;
-//    protected IIcon theIcon;
 
     public ItemGoldenEgg() 
-    {
-		this("Golden Goose", 0xF5E16F, 0xF5F56F);
-	}
-    
-    public ItemGoldenEgg(String parEntityToSpawnName, int parPrimaryColor, int parSecondaryColor)
     {
         setUnlocalizedName("golden_egg");
     	maxStackSize = 16; // same as regular egg
         setCreativeTab(CreativeTabs.tabMaterials);
-        colorBase = parPrimaryColor;
-        colorSpots = parSecondaryColor;
     }
 
 	/**
@@ -73,18 +61,11 @@ public class ItemGoldenEgg extends Item
         return par1ItemStack;
     }
     
-    @Override
-    @SideOnly(Side.CLIENT)
-    public int getColorFromItemStack(ItemStack par1ItemStack, int parColorType)
-    {
-        return (parColorType == 0) ? colorBase : colorSpots;
-    }
-
 //    @Override
 //    @SideOnly(Side.CLIENT)
-//    public boolean requiresMultipleRenderPasses()
+//    public int getColorFromItemStack(ItemStack par1ItemStack, int parColorType)
 //    {
-//        return false;
+//        return (parColorType == 0) ? colorBase : colorSpots;
 //    }
     
     @Override
@@ -94,24 +75,4 @@ public class ItemGoldenEgg extends Item
     {
     	return MagicBeansUtilities.stringToGolden("Golden Egg", 4);
 	}  
-
-
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public void registerIcons(IIconRegister par1IconRegister)
-//    {
-//        super.registerIcons(par1IconRegister);
-//        theIcon = par1IconRegister.registerIcon(this.getIconString() + "_overlay");
-//    }
-//    
-//    /**
-//     * Gets an icon index based on an item's damage value and the given render pass
-//     */
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public IIcon getIconFromDamageForRenderPass(int par1, int par2)
-//    {
-//        return par2 > 0 ? theIcon : super.getIconFromDamageForRenderPass(par1, par2);
-//    }
-
 }

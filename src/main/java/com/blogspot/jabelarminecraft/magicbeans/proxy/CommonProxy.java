@@ -219,6 +219,8 @@ public class CommonProxy
         System.out.println("Ticks per grow stage = "+MagicBeans.configTicksPerGrowStage);
         MagicBeans.configTimeUntilNextEgg = config.get(Configuration.CATEGORY_GENERAL, "TimeUntilNextEgg", 600, "Don't be greedy!", 200, 1800).getInt(600);
         System.out.println("Time until next egg = "+MagicBeans.configTimeUntilNextEgg);
+        MagicBeans.configCowTextureType = config.get(Configuration.CATEGORY_GENERAL, "CowTextureType", 0, "Green cows why not?", 0, 2).getInt(0);
+        System.out.println("Cow texture type = "+MagicBeans.configCowTextureType);
         
         // save is useful for the first run where config might not exist
         config.save();

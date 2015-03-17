@@ -93,6 +93,7 @@ public class MagicBeans
 	public static int configMaxStalkHeight = 136;
 	public static int configTicksPerGrowStage = 20;
 	public static int configTimeUntilNextEgg = 900;
+	public static int configCowTextureType = 0;
     
     // instantiate materials
     public final static Material materialCloud = new MaterialCloud();
