@@ -57,12 +57,12 @@ public class GuiConfigMagicBeans extends GuiConfig
             boolean flag = true;
             try
             {
-                if ((configID != null || this.parentScreen == null || !(this.parentScreen instanceof GuiConfig)) 
-                        && (this.entryList.hasChangedEntry(true)))
+                if ((configID != null || parentScreen == null || !(parentScreen instanceof GuiConfig)) 
+                        && (entryList.hasChangedEntry(true)))
                 {
                 	// DEBUG
                 	System.out.println("Saving config elements");
-                    boolean requiresMcRestart = this.entryList.saveConfigElements();
+                    boolean requiresMcRestart = entryList.saveConfigElements();
 
                     if (Loader.isModLoaded(modID))
                     {
@@ -78,8 +78,8 @@ public class GuiConfigMagicBeans extends GuiConfig
                                     new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
                         }
                         
-                        if (this.parentScreen instanceof GuiConfig)
-                            ((GuiConfig) this.parentScreen).needsRefresh = true;
+                        if (parentScreen instanceof GuiConfig)
+                            ((GuiConfig) parentScreen).needsRefresh = true;
                     }
                 }
             }
@@ -89,8 +89,7 @@ public class GuiConfigMagicBeans extends GuiConfig
             }
             
             if (flag)
-                this.mc.displayGuiScreen(this.parentScreen);
+                mc.displayGuiScreen(parentScreen);
         }
     }
-
 }

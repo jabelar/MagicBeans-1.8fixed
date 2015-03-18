@@ -68,10 +68,6 @@ public class RenderCowMagicBeans extends RenderLiving
         cowMagicBeansTexture[2] = new ResourceLocation(MagicBeans.MODID+":textures/entities/cow_magic_beans_2.png");
     }
 
-    /**
-    * Returns the location of an entity's texture. Doesn't seem to be called 
-    * unless you call Render.bindEntityTexture.
-    */
     @Override
     protected ResourceLocation getEntityTexture(Entity par1Entity)
     {
