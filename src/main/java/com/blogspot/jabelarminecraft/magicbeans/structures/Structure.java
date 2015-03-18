@@ -26,13 +26,13 @@ import java.io.InputStreamReader;
 
 import net.minecraft.block.Block;
 import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeansWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
 
 public class Structure implements IStructure
 {
@@ -246,20 +246,13 @@ public class Structure implements IStructure
 					{
 						BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
 						// perform some block substitutions if interested
-						if (!(blockName.equals("minecraft:dirt")) && !(blockName.equals("minecraft:grass")))
-						{
-							if (blockName.equals("minecraft:lava"))
-							{
-								theWorld.setBlockState(thePos,  Blocks.glowstone.getDefaultState());
-							}
-							else
-							{
-								theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
-							}
-						}
-						else
+						if (blockName.equals("minecraft:dirt") || blockName.equals("minecraft:grass"))
 						{
 							theWorld.setBlockState(thePos, MagicBeans.blockCloud.getDefaultState());
+						}
+						else if (!(theWorld.getBlockState(thePos).getBlock() instanceof BlockMagicBeanStalk))
+						{
+							theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
 						}
 					}
 				}
@@ -293,10 +286,6 @@ public class Structure implements IStructure
 					Block theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
 					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
 					int theMetadata = blockMetaArray[indX][indY][indZ];
-					if (theBlock == Blocks.lava) // in Jaden's castle there was issue with lava so making them all sources
-					{
-						theMetadata = 0;
-					}
 					theWorld.setBlockState(thePos, theBlock.getStateFromMeta(theMetadata));
 					if (theBlock.hasTileEntity())
 					{
