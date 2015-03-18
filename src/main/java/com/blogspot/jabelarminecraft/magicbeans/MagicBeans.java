@@ -85,11 +85,9 @@ public class MagicBeans
     // set up configuration properties (will be read from config file in preInit)
     public static File configFile;
     public static Configuration config;
-    public static Boolean configGiantIsHostile = true;
     public static int configGiantHealth = 10;
 	public static boolean configGiantCanRegen = true;
     public static int configGiantAttackDamage = 4;
-    public static double configChanceCowIsMagic = 0.1D;
 	public static int configMaxStalkHeight = 136;
 	public static int configTicksPerGrowStage = 20;
 	public static int configTimeUntilNextEgg = 900;

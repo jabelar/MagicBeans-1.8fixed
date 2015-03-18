@@ -25,7 +25,6 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiConfig;
 import net.minecraftforge.fml.client.config.GuiMessageDialog;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
@@ -43,8 +42,11 @@ public class GuiConfigMagicBeans extends GuiConfig
     public GuiConfigMagicBeans(GuiScreen parent) 
     {
         super(parent,
-                new ConfigElement(MagicBeans.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
-                MagicBeans.MODID, false, false, GuiConfig.getAbridgedConfigPath(MagicBeans.config.toString()));
+                new ConfigElement(MagicBeans.config.getCategory("magicbeans")).getChildElements(),
+                MagicBeans.MODID, 
+                false, 
+                false, 
+                GuiConfig.getAbridgedConfigPath(MagicBeans.config.toString()));
     }
     
     @Override

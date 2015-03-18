@@ -189,12 +189,6 @@ public class Structure implements IStructure
 		
 		totalVolume = dimX * dimY * dimZ;
 		
-//		// generate the cloud
-//		if (!finishedGeneratingCloud)
-//		{
-//			generateCloudTick();
-//		}
-//		else if (!finishedGeneratingBasic)
 		if (!finishedGeneratingBasic)
 		{
 			// DEBUG
@@ -299,6 +293,10 @@ public class Structure implements IStructure
 					Block theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
 					BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
 					int theMetadata = blockMetaArray[indX][indY][indZ];
+					if (theBlock == Blocks.lava) // in Jaden's castle there was issue with lava so making them all sources
+					{
+						theMetadata = 0;
+					}
 					theWorld.setBlockState(thePos, theBlock.getStateFromMeta(theMetadata));
 					if (theBlock.hasTileEntity())
 					{

@@ -16,6 +16,7 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.gui;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import net.minecraft.client.Minecraft;
@@ -43,7 +44,9 @@ public class GuiFactoryMagicBeans implements IModGuiFactory
     @Override
     public Set<RuntimeOptionCategoryElement> runtimeGuiCategories() 
     {
-        return null;
+    	Set<RuntimeOptionCategoryElement> setElements = new HashSet();
+    	setElements.add(new RuntimeOptionCategoryElement("magicbeans", "giant"));
+        return setElements;
     }
  
     @Override
