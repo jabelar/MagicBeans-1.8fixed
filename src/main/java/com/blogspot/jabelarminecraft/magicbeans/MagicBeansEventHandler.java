@@ -385,10 +385,6 @@ public class MagicBeansEventHandler
         {
             event.displayname = event.username+" the Beautiful";
         }    
-        else
-        {
-            event.displayname = event.username+" the Ugly";            
-        }
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -731,7 +727,6 @@ public class MagicBeansEventHandler
     {
         if (event.gui instanceof GuiIngameModOptions)
         {
-        	System.out.println("GuiOpenEvent for GuiIngameModOptions");
         	event.gui = new GuiConfigMagicBeans(null);        
         }
     }
