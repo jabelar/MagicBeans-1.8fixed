@@ -35,6 +35,7 @@ import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
 // Thanks to minalien tutoral at http://minalien.com/minecraft-forge-feature-spotlight-config-guis/
 public class GuiConfigMagicBeans extends GuiConfig 
@@ -46,7 +47,7 @@ public class GuiConfigMagicBeans extends GuiConfig
                 MagicBeans.MODID, 
                 false, 
                 false, 
-                GuiConfig.getAbridgedConfigPath(MagicBeans.config.toString()));
+                MagicBeansUtilities.stringToRainbow("Play Magic Beans Any Way You Want"));
     }
     
     @Override
