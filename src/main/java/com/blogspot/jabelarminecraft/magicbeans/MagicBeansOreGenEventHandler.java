@@ -27,12 +27,6 @@ import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 public class MagicBeansOreGenEventHandler 
 {
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(OreGenEvent event)
-    {
-        
-    }
-    
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(GenerateMinable event)
     {
         

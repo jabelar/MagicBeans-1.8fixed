@@ -17,6 +17,7 @@
 package com.blogspot.jabelarminecraft.magicbeans.entities;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.particle.EntityFX;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -41,6 +42,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.Potion;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
@@ -754,4 +756,11 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
 		System.out.println("EntityGiant spawn data received, scaleFactor = "+getScaleFactor());
 	}
 
+	public Block findBlockUnderEntity(Entity parEntity)
+	{
+	    int blockX = MathHelper.floor_double(parEntity.posX);
+	    int blockY = MathHelper.floor_double(parEntity.getEntityBoundingBox().minY)-1;
+	    int blockZ = MathHelper.floor_double(parEntity.posZ);
+	    return parEntity.worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
+	}
 }
