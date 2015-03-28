@@ -25,7 +25,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.config.ConfigElement;
-import net.minecraftforge.fml.client.config.GuiConfig;
+import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiMessageDialog;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
@@ -38,17 +38,17 @@ import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
 // Thanks to minalien tutoral at http://minalien.com/minecraft-forge-feature-spotlight-config-guis/
-public class GuiConfigMagicBeans extends GuiConfig 
+public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig 
 {
-    public GuiConfigMagicBeans(GuiScreen parent) 
+    public GuiConfig(GuiScreen parent) 
     {
         super(parent,
-                new ConfigElement(MagicBeans.config.getCategory("magicbeans")).getChildElements(),
+                new ConfigElement(MagicBeans.config.getCategory(Configuration.CATEGORY_GENERAL)).getChildElements(),
                 MagicBeans.MODID, 
                 false, 
                 false, 
                 MagicBeansUtilities.stringToGolden("Play Magic Beans Any Way You Want", 13));
-    	titleLine2 = GuiConfig.getAbridgedConfigPath(MagicBeans.config.toString());
+    	titleLine2 = MagicBeans.configFile.getAbsolutePath();
     }
     
     @Override

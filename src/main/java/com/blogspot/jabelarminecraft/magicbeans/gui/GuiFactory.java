@@ -27,7 +27,7 @@ import net.minecraftforge.fml.client.IModGuiFactory;
  * @author jabelar
  *
  */
-public class GuiFactoryMagicBeans implements IModGuiFactory 
+public class GuiFactory implements IModGuiFactory 
 {
     @Override
     public void initialize(Minecraft minecraftInstance) 
@@ -38,7 +38,7 @@ public class GuiFactoryMagicBeans implements IModGuiFactory
     @Override
     public Class<? extends GuiScreen> mainConfigGuiClass() 
     {
-        return GuiConfigMagicBeans.class;
+        return GuiConfig.class;
     }
  
     @Override

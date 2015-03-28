@@ -117,7 +117,7 @@ import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
 import com.blogspot.jabelarminecraft.magicbeans.entities.EntityCowMagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.gui.GuiConfigMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.gui.GuiConfig;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
 public class MagicBeansEventHandler 
@@ -727,7 +727,7 @@ public class MagicBeansEventHandler
     {
         if (event.gui instanceof GuiIngameModOptions)
         {
-        	event.gui = new GuiConfigMagicBeans(null);        
+        	event.gui = new GuiConfig(null);        
         }
     }
 
