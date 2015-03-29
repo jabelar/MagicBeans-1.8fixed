@@ -205,7 +205,7 @@ public class CommonProxy
         MagicBeans.configGiantHealth = config.get(Configuration.CATEGORY_GENERAL, "Giant Health", 100, "This is a healthy "+MagicBeansUtilities.stringToRainbow("Giant")).getInt(100);
         System.out.println("Giant health = "+MagicBeans.configGiantHealth);
         MagicBeans.configGiantCanRegen = config.get(Configuration.CATEGORY_GENERAL, "Giant Can Regenerate", true, "This is a healthy "+MagicBeansUtilities.stringToRainbow("Giant")).getBoolean(true);
-        System.out.println("Giant can regen = "+MagicBeans.configGiantCanRegen);
+        System.out.println("Giant can regenerate = "+MagicBeans.configGiantCanRegen);
         MagicBeans.configGiantAttackDamage = config.get(Configuration.CATEGORY_GENERAL, "Giant Attack Damage", 8, "He's surprisingly resilient").getInt(8);
         System.out.println("Giant Attack Damage = "+MagicBeans.configGiantAttackDamage);
         MagicBeans.configMaxStalkHeight = config.get(Configuration.CATEGORY_GENERAL, "Max Beantalk Height", 133, "Cloud level is 133", 40, 150).getInt(133);

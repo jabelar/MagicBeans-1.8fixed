@@ -77,7 +77,7 @@ public class MessageGiveItemMagicBeansToServer implements IMessage
         	if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
         	{
 	            thePlayer.inventory.addItemStackToInventory(new ItemStack(MagicBeans.magicBeans, 1));
-	            Entity theEntity = MagicBeansUtilities.getEntityByID(entityID, thePlayer.worldObj);
+	            Entity theEntity = thePlayer.worldObj.getEntityByID(entityID);
 	            theEntity.setDead();       		
         	}
         	else

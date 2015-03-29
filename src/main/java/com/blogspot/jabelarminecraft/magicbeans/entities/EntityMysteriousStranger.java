@@ -114,6 +114,16 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 	}
 	
 	@Override
+	public void setDead()
+	{
+		if (cowSummonedBy != null) // i.e. mysterious stranger dying for some reason before player trades cow for beans
+		{
+			cowSummonedBy.setHasSpawnedMysteriousStranger(false); // allow it to spawn another one
+		}
+		super.setDead();
+	}
+	
+	@Override
 	public boolean interact(EntityPlayer parPlayer)
 	{
 		this.collideWithNearbyEntities();;
@@ -259,7 +269,7 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 
 		// DEBUG
 		// System.out.println("EntityMysteriousStranger getCowSummonedBy = "+cowSummonedById+", on world.isRemote = "+worldObj.isRemote);
-		return (EntityCowMagicBeans) MagicBeansUtilities.getEntityByID(cowSummonedById, worldObj);
+		return (EntityCowMagicBeans) worldObj.getEntityByID(cowSummonedById);
 	}
 	
 	public void setCowSummonedBy(EntityCowMagicBeans parCowMagicBeans)
@@ -282,7 +292,7 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 
 		// DEBUG
 		// System.out.println("EntityMysteriousStranger getPlayerSummonedBy = "+playerSummonedById+", on world.isRemote = "+worldObj.isRemote);
-		return (EntityPlayer) MagicBeansUtilities.getEntityByID(playerSummonedById, worldObj);
+		return (EntityPlayer) worldObj.getEntityByID(playerSummonedById);
 	}
 
 	public void setPlayerSummonedBy(EntityPlayer parPlayerSummonedBy) 

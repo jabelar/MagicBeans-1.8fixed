@@ -37,7 +37,6 @@ import net.minecraftforge.fml.common.eventhandler.Event.Result;
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
-// Thanks to minalien tutoral at http://minalien.com/minecraft-forge-feature-spotlight-config-guis/
 public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig 
 {
     public GuiConfig(GuiScreen parent) 
@@ -102,7 +101,5 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
             if (flag)
                 mc.displayGuiScreen(parentScreen);
         }
-    }
-    
-    
+    }    
 }

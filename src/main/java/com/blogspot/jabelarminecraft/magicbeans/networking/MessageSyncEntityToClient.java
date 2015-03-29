@@ -26,7 +26,6 @@ import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
 
 /**
  * @author jabelar
@@ -74,7 +73,7 @@ public class MessageSyncEntityToClient implements IMessage
         public IMessage onMessage(MessageSyncEntityToClient message, MessageContext ctx) 
         {
         	EntityPlayer thePlayer = MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-        	IEntityMagicBeans theEntity = (IEntityMagicBeans)MagicBeansUtilities.getEntityByID(message.entityId, thePlayer.worldObj);
+        	IEntityMagicBeans theEntity = (IEntityMagicBeans)thePlayer.worldObj.getEntityByID(message.entityId);
         	// DEBUG
         	if (theEntity == null)
         	{
