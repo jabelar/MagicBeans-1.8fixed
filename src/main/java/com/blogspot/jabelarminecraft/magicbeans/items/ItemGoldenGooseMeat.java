@@ -26,7 +26,7 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -73,7 +73,7 @@ public class ItemGoldenGooseMeat extends ItemFood
     // unless you specifically check for localization here and convert
 	public String getItemStackDisplayName(ItemStack par1ItemStack)
     {
-    	return MagicBeansUtilities.stringToGolden("Golden Goose Meat", 8);
+    	return Utilities.stringToGolden("Golden Goose Meat", 8);
 	}  
 
 }

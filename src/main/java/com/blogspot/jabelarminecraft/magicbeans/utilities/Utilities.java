@@ -31,7 +31,7 @@ import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToSe
  * @author jabelar
  *
  */
-public class MagicBeansUtilities 
+public class Utilities 
 {
 	/*
 	 * Text Utilities

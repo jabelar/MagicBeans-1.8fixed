@@ -30,7 +30,7 @@ import org.lwjgl.opengl.GL11;
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.entities.EntityMysteriousStranger;
 import com.blogspot.jabelarminecraft.magicbeans.networking.MessageGiveItemMagicBeansToServer;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -66,17 +66,17 @@ public class GuiMysteriousStranger extends GuiScreen
 	    bookPageTextures[0] = new ResourceLocation(MagicBeans.MODID+":textures/gui/book.png");
 	    bookPageTextures[1] = new ResourceLocation(MagicBeans.MODID+":textures/gui/book.png");
 	    bookPageTextures[2] = new ResourceLocation(MagicBeans.MODID+":textures/gui/book.png");
-	    stringPageText[0] = "The "+MagicBeansUtilities.stringToRainbow("Mysterious Stranger", true)
+	    stringPageText[0] = "The "+Utilities.stringToRainbow("Mysterious Stranger", true)
 	    		+" admired your family cow and asked if it was for sale.\n\nWhen you nodded, he offered to trade some "
-	    		+MagicBeansUtilities.stringToRainbow("Magic Beans", true)
+	    		+Utilities.stringToRainbow("Magic Beans", true)
 	    		+", that (if planted in tilled dirt) would lead to more wealth than you could imagine.";
 	    stringPageText[1]="So you handed him your cow, and grabbed the "
-	    		+MagicBeansUtilities.stringToRainbow("Magic Beans", true)
+	    		+Utilities.stringToRainbow("Magic Beans", true)
 	    		+".\n\nPleased with yourself, you hurried away, looking for tilled dirt in which to plant the "
-	    		+MagicBeansUtilities.stringToRainbow("Magic Beans", true)
+	    		+Utilities.stringToRainbow("Magic Beans", true)
 	    		+".\n\nYou couldn't wait to see how proud your mother would be for";
 	    stringPageText[2]="being so shrewd!  Untold wealth in return for an old, milkless cow; what a good deal you made!\n\nSo off you went, looking for a place to plant the "
-	    		+MagicBeansUtilities.stringToRainbow("Magic Beans", true)
+	    		+Utilities.stringToRainbow("Magic Beans", true)
 	    		+" with room to grow...";
 	}
 

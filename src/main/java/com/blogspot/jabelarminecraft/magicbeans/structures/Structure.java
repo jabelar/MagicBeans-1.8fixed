@@ -31,7 +31,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeansWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
 
 public class Structure implements IStructure
@@ -176,7 +176,7 @@ public class Structure implements IStructure
 		}
 
 		// exit if finished
-		if (MagicBeansWorldData.get(theWorld).getHasCastleSpwaned())
+		if (ModWorldData.get(theWorld).getHasCastleSpwaned())
 		{
 			// DEBUG
 			System.out.println("Castle has already spawned");
@@ -223,7 +223,7 @@ public class Structure implements IStructure
 		{
 			// DEBUG
 			System.out.println("Structure setting MagicBeansWorldData hasCastleBeenSpawned to true");
-			MagicBeansWorldData.get(theWorld).setHasCastleSpawned(true);
+			ModWorldData.get(theWorld).setHasCastleSpawned(true);
 		}
 	}
 	

@@ -27,7 +27,7 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeansWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockCropMagicBeans;
 
 public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlayerListBox
@@ -52,7 +52,7 @@ public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlaye
 	@Override
 	public void update()
 	{
-		if (worldObj.isRemote || MagicBeansWorldData.get(worldObj).getHasCastleSpwaned())
+		if (worldObj.isRemote || ModWorldData.get(worldObj).getHasCastleSpwaned())
 		{
 			return;
 		}

@@ -44,23 +44,23 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeansWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.ai.EntityCowMagicBeansAIMate;
 import com.blogspot.jabelarminecraft.magicbeans.gui.GuiFamilyCow;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
  *
  */
-public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans, IEntityAdditionalSpawnData
+public class EntityFamilyCow extends EntityCow implements IEntityMagicBeans, IEntityAdditionalSpawnData
 {
     public NBTTagCompound syncDataCompound = new NBTTagCompound();
     
 	/**
 	 * @param parWorld
 	 */
-	public EntityCowMagicBeans(World parWorld) 
+	public EntityFamilyCow(World parWorld) 
 	{
 		super(parWorld);
 		// DEBUG
@@ -97,14 +97,14 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 
         			EntityPlayer playerLeashedTo = (EntityPlayer) entityLeashedTo;
         			Vec3 playerLookVector = playerLeashedTo.getLookVec();
-        			playerLeashedTo.addChatMessage(new ChatComponentText(MagicBeansUtilities.stringToRainbow("A mysterious stranger appears!")));
+        			playerLeashedTo.addChatMessage(new ChatComponentText(Utilities.stringToRainbow("A mysterious stranger appears!")));
 		            String entityToSpawnNameFull = MagicBeans.MODID+".mysterious_stranger";
 		            if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
 		            {
 		            	EntityMysteriousStranger entityToSpawn = new EntityMysteriousStranger(worldObj, this, playerLeashedTo);
 		                double spawnX = playerLeashedTo.posX+5*playerLookVector.xCoord;
 		                double spawnZ = playerLeashedTo.posZ+5*playerLookVector.zCoord;
-		                double spawnY = MagicBeansUtilities.getHeightValue(worldObj, spawnX, spawnZ);
+		                double spawnY = Utilities.getHeightValue(worldObj, spawnX, spawnZ);
 		                
 		                // DEBUG
 		                System.out.println("Trying to spawn mysterious stranger at "+spawnX+", "+spawnY+", "+spawnZ);
@@ -190,7 +190,7 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 	public boolean interact(EntityPlayer parPlayer)
     {
     	// check if have already spawned castle
-    	if (!MagicBeansWorldData.get(worldObj).getHasCastleSpwaned())
+    	if (!ModWorldData.get(worldObj).getHasCastleSpwaned())
     	{
 	    	// Family cow doesn't provide milk (that's why your mother wants you to sell it)
 	    	// don't open gui if holding items, e.g. wheat that should incite mating instead
@@ -228,7 +228,7 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
     @Override
 	public EntityCow createChild(EntityAgeable parAgeable)
     {
-        return new EntityCowMagicBeans(worldObj);
+        return new EntityFamilyCow(worldObj);
     }
 
     @Override
@@ -342,7 +342,7 @@ public class EntityCowMagicBeans extends EntityCow implements IEntityMagicBeans,
 	@Override
 	public void sendEntitySyncPacket()
 	{
-		MagicBeansUtilities.sendEntitySyncPacketToClient(this);
+		Utilities.sendEntitySyncPacketToClient(this);
 	}
 
 

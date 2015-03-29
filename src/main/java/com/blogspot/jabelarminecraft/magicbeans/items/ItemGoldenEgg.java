@@ -26,7 +26,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 
 import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenEggThrown;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 public class ItemGoldenEgg extends Item
 {
@@ -73,6 +73,6 @@ public class ItemGoldenEgg extends Item
     // unless you specifically check for localization here and convert
 	public String getItemStackDisplayName(ItemStack par1ItemStack)
     {
-    	return MagicBeansUtilities.stringToGolden("Golden Egg", 4);
+    	return Utilities.stringToGolden("Golden Egg", 4);
 	}  
 }

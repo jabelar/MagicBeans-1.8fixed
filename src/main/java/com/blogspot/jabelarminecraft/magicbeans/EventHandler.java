@@ -116,11 +116,11 @@ import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
 
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityCowMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
 import com.blogspot.jabelarminecraft.magicbeans.gui.GuiConfig;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
-public class MagicBeansEventHandler 
+public class EventHandler 
 {
     /*
      * Miscellaneous events
@@ -425,7 +425,7 @@ public class MagicBeansEventHandler
     	
     	Entity theEntity = event.target;
 
-        if (theEntity instanceof EntityCow && !(theEntity instanceof EntityCowMagicBeans))
+        if (theEntity instanceof EntityCow && !(theEntity instanceof EntityFamilyCow))
         {
         	// DEBUG
         	// System.out.println("Interacting with cow");
@@ -436,7 +436,7 @@ public class MagicBeansEventHandler
 	        	{
 	        		// DEBUG
 	        		// System.out.println("While holding a golden carrot");
-	        		if (!MagicBeansWorldData.get(world).getHasCastleSpwaned())
+	        		if (!ModWorldData.get(world).getHasCastleSpwaned())
 	        		{
 	        			// DEBUG
 	        			// System.out.println("Haven't spawned castle yet so okay to make a family cow");
@@ -445,9 +445,9 @@ public class MagicBeansEventHandler
     	    		
         	    		if (!((EntityCow) theEntity).isChild())
         	    		{
-		    	    		thePlayer.addChatMessage(new ChatComponentText(MagicBeansUtilities.stringToRainbow("This cow is now your Family Cow!")));
+		    	    		thePlayer.addChatMessage(new ChatComponentText(Utilities.stringToRainbow("This cow is now your Family Cow!")));
 			        
-		    	    		EntityCowMagicBeans entityToSpawn = new EntityCowMagicBeans(world);
+		    	    		EntityFamilyCow entityToSpawn = new EntityFamilyCow(world);
 			        		entityToSpawn.setLocationAndAngles(theEntity.posX, theEntity.posY, theEntity.posZ, 
 			                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
 			                    * 360.0F), 0.0F);

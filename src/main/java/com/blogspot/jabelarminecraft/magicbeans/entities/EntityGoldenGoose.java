@@ -44,7 +44,7 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 public class EntityGoldenGoose extends EntityAnimal implements IEntityMagicBeans, IEntityAdditionalSpawnData
 {
@@ -393,7 +393,7 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntityMagicBeans
 	@Override
 	public void sendEntitySyncPacket()
 	{
-		MagicBeansUtilities.sendEntitySyncPacketToClient(this);
+		Utilities.sendEntitySyncPacketToClient(this);
 	}
 	
 	/* (non-Javadoc)

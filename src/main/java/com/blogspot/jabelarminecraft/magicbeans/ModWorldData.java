@@ -4,7 +4,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldSavedData;
 
-public class MagicBeansWorldData extends WorldSavedData 
+public class ModWorldData extends WorldSavedData 
 {
 
 	private static final String IDENTIFIER = MagicBeans.MODID;
@@ -12,12 +12,12 @@ public class MagicBeansWorldData extends WorldSavedData
 	private boolean hasCastleSpawned = false;
 	private boolean familyCowHasGivenLead = false;
 	
-	public MagicBeansWorldData() 
+	public ModWorldData() 
 	{
 		this(IDENTIFIER);
 	}
 	
-	public MagicBeansWorldData(String parIdentifier) 
+	public ModWorldData(String parIdentifier) 
 	{
 		super(parIdentifier);
 		markDirty();
@@ -77,15 +77,15 @@ public class MagicBeansWorldData extends WorldSavedData
 		}
 	}
 		
-	public static MagicBeansWorldData get(World world) 
+	public static ModWorldData get(World world) 
 	{
-		MagicBeansWorldData data = (MagicBeansWorldData)world.loadItemData(MagicBeansWorldData.class, IDENTIFIER);
+		ModWorldData data = (ModWorldData)world.loadItemData(ModWorldData.class, IDENTIFIER);
 		if (data == null) 
 		{
 			// DEBUG
 			System.out.println("MagicBeansWorldData didn't exist so creating it");
 			
-			data = new MagicBeansWorldData();
+			data = new ModWorldData();
 			world.setItemData(IDENTIFIER, data);
 		}
 		return data;

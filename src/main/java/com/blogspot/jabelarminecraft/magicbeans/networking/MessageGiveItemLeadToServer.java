@@ -26,8 +26,8 @@ import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeansWorldData;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.MagicBeansUtilities;
+import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -63,7 +63,7 @@ public class MessageGiveItemLeadToServer implements IMessage
         	// DEBUG
         	System.out.println("Message received");
         	EntityPlayer thePlayer = MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-        	if (MagicBeansWorldData.get(thePlayer.worldObj).getFamilyCowHasGivenLead())
+        	if (ModWorldData.get(thePlayer.worldObj).getFamilyCowHasGivenLead())
         	{
         		// DEBUG
         		System.out.println("Player already got one free lead, so not giving another");
@@ -72,12 +72,12 @@ public class MessageGiveItemLeadToServer implements IMessage
         	if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
         	{
 	            thePlayer.inventory.addItemStackToInventory(new ItemStack(Items.lead, 1));
-	            MagicBeansWorldData.get(thePlayer.worldObj).setFamilyCowHasGivenLead(true);
+	            ModWorldData.get(thePlayer.worldObj).setFamilyCowHasGivenLead(true);
         	}
         	else if (!thePlayer.inventory.hasItem(Items.lead)) // full but doesn't already have a lead         		
         	{
     			thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Interact again with the "
-    					+MagicBeansUtilities.stringToRainbow("Family Cow")
+    					+Utilities.stringToRainbow("Family Cow")
     					+" later when you have room in your inventory to get a lead."));
         	}
             return null; // no response in this case

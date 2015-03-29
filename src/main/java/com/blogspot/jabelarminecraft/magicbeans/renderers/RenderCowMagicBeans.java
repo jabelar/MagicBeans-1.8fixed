@@ -24,7 +24,7 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityCowMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
 
 /**
  * @author jabelar
@@ -51,7 +51,7 @@ public class RenderCowMagicBeans extends RenderLiving
         // preRenderCallbackCowMagicBeans((EntityCowMagicBeans) entity, f);
     }
   
-    protected void preRenderCallbackCowMagicBeans(EntityCowMagicBeans entity, float f)
+    protected void preRenderCallbackCowMagicBeans(EntityFamilyCow entity, float f)
     {
         // some people do some G11 transformations or blends here, like you can do
         // GL11.glScalef(2F, 2F, 2F); to scale up the entity
