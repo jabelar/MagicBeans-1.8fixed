@@ -150,14 +150,6 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
     	super.updateTick(parWorld, parPos, parState, parRand);
     }
 
-//	@Override
-//	public TileEntity createNewTileEntity(World parWorld, int parMetadata) 
-//	{
-//		// DEBUG
-//		System.out.println("BlockMagicBeans createNewTileEntity()");
-//		return new TileEntityMagicBeanStalk();
-//	}
-
 	@Override
 	public boolean isLadder(IBlockAccess parWord, BlockPos parPos, EntityLivingBase parEntity)
 	{
