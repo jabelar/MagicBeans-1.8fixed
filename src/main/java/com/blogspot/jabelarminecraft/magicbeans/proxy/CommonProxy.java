@@ -45,9 +45,9 @@ import net.minecraftforge.fml.common.registry.EntityRegistry;
 import net.minecraftforge.fml.common.registry.GameRegistry;
 import net.minecraftforge.fml.relauncher.Side;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.EventHandler;
 import com.blogspot.jabelarminecraft.magicbeans.FMLEventHandler;
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.OreGenEventHandler;
 import com.blogspot.jabelarminecraft.magicbeans.TerrainGenEventHandler;
 import com.blogspot.jabelarminecraft.magicbeans.commands.CommandStructure;
@@ -264,7 +264,7 @@ public class CommonProxy
         GameRegistry.registerItem(MagicBeans.bootsOfSafeFalling, MagicBeans.bootsOfSafeFalling.getUnlocalizedName().substring(5));
 
         GameRegistry.registerItem(MagicBeans.spawnFamilyCow, MagicBeans.spawnFamilyCow.getUnlocalizedName().substring(5));
-        GameRegistry.registerItem(MagicBeans.spawnMysteriousStranger, MagicBeans.spawnMysteriousStranger.getUnlocalizedName().substring(5));
+//        GameRegistry.registerItem(MagicBeans.spawnMysteriousStranger, MagicBeans.spawnMysteriousStranger.getUnlocalizedName().substring(5));
         GameRegistry.registerItem(MagicBeans.spawnGiant, MagicBeans.spawnGiant.getUnlocalizedName().substring(5));
         GameRegistry.registerItem(MagicBeans.spawnGoldenGoose, MagicBeans.spawnGoldenGoose.getUnlocalizedName().substring(5));
 

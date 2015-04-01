@@ -13,3 +13,5 @@ entity.magicbeans.giant.name=Giant
 entity.magicbeans.golden_goose.name=Golden Goose
 achievement.startmagicbeans=Started Jack and Beanstalk Adventure
 achievement.giantslayer=Giant Slayer
+achievement.startmagicbeans.desc=Feed a golden carrot to a cow
+achievement.giantslayer.desc=Find a giant and kill it
