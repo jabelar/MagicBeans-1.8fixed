@@ -22,6 +22,8 @@ import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
@@ -30,6 +32,7 @@ import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
  * @author jabelar
  *
  */
+@SideOnly(Side.CLIENT)
 public class RenderCowMagicBeans extends RenderLiving
 {
 

@@ -23,6 +23,8 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.util.ResourceLocation;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 import org.lwjgl.opengl.GL11;
 
@@ -33,6 +35,7 @@ import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
  * @author jabelar
  *
  */
+@SideOnly(Side.CLIENT)
 public class RenderGiant extends RenderLiving
 {
     protected ResourceLocation giantTexture;
