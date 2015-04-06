@@ -53,7 +53,6 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
  */
 public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
 {
-    @SideOnly(Side.CLIENT)
     protected int colorBase = 0x000000;
     protected int colorSpots = 0xFFFFFF;
     protected String entityToSpawnName = "";
