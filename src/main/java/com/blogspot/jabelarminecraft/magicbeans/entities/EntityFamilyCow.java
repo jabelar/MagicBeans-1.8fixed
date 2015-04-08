@@ -20,7 +20,6 @@ import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityAgeable;
-import net.minecraft.entity.EntityList;
 import net.minecraft.entity.ai.EntityAIFollowParent;
 import net.minecraft.entity.ai.EntityAILookIdle;
 import net.minecraft.entity.ai.EntityAIPanic;
@@ -43,7 +42,6 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.ai.EntityCowMagicBeansAIMate;
 import com.blogspot.jabelarminecraft.magicbeans.gui.GuiFamilyCow;
@@ -94,40 +92,31 @@ public class EntityFamilyCow extends EntityCow implements IEntityMagicBeans, IEn
         		Entity entityLeashedTo = getLeashedToEntity();
         		if (entityLeashedTo instanceof EntityPlayer)
         		{
-
-        			EntityPlayer playerLeashedTo = (EntityPlayer) entityLeashedTo;
-        			Vec3 playerLookVector = playerLeashedTo.getLookVec();
-        			playerLeashedTo.addChatMessage(new ChatComponentText(Utilities.stringToRainbow("A mysterious stranger appears!")));
-		            String entityToSpawnNameFull = MagicBeans.MODID+".mysterious_stranger";
-		            if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
-		            {
-		            	EntityMysteriousStranger entityToSpawn = new EntityMysteriousStranger(worldObj, this, playerLeashedTo);
-		                double spawnX = playerLeashedTo.posX+5*playerLookVector.xCoord;
-		                double spawnZ = playerLeashedTo.posZ+5*playerLookVector.zCoord;
-		                double spawnY = Utilities.getHeightValue(worldObj, spawnX, spawnZ);
-		                
-		                // DEBUG
-		                System.out.println("Trying to spawn mysterious stranger at "+spawnX+", "+spawnY+", "+spawnZ);
-		                BlockPos spawnPos = new BlockPos(spawnX, spawnY, spawnZ);
-		                
-		                // check to ensure there is open area for stranger to spawn, not underground
-		                if (worldObj.canBlockSeeSky(spawnPos))
-		                {
-		                	entityToSpawn.setLocationAndAngles(spawnX, spawnY, spawnZ, 
-			                      MathHelper.wrapAngleTo180_float(rand.nextFloat()
-			                      * 360.0F), 0.0F);
-			                worldObj.spawnEntityInWorld(entityToSpawn);
-			                entityToSpawn.playLivingSound();
-			                setHasSpawnedMysteriousStranger(true);
-			        		// DEBUG
-			        		System.out.println("A mysterious stranger appears with entity ID = "+entityToSpawn.getEntityId());
-		                }
-		            }
-		            else
-		            {
-		                //DEBUG
-		                System.out.println("Entity not found "+entityToSpawnNameFull);
-		            }
+	    			EntityPlayer playerLeashedTo = (EntityPlayer) entityLeashedTo;
+	    			Vec3 playerLookVector = playerLeashedTo.getLookVec();
+	
+	    			EntityMysteriousStranger entityToSpawn = new EntityMysteriousStranger(worldObj, this, playerLeashedTo);
+	                double spawnX = playerLeashedTo.posX+5*playerLookVector.xCoord;
+	                double spawnZ = playerLeashedTo.posZ+5*playerLookVector.zCoord;
+	                double spawnY = Utilities.getHeightValue(worldObj, spawnX, spawnZ);
+	                
+	                // DEBUG
+	                System.out.println("Trying to spawn mysterious stranger at "+spawnX+", "+spawnY+", "+spawnZ);
+	                BlockPos spawnPos = new BlockPos(spawnX, spawnY, spawnZ);
+	                
+	                // check to ensure there is open area for stranger to spawn, not underground
+	                if (worldObj.canBlockSeeSky(spawnPos))
+	                {
+	                	entityToSpawn.setLocationAndAngles(spawnX, spawnY, spawnZ, 
+		                      MathHelper.wrapAngleTo180_float(rand.nextFloat()
+		                      * 360.0F), 0.0F);
+		                worldObj.spawnEntityInWorld(entityToSpawn);
+		                entityToSpawn.playLivingSound();
+		                setHasSpawnedMysteriousStranger(true);
+		    			playerLeashedTo.addChatMessage(new ChatComponentText(Utilities.stringToRainbow("A mysterious stranger appears!")));
+		        		// DEBUG
+		        		System.out.println("A mysterious stranger appears with entity ID = "+entityToSpawn.getEntityId());
+	                }
         		}
     		}
     	}
