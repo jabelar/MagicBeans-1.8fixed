@@ -63,7 +63,7 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
         // plant will grow.  Note that the canPlayerEdit class doesn't seem to 
         // be affected by the position parameters and really just checks player 
         // and item capability to edit
-        else if (parPlayer.func_175151_a(parPos, parSide, parItemStack)) //  .canPlayerEdit(parX, parY+1, parZ, par7, parItemStack))
+        else if (parPlayer.canPlayerEdit(parPos, parSide, parItemStack)) //  .canPlayerEdit(parX, parY+1, parZ, par7, parItemStack))
         {
 //        	// DEBUG
 //        	System.out.println("Player is allowed to edit");

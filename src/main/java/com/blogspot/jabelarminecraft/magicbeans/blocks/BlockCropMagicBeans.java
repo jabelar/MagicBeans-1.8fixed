@@ -82,9 +82,9 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
     }
     
     @Override
-	public boolean canBlockStay(World worldIn, BlockPos p_180671_2_, IBlockState p_180671_3_)
+	public boolean canBlockStay(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState)
     {
-        return (worldIn.getLight(p_180671_2_) >= 8 || worldIn.canSeeSky(p_180671_2_)) && worldIn.getBlockState(p_180671_2_.offsetDown()).getBlock().canSustainPlant(worldIn, p_180671_2_.offsetDown(), net.minecraft.util.EnumFacing.UP, this);
+        return (parWorld.getLight(parBlockPos) >= 8 || parWorld.canSeeSky(parBlockPos)) && parWorld.getBlockState(parBlockPos.down()).getBlock().canSustainPlant(parWorld, parBlockPos.down(), net.minecraft.util.EnumFacing.UP, this);
     }
 
 

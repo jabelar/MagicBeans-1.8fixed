@@ -151,11 +151,11 @@ public class EntityCowMagicBeansAIMate extends EntityAIBase
 
         if (entityageable != null)
         {
-            EntityPlayer entityplayer = theAnimal.func_146083_cb();
+            EntityPlayer entityplayer = theAnimal.getPlayerInLove();
 
-            if (entityplayer == null && targetMate.func_146083_cb() != null)
+            if (entityplayer == null && targetMate.getPlayerInLove() != null)
             {
-                entityplayer = targetMate.func_146083_cb();
+                entityplayer = targetMate.getPlayerInLove();
             }
 
             if (entityplayer != null)

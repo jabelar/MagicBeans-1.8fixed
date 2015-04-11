@@ -506,7 +506,7 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
         }
 
         // Check for invulnerability
-        if (func_180431_b(parDamageSource))
+        if (isEntityInvulnerable(parDamageSource))
         {
             return true;
         }
@@ -536,7 +536,7 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
     	// DEBUG
     	System.out.println("EntityGiant damageEntity()");
     	
-        if (!func_180431_b(parDamageSource))
+        if (!isEntityInvulnerable(parDamageSource))
         {
             parDamageAmount = ForgeHooks.onLivingHurt(this, parDamageSource, parDamageAmount);
             if (parDamageAmount <= 0) return;

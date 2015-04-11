@@ -100,7 +100,7 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         {
             return true;
         }
-        else if (!playerIn.func_175151_a(pos.offset(side), side, stack))
+        else if (!playerIn.canPlayerEdit(pos.offset(side), side, stack))
         {
             return false;
         }
@@ -177,14 +177,14 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
             {
                 if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
                 {
-                    BlockPos blockpos = movingobjectposition.func_178782_a();
+                    BlockPos blockpos = movingobjectposition.getBlockPos();
 
                     if (!worldIn.isBlockModifiable(playerIn, blockpos))
                     {
                         return itemStackIn;
                     }
 
-                    if (!playerIn.func_175151_a(blockpos, movingobjectposition.field_178784_b, itemStackIn))
+                    if (!playerIn.canPlayerEdit(blockpos, movingobjectposition.sideHit, itemStackIn))
                     {
                         return itemStackIn;
                     }

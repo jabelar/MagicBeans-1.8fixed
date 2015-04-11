@@ -114,20 +114,6 @@ public class Utilities
 	{
 		return stringToGolden(parString, parShineLocation, false);
 	}
-
-	public static Entity getEntityByID(int entityID, World world)        
-	{         
-	    for(Object o: world.getLoadedEntityList())                
-	    {                        
-	        if(((Entity)o).getEntityId() == entityID)                        
-	        {   
-	        	// DEBUG
-	            // System.out.println("Found the entity");                                
-	            return ((Entity)o);                        
-	        }                
-	    }                
-	    return null;        
-	} 
 	
 	/**
 	* Based on code from http://pages.cs.wisc.edu/~ltorrey/cs302/examples/PigLatinTranslator.java
@@ -251,7 +237,7 @@ public class Utilities
     	int chunkX = intX >> 4;
     	int chunkZ = intZ >> 4;
     	double height = parWorld.getChunkFromChunkCoords(chunkX, chunkZ)
-    			.getHeight(intX & 15, intZ & 15);
+    			.getHeightValue(intX & 15, intZ & 15);
     	
     	return height;
     }
