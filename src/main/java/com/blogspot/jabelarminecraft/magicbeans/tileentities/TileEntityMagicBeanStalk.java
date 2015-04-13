@@ -90,9 +90,9 @@ public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlaye
 	}
 	
 	@Override
-	public boolean shouldRefresh(World parWorld, BlockPos parPos, IBlockState parOldState, IBlockState parNewState)
+	public boolean shouldRefresh(World world, BlockPos pos, IBlockState oldState, IBlockState newSate)
 	{
-		return false;
+	    return (oldState.getBlock() != newSate.getBlock());
 	}
 	
 	public int getGrowStage()
