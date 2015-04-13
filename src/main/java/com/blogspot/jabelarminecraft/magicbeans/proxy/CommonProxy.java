@@ -13,12 +13,13 @@
 
     For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 
-	If you're interested in licensing the code under different terms you can
-	contact the author at julian_abelar@hotmail.com 
+    If you're interested in licensing the code under different terms you can
+    contact the author at julian_abelar@hotmail.com 
 */
 
 package com.blogspot.jabelarminecraft.magicbeans.proxy;
 
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EnumCreatureType;
 import net.minecraft.entity.player.EntityPlayer;
@@ -83,6 +84,7 @@ public class CommonProxy
 
         // register stuff
         registerBlocks();
+        readStructures();
         registerItems();
         registerTileEntities();
         registerModEntities();
@@ -90,12 +92,18 @@ public class CommonProxy
         registerFuelHandlers();
         registerSimpleNetworking();
 //        VillagerRegistry.instance().registerVillagerId(10);
-//		VillagerRegistry.instance().registerVillageTradeHandler(10, new VillageTradeHandlerMagicBeans());
-//		VillagerRegistry.getRegisteredVillagers();
+//        VillagerRegistry.instance().registerVillageTradeHandler(10, new VillageTradeHandlerMagicBeans());
+//        VillagerRegistry.getRegisteredVillagers();
 
     }
 
-	public void fmlLifeCycleEvent(FMLInitializationEvent event)
+    protected void readStructures()
+    {
+        MagicBeans.structureCastle.readArrays(MagicBeans.structureCastle.getName());
+//        MagicBeans.structureCastle.makeSparseArray();
+    }
+
+    public void fmlLifeCycleEvent(FMLInitializationEvent event)
     {
         // register custom event listeners
         registerEventListeners();
@@ -112,51 +120,51 @@ public class CommonProxy
         // can do some inter-mod stuff here
     }
 
-	public void fmlLifeCycleEvent(FMLServerAboutToStartEvent event) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    public void fmlLifeCycleEvent(FMLServerAboutToStartEvent event) 
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void fmlLifeCycleEvent(FMLServerStartedEvent event) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    public void fmlLifeCycleEvent(FMLServerStartedEvent event) 
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void fmlLifeCycleEvent(FMLServerStoppingEvent event) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    public void fmlLifeCycleEvent(FMLServerStoppingEvent event) 
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void fmlLifeCycleEvent(FMLServerStoppedEvent event) 
-	{
-		// TODO Auto-generated method stub
-		
-	}
+    public void fmlLifeCycleEvent(FMLServerStoppedEvent event) 
+    {
+        // TODO Auto-generated method stub
+        
+    }
 
-	public void fmlLifeCycleEvent(FMLServerStartingEvent event) 
-	{
-		// // register server commands
+    public void fmlLifeCycleEvent(FMLServerStartingEvent event) 
+    {
+        // // register server commands
         event.registerServerCommand(new CommandStructure());
         event.registerServerCommand(new CommandStructureCapture());
-	}
-		
+    }
+        
     /*
-	 * Thanks to diesieben07 tutorial for this code
-	 */
-	/**
-	 * Registers the simple networking channel and messages for both sides
-	 */
-	protected void registerSimpleNetworking() 
-	{
-		// DEBUG
-		System.out.println("registering simple networking");
-		MagicBeans.network = NetworkRegistry.INSTANCE.newSimpleChannel(MagicBeans.NETWORK_CHANNEL_NAME);
+     * Thanks to diesieben07 tutorial for this code
+     */
+    /**
+     * Registers the simple networking channel and messages for both sides
+     */
+    protected void registerSimpleNetworking() 
+    {
+        // DEBUG
+        System.out.println("registering simple networking");
+        MagicBeans.network = NetworkRegistry.INSTANCE.newSimpleChannel(MagicBeans.NETWORK_CHANNEL_NAME);
 
-		int packetId = 0;
-		// register messages from client to server
+        int packetId = 0;
+        // register messages from client to server
         MagicBeans.network.registerMessage(MessageToServer.Handler.class, MessageToServer.class, packetId++, Side.SERVER);
         MagicBeans.network.registerMessage(MessageGiveItemMagicBeansToServer.Handler.class, MessageGiveItemMagicBeansToServer.class, packetId++, Side.SERVER);
         MagicBeans.network.registerMessage(MessageGiveItemLeadToServer.Handler.class, MessageGiveItemLeadToServer.class, packetId++, Side.SERVER);
@@ -164,23 +172,23 @@ public class CommonProxy
         // register messages from server to client
         MagicBeans.network.registerMessage(MessageToClient.Handler.class, MessageToClient.class, packetId++, Side.CLIENT);
         MagicBeans.network.registerMessage(MessageSyncEntityToClient.Handler.class, MessageSyncEntityToClient.class, packetId++, Side.CLIENT);
-	}
-	
-	/*	 
-	 * Thanks to CoolAlias for this tip!
-	 */
-	/**
-	 * Returns a side-appropriate EntityPlayer for use during message handling
-	 */
-	public EntityPlayer getPlayerEntityFromContext(MessageContext ctx) 
-	{
-		return ctx.getServerHandler().playerEntity;
-	}
+    }
     
-	/**
-	 * Process the configuration
-	 * @param event
-	 */
+    /*     
+     * Thanks to CoolAlias for this tip!
+     */
+    /**
+     * Returns a side-appropriate EntityPlayer for use during message handling
+     */
+    public EntityPlayer getPlayerEntityFromContext(MessageContext ctx) 
+    {
+        return ctx.getServerHandler().playerEntity;
+    }
+    
+    /**
+     * Process the configuration
+     * @param event
+     */
     protected void initConfig(FMLPreInitializationEvent event)
     {
         // might need to use suggestedConfigFile (event.getSuggestedConfigFile) location to publish
@@ -201,18 +209,18 @@ public class CommonProxy
      */
     public void syncConfig()
     {
-    	config.load();
+        config.load();
         MagicBeans.configGiantHealth = config.get(Configuration.CATEGORY_GENERAL, "Giant Health", 100, "This is a healthy "+Utilities.stringToRainbow("Giant")).getInt(100);
         System.out.println("Giant health = "+MagicBeans.configGiantHealth);
         MagicBeans.configGiantCanRegen = config.get(Configuration.CATEGORY_GENERAL, "Giant Can Regenerate", true, "This is a healthy "+Utilities.stringToRainbow("Giant")).getBoolean(true);
         System.out.println("Giant can regenerate = "+MagicBeans.configGiantCanRegen);
         MagicBeans.configGiantAttackDamage = config.get(Configuration.CATEGORY_GENERAL, "Giant Attack Damage", 8, "He's surprisingly resilient").getInt(8);
         System.out.println("Giant Attack Damage = "+MagicBeans.configGiantAttackDamage);
-        MagicBeans.configMaxStalkHeight = config.get(Configuration.CATEGORY_GENERAL, "Max Beantalk Height", 133, "Cloud level is 133", 40, 150).getInt(133);
+        MagicBeans.configMaxStalkHeight = config.get(Configuration.CATEGORY_GENERAL, "Max Beanstalk Height", 133, "Cloud level is 133", 40, 150).getInt(133);
         System.out.println("Maximum stalk height = "+MagicBeans.configMaxStalkHeight);
         MagicBeans.configTicksPerGrowStage = config.get(Configuration.CATEGORY_GENERAL, "Ticks Per Beanstalk Grow Stage", 2, "Patience is a virtue", 1, 1200).getInt(2);
         System.out.println("Ticks per grow stage = "+MagicBeans.configTicksPerGrowStage);
-        MagicBeans.configTimeUntilNextEgg = config.get(Configuration.CATEGORY_GENERAL, "Time Until Next Golden Egg Laid", 600, "Don't be greedy!", 200, 1800).getInt(600);
+        MagicBeans.configTimeUntilNextEgg = config.get(Configuration.CATEGORY_GENERAL, "Time Between Golden Egg Laid", 600, "Don't be greedy!", 200, 1800).getInt(600);
         System.out.println("Time until next egg = "+MagicBeans.configTimeUntilNextEgg);
         MagicBeans.configCowTextureType = config.get(Configuration.CATEGORY_GENERAL, "Cow Texture Type", 0, "Green cows why not?", 0, 2).getInt(0);
         System.out.println("Cow texture type = "+MagicBeans.configCowTextureType);
@@ -227,13 +235,9 @@ public class CommonProxy
     public void registerBlocks()
     {
         //example: GameRegistry.registerBlock(blockTomato, "tomatoes");
-    	GameRegistry.registerBlock(MagicBeans.blockMagicBeanStalk, MagicBeans.blockMagicBeanStalk.getUnlocalizedName().substring(5));
-    	GameRegistry.registerBlock(MagicBeans.blockCloud, MagicBeans.blockCloud.getUnlocalizedName().substring(5));
-    	
-        // each instance of your block should have a name that is unique within your mod.  use lower case.
-        // you don't need to register an item corresponding to the block, GameRegistry.registerBlock does this automatically.
-    	
-    }
+        GameRegistry.registerBlock(MagicBeans.blockMagicBeanStalk, MagicBeans.blockMagicBeanStalk.getUnlocalizedName().substring(5));
+        GameRegistry.registerBlock(MagicBeans.blockCloud, MagicBeans.blockCloud.getUnlocalizedName().substring(5));
+     }
 
     /** 
      * Registers fluids
@@ -267,8 +271,6 @@ public class CommonProxy
 //        GameRegistry.registerItem(MagicBeans.spawnMysteriousStranger, MagicBeans.spawnMysteriousStranger.getUnlocalizedName().substring(5));
         GameRegistry.registerItem(MagicBeans.spawnGiant, MagicBeans.spawnGiant.getUnlocalizedName().substring(5));
         GameRegistry.registerItem(MagicBeans.spawnGoldenGoose, MagicBeans.spawnGoldenGoose.getUnlocalizedName().substring(5));
-
-        // example: GameRegistry.registerCustomItemStack(name, itemStack);
     }
     
     /**
@@ -297,13 +299,13 @@ public class CommonProxy
         //        GameRegistry.addShapelessRecipe(output, params);
         //        GameRegistry.addSmelting(input, output, xp);
         GameRegistry.addShapedRecipe(new ItemStack(MagicBeans.goldenGooseMeat, 1), 
-        		new Object[]
-        		{
-        			"AAA",
-        			"ABA",
-        			"AAA",
-        			'A', Items.gold_ingot, 'B', Items.chicken
-        		});
+                new Object[]
+                {
+                    "AAA",
+                    "ABA",
+                    "AAA",
+                    'A', Items.gold_ingot, 'B', Items.chicken
+                });
     }
 
     /*
@@ -351,18 +353,18 @@ public class CommonProxy
      }
 
      public void registerModEntityWithEgg(Class parEntityClass, String parEntityName, 
-    	      int parEggColor, int parEggSpotsColor)
-	{
-	    registerModEntity(parEntityClass, parEntityName);
-	    registerSpawnEgg(parEntityName, parEggColor, parEggSpotsColor);
-	}
+              int parEggColor, int parEggSpotsColor)
+    {
+        registerModEntity(parEntityClass, parEntityName);
+        registerSpawnEgg(parEntityName, parEggColor, parEggSpotsColor);
+    }
 
      // can't use vanilla spawn eggs with entities registered with modEntityID, so use custom eggs.
      // name passed must match entity name string
      public void registerSpawnEgg(String parSpawnName, int parEggColor, int parEggSpotsColor)
      {
-    	 Item itemSpawnEgg = new MagicBeansMonsterPlacer(parSpawnName, parEggColor, parEggSpotsColor);
-    	 GameRegistry.registerItem(itemSpawnEgg, itemSpawnEgg.getUnlocalizedName().substring(5));
+         Item itemSpawnEgg = new MagicBeansMonsterPlacer(parSpawnName, parEggColor, parEggSpotsColor);
+         GameRegistry.registerItem(itemSpawnEgg, itemSpawnEgg.getUnlocalizedName().substring(5));
      }
 
      /**
@@ -402,7 +404,7 @@ public class CommonProxy
          for (int i=0; i<allBiomes.length; i++)
          {
              EntityRegistry.addSpawn(parEntity.getClass(), parChance, parMinGroup, parMaxGroup, EnumCreatureType.CREATURE, 
-           	      allBiomes[i]); //change the values to vary the spawn rarity, biome, etc.             	
+                     allBiomes[i]); //change the values to vary the spawn rarity, biome, etc.                 
          }
      }
      
@@ -418,33 +420,37 @@ public class CommonProxy
         // example: GameRegistry.registerFuelHandler(handler);
      }
  
-	/**
+    /**
      * Register event listeners
      */
-	protected void registerEventListeners() 
-	{
-		// DEBUG
-		System.out.println("Registering event listeners");
+    protected void registerEventListeners() 
+    {
+        // DEBUG
+        System.out.println("Registering event listeners");
 
-		MinecraftForge.EVENT_BUS.register(new EventHandler());
+        MinecraftForge.EVENT_BUS.register(new EventHandler());
         MinecraftForge.TERRAIN_GEN_BUS.register(new TerrainGenEventHandler());
         MinecraftForge.ORE_GEN_BUS.register(new OreGenEventHandler());        
 
         // some events, especially tick, is handled on FML bus
         FMLCommonHandler.instance().bus().register(new FMLEventHandler());
     }
-	
-	/**
-	 * Register achievements
-	 */
-	protected void registerAchievements()
-	{
-		MagicBeans.achievementStartMagicBeans = new Achievement("achievement.startmagicbeans", "startmagicbeans", 0, 0, MagicBeans.magicBeans, (Achievement)null);
-		MagicBeans.achievementStartMagicBeans.registerStat().initIndependentStat(); // Eclipse is having trouble chaining these in previous line
-		MagicBeans.achievementGiantSlayer = new Achievement("achievement.giantslayer", "giantslayer", 2, 1, MagicBeans.bootsOfSafeFalling, MagicBeans.achievementStartMagicBeans).setSpecial();
-		MagicBeans.achievementGiantSlayer.registerStat(); // Eclipse is having trouble chaining this in previous line
-		
-		AchievementPage.registerAchievementPage(new AchievementPage("Magic Beans Achievements", new Achievement[] {MagicBeans.achievementStartMagicBeans, MagicBeans.achievementGiantSlayer}));
-	}
+    
+    /**
+     * Register achievements
+     */
+    protected void registerAchievements()
+    {
+        MagicBeans.achievementStartMagicBeans = new Achievement("achievement.startmagicbeans", "startmagicbeans", 0, 0, MagicBeans.magicBeans, (Achievement)null);
+        MagicBeans.achievementStartMagicBeans.registerStat().initIndependentStat(); // Eclipse is having trouble chaining these in previous line
+        MagicBeans.achievementGiantSlayer = new Achievement("achievement.giantslayer", "giantslayer", 2, 1, MagicBeans.bootsOfSafeFalling, MagicBeans.achievementStartMagicBeans).setSpecial();
+        MagicBeans.achievementGiantSlayer.registerStat(); // Eclipse is having trouble chaining this in previous line
+        
+        AchievementPage.registerAchievementPage(new AchievementPage("Magic Beans Achievements", new Achievement[] {MagicBeans.achievementStartMagicBeans, MagicBeans.achievementGiantSlayer}));
+    }
 
+    public void generateMysteriousParticles(Entity theEntity)
+    {
+        
+    }
 }

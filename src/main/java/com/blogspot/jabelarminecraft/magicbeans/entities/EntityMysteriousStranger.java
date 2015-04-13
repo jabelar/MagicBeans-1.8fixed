@@ -18,7 +18,6 @@ package com.blogspot.jabelarminecraft.magicbeans.entities;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.particle.EntityFX;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
@@ -29,8 +28,8 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.gui.GuiMysteriousStranger;
-import com.blogspot.jabelarminecraft.magicbeans.particles.EntityParticleFXMysterious;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
@@ -84,14 +83,9 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 	public void onUpdate()
 	{
 		super.onUpdate();
-		if (worldObj.isRemote && rand.nextFloat()<0.1F)
-		{
-			double var4 = rand.nextGaussian() * 0.02D;
-			double var6 = rand.nextGaussian() * 0.02D;
-			double var8 = rand.nextGaussian() * 0.02D;
-			EntityFX particleMysterious = new EntityParticleFXMysterious(worldObj, posX + rand.nextFloat() * width * 2.0F - width, posY + 0.5D + rand.nextFloat() * height, posZ + rand.nextFloat() * width * 2.0F - width, var4, var6, var8);
-			Minecraft.getMinecraft().effectRenderer.addEffect(particleMysterious);
-		}
+        
+        // create particles
+        MagicBeans.proxy.generateMysteriousParticles(this);
 		
 		// check if cow happened to get killed
 		if (getCowSummonedBy() == null)

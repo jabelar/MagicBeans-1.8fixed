@@ -22,10 +22,12 @@ package com.blogspot.jabelarminecraft.magicbeans.proxy;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelCow;
 import net.minecraft.client.model.ModelVillager;
+import net.minecraft.client.particle.EntityFX;
 import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
+import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.util.ResourceLocation;
@@ -51,6 +53,7 @@ import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenGoose;
 import com.blogspot.jabelarminecraft.magicbeans.entities.EntityMysteriousStranger;
 import com.blogspot.jabelarminecraft.magicbeans.models.ModelGiant;
 import com.blogspot.jabelarminecraft.magicbeans.models.ModelGoldenGoose;
+import com.blogspot.jabelarminecraft.magicbeans.particles.EntityParticleFXMysterious;
 import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderCowMagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGiant;
 import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGoldenEggThrown;
@@ -247,5 +250,19 @@ public class ClientProxy extends CommonProxy
        //control the detail, but have a massive impact on performance. 32x32 is a good balance on my machine.s
        sphere.draw(0.5F, 32, 32);
        GL11.glEndList();
+    }
+    
+    @Override
+    public void generateMysteriousParticles(Entity theEntity)
+    {
+        double var4 = theEntity.worldObj.rand.nextGaussian() * 0.02D;
+        double var6 = theEntity.worldObj.rand.nextGaussian() * 0.02D;
+        double var8 = theEntity.worldObj.rand.nextGaussian() * 0.02D;
+        EntityFX particleMysterious = new EntityParticleFXMysterious(theEntity.worldObj, 
+                theEntity.posX + theEntity.worldObj.rand.nextFloat() * theEntity.width * 2.0F - theEntity.width, 
+                theEntity.posY + 0.5D + theEntity.worldObj.rand.nextFloat() * theEntity.height, 
+                theEntity.posZ + theEntity.worldObj.rand.nextFloat() * theEntity.width * 2.0F - theEntity.width, 
+                var4, var6, var8);
+        Minecraft.getMinecraft().effectRenderer.addEffect(particleMysterious);        
     }
 }
