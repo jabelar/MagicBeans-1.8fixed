@@ -37,7 +37,6 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.registry.GameRegistry;
 
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
@@ -186,11 +185,6 @@ public class ClientProxy extends CommonProxy
         
     	renderItem.getItemModelMesher().register(Item.getItemFromBlock(MagicBeans.blockCloud), 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.blockCloud.getUnlocalizedName().substring(5), "inventory"));
     	renderItem.getItemModelMesher().register(Item.getItemFromBlock(MagicBeans.blockMagicBeanStalk), 0, new ModelResourceLocation(MagicBeans.MODID + ":" + MagicBeans.blockMagicBeanStalk.getUnlocalizedName().substring(5), "inventory"));
-
-    	Item itemBlockSimple = GameRegistry.findItem("magicbeans", "mbe01_block_simple");
-        ModelResourceLocation itemModelResourceLocation = new ModelResourceLocation("magicbeans:mbe01_block_simple", "inventory");
-        final int DEFAULT_ITEM_SUBTYPE = 0;
-        Minecraft.getMinecraft().getRenderItem().getItemModelMesher().register(itemBlockSimple, DEFAULT_ITEM_SUBTYPE, itemModelResourceLocation);
 
 	}
 	
