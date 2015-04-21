@@ -127,9 +127,11 @@ public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IB
 			setHealth(getHealth()+1);
 		}
 		
-        
         // create particles
-        MagicBeans.proxy.generateMysteriousParticles(this);
+        if (ticksExisted % 5 == 0)
+        {
+            MagicBeans.proxy.generateMysteriousParticles(this);
+        }
 		
 		// falling on death can damage like special attack
 		if (deathTime == 19) // time this to point in RenderGiant death fall sequence when it hits the ground

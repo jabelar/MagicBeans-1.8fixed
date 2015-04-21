@@ -85,7 +85,10 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntityM
 		super.onUpdate();
         
         // create particles
-        MagicBeans.proxy.generateMysteriousParticles(this);
+        if (ticksExisted % 5 == 0)
+        {
+            MagicBeans.proxy.generateMysteriousParticles(this);
+        }
 		
 		// check if cow happened to get killed
 		if (getCowSummonedBy() == null)
