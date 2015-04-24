@@ -43,7 +43,7 @@ public class ModWorldData extends WorldSavedData
 		nbt.setBoolean("familyCowHasGivenLead", familyCowHasGivenLead);
 	}
 	
-	public boolean getHasCastleSpwaned() 
+	public boolean getHasCastleSpawned() 
 	{
 		return hasCastleSpawned;
 	}

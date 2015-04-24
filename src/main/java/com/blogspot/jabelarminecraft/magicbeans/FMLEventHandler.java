@@ -124,7 +124,7 @@ public class FMLEventHandler
 		}
 		
 		// DEBUG
-		System.out.println("MagicBeansWorldData hasCastleSpawned ="+ModWorldData.get(event.player.worldObj).getHasCastleSpwaned()+
+		System.out.println("MagicBeansWorldData hasCastleSpawned ="+ModWorldData.get(event.player.worldObj).getHasCastleSpawned()+
 				", familyCowHasGivenLead ="+ModWorldData.get(event.player.worldObj).getFamilyCowHasGivenLead());
 	}
 

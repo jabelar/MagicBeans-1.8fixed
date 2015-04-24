@@ -179,7 +179,7 @@ public class EntityFamilyCow extends EntityCow implements IEntityMagicBeans, IEn
 	public boolean interact(EntityPlayer parPlayer)
     {
     	// check if have already spawned castle
-    	if (!ModWorldData.get(worldObj).getHasCastleSpwaned())
+    	if (!ModWorldData.get(worldObj).getHasCastleSpawned())
     	{
 	    	// Family cow doesn't provide milk (that's why your mother wants you to sell it)
 	    	// don't open gui if holding items, e.g. wheat that should incite mating instead

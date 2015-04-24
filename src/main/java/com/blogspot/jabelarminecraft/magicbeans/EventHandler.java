@@ -436,7 +436,7 @@ public class EventHandler
 	        	{
 	        		// DEBUG
 	        		// System.out.println("While holding a golden carrot");
-	        		if (!ModWorldData.get(world).getHasCastleSpwaned())
+	        		if (!ModWorldData.get(world).getHasCastleSpawned())
 	        		{
 	        			// DEBUG
 	        			// System.out.println("Haven't spawned castle yet so okay to make a family cow");

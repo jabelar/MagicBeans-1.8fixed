@@ -114,4 +114,18 @@ public interface IStructure
 	 * For example you can put things in inventory, etc.
 	 */
 	void customizeTileEntity(BlockPos parPos);
+
+    /**
+     * 
+     */
+    void makeSparseArrays();
+
+    /**
+     * @param parEntity
+     * @param parOffsetX
+     * @param parOffsetY
+     * @param parOffsetZ
+     */
+    void generateSparse(TileEntity parEntity, int parOffsetX, int parOffsetY,
+            int parOffsetZ);
 }

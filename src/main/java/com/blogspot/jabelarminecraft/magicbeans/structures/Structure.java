@@ -25,14 +25,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 public class Structure implements IStructure
 {
@@ -68,11 +72,20 @@ public class Structure implements IStructure
     int[][][] blockMetaArray = null;
 
     BufferedReader readIn;
+    
+    StructureSparseArrayElement[] theSparseArrayBasic = new StructureSparseArrayElement[64 * 64 * 64];
+    StructureSparseArrayElement[] theSparseArrayMeta = new StructureSparseArrayElement[64 * 64 * 64];
+    StructureSparseArrayElement[] theSparseArraySpecial = new StructureSparseArrayElement[64 * 64 * 64];
+    int numSparseElementsBasic = 0;
+    int numSparseElementsMeta = 0;
+    int numSparseElementsSpecial = 0;
 
     public Structure(String parName)
     {
         theStructureName = parName;
-        readArrays(theStructureName);
+        // Remember to put following in the init handling of common proxy *after* the blocks are registered
+        //  readArrays(theStructureName);
+        //  makeSparseArray();
     }
     
     @Override
@@ -155,6 +168,203 @@ public class Structure implements IStructure
             e.printStackTrace();
         }
     }
+
+    
+    @Override
+    public void makeSparseArrays()
+    {
+        Block theBlock = null;
+        // DEBUG
+        System.out.println("Starting to make sparse array for basic blocks");
+        for (int indY=0; indY < dimY; indY++)
+        {
+            for (int indX=0; indX < dimX; indX++)
+            {
+                for (int indZ=0; indZ < dimZ; indZ++) 
+                {
+                    if (!blockNameArray[indX][indY][indZ].equals("minecraft:air"))
+                    {
+                        theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
+                        if (theBlock == null) System.out.println("Block unexpectedly null at "+indX+", "+indY+", "+indZ);
+                        if (blockMetaArray[indX][indY][indZ] == 0 
+                                && theBlock != Blocks.tripwire)
+                        {
+                            theSparseArrayBasic[numSparseElementsBasic] = 
+                                    new StructureSparseArrayElement(
+                                          theBlock,
+                                          0,
+                                          indX,
+                                          indY,
+                                          indZ
+                                          );
+                            numSparseElementsBasic++;
+                        }
+                        else if (blockMetaArray[indX][indY][indZ] > 0)
+                        {
+                            theSparseArrayMeta[numSparseElementsMeta] = 
+                                    new StructureSparseArrayElement(
+                                          theBlock,
+                                          blockMetaArray[indX][indY][indZ],
+                                          indX,
+                                          indY,
+                                          indZ
+                                          );
+                            numSparseElementsMeta++;
+                        }
+                        else // must be trip wire
+                        {
+                            theSparseArraySpecial[numSparseElementsSpecial] = 
+                                    new StructureSparseArrayElement(
+                                          theBlock,
+                                          blockMetaArray[indX][indY][indZ],
+                                          indX,
+                                          indY,
+                                          indZ
+                                          );
+                            numSparseElementsSpecial++;
+                        }
+                    }
+                }
+            }
+        }
+        // DEBUG
+        System.out.println("Finished making sparse array for basic blocks, with number of elements = "+numSparseElementsBasic);
+        System.out.println("Finished making sparse array for meta blocks, with number of elements = "+numSparseElementsMeta);
+        System.out.println("Finished making sparse array for special blocks, with number of elements = "+numSparseElementsSpecial);
+    }
+    
+    @Override
+    public void generateSparse(TileEntity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
+    {
+        // exit if generating not started
+        if (!shouldGenerate)
+        {
+            return;
+        }
+        
+        theTileEntity = parEntity;
+        theWorld = theTileEntity.getWorld();
+
+        if (theWorld.isRemote)
+        {
+            return;
+        }
+
+        // exit if finished
+        if (ModWorldData.get(theWorld).getHasCastleSpawned())
+        {
+            // DEBUG
+            System.out.println("Castle has already spawned");
+            return;
+        }
+
+        // DEBUG
+        System.out.println("Starting to generate with sparse array");
+        
+        startX = theTileEntity.getPos().getX()-9; // +parOffsetX;
+        startY = theTileEntity.getPos().getY()-3; // +parOffsetY;
+        startZ = theTileEntity.getPos().getZ()-12; // +parOffsetZ;
+
+        totalVolume = dimX * dimY * dimZ;
+        
+        // DEBUG
+        System.out.println("Starting to generate basic blocks");
+        long startTime = System.currentTimeMillis();
+        for (int index = 0; index < numSparseElementsBasic; index++)
+        {
+            Block theBlock = theSparseArrayBasic[index].theBlock;
+            theWorld.setBlockState(startPos, null)
+            theWorld.setBlock(
+                    startX+theSparseArrayBasic[index].posX, 
+                    startY+theSparseArrayBasic[index].posY, 
+                    startZ+theSparseArrayBasic[index].posZ, 
+                    theBlock, 
+                    0, 
+                    2
+                    );
+            if (theBlock.hasTileEntity())
+            {
+                customizeTileEntity(
+                        theBlock, 
+                        0, 
+                        startX+theSparseArrayMeta[index].posX, 
+                        startY+theSparseArrayMeta[index].posY, 
+                        startZ+theSparseArrayMeta[index].posZ
+                        );
+            }
+        }
+
+        // DEBUG
+        System.out.println("Starting to generate meta blocks");
+        for (int index = 0; index < numSparseElementsMeta; index++)
+        {
+            Block theBlock = theSparseArrayMeta[index].theBlock;
+            if (theBlock == null) System.out.println("Block is unexpectedly null at meta block index = "+index);
+            int theMetaData = theSparseArrayMeta[index].theMetaData;
+            theWorld.setBlock(
+                    startX+theSparseArrayMeta[index].posX, 
+                    startY+theSparseArrayMeta[index].posY, 
+                    startZ+theSparseArrayMeta[index].posZ, 
+                    theBlock, 
+                    theMetaData, 
+                    2
+                    );
+           if (theBlock.hasTileEntity(theMetaData))
+           {
+               customizeTileEntity(
+                       theBlock, 
+                       theMetaData, 
+                       startX+theSparseArrayMeta[index].posX, 
+                       startY+theSparseArrayMeta[index].posY, 
+                       startZ+theSparseArrayMeta[index].posZ
+                       );
+           }
+        }
+
+        // DEBUG
+        System.out.println("Starting to generate special blocks");
+        for (int index = 0; index < numSparseElementsSpecial; index++)
+        {
+            Block theBlock = theSparseArraySpecial[index].theBlock;
+            if (theBlock == null) System.out.println("Block is unexpectedly null at special block index = "+index);
+            int theMetaData = theSparseArrayMeta[index].theMetaData;
+            theWorld.setBlock(
+                   startX+theSparseArraySpecial[index].posX, 
+                   startY+theSparseArraySpecial[index].posY, 
+                   startZ+theSparseArraySpecial[index].posZ, 
+                   theBlock, 
+                   theMetaData, 
+                   2
+                   );
+           if (theBlock.hasTileEntity(theMetaData))
+           {
+               customizeTileEntity(
+                       theBlock, 
+                       theMetaData, 
+                       startX+theSparseArraySpecial[index].posX, 
+                       startY+theSparseArraySpecial[index].posY, 
+                       startZ+theSparseArraySpecial[index].posZ
+                       );
+           }
+        }
+        long endTime   = System.currentTimeMillis();
+        long totalTime = endTime - startTime;
+        System.out.println("Time to loop 11k blocks = "+totalTime+" milliseconds");
+
+        // DEBUG
+        System.out.println("Populating items");
+        populateItems();
+
+        // DEBUG
+        System.out.println("Populating Entities");
+        populateEntities();
+
+        // DEBUG
+        System.out.println("Structure setting MagicBeansWorldData hasCastleBeenSpawned to true");
+        ModWorldData.get(theWorld).setHasCastleSpawned(true);
+        theWorld.getClosestPlayer(startX, startY, startZ, -1).addChatMessage(new ChatComponentText(Utilities.stringToRainbow("Look up! Something happened at the top of the bean stalk.")));
+    }
+    
     @Override
     public void generateTick(TileEntity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
     {
@@ -176,7 +386,7 @@ public class Structure implements IStructure
         }
 
         // exit if finished
-        if (ModWorldData.get(theWorld).getHasCastleSpwaned())
+        if (ModWorldData.get(theWorld).getHasCastleSpawned())
         {
             // DEBUG
             System.out.println("Castle has already spawned");
@@ -191,32 +401,32 @@ public class Structure implements IStructure
         
         if (!finishedGeneratingBasic)
         {
-            // DEBUG
-            System.out.println("Generating basic blocks");
+//            // DEBUG
+//            System.out.println("Generating basic blocks");
             generateBasicBlocksTick();
         }
         else if (!finishedGeneratingMeta)
         {
-            // DEBUG
-            System.out.println("Generating metadata blocks");
+//            // DEBUG
+//            System.out.println("Generating metadata blocks");
             generateMetaBlocksTick();
         }
         else if (!finishedGeneratingSpecial)
         {
-            // DEBUG
-            System.out.println("Generating special blocks");
+//            // DEBUG
+//            System.out.println("Generating special blocks");
             generateSpecialBlocksTick();
         }
         else if (!finishedPopulatingItems)
         {
-            // DEBUG
-            System.out.println("Populating items");
+//            // DEBUG
+//            System.out.println("Populating items");
             populateItems();
         }
         else if (!finishedPopulatingEntities)
         {
-            // DEBUG
-            System.out.println("Populating Entities");
+//            // DEBUG
+//            System.out.println("Populating Entities");
             populateEntities();
         }
         else
@@ -347,33 +557,6 @@ public class Structure implements IStructure
         }
     }
 
-    public void generateCloudTick() 
-    {
-        // DEBUG
-        System.out.println("Generating cloud");
-
-        int posX = startX-cloudMarginX+ticksGenerating/(dimZ+2*cloudMarginZ);
-
-        for (int indZ = startZ-cloudMarginZ; indZ < startZ+dimZ+cloudMarginZ; indZ++)
-        {
-            // DEBUG
-            // System.out.println("Generating cloud blocks at "+parX+", "+parY+", "+indZ);
-            // let the beanstalk go through the clouds
-            if (!((Math.abs(posX-theTileEntity.getPos().getX())<2)&&(Math.abs(indZ-theTileEntity.getPos().getZ())<2)))
-            {
-                BlockPos thePos = new BlockPos(posX, startY+1, indZ);
-
-                theWorld.setBlockState(thePos, MagicBeans.blockCloud.getDefaultState());
-            }
-        }
-        ticksGenerating += dimZ+2*cloudMarginZ;
-        if (ticksGenerating >= (dimX+2*cloudMarginX) * (dimZ+2*cloudMarginZ))
-        {
-            finishedGeneratingCloud = true;
-            ticksGenerating = 0;
-        }
-    }
-
     @Override
     public void populateItems()
     {
@@ -386,29 +569,6 @@ public class Structure implements IStructure
     public void populateEntities()
     {
         finishedPopulatingEntities = true;
-    }
-
-    
-    public void generateCloud(World parWorld, int parX, int parY, int parZ, int parCloudSize) 
-    {    
-        // DEBUG
-        System.out.println("Generating cloud");
-        
-        if (parWorld.isRemote)
-        {
-            return;
-        }
-
-        for (int indX = parX-parCloudSize/2; indX < parX+parCloudSize/2; indX++)
-        {
-            for (int indZ = parZ-parCloudSize/2; indZ < parZ+parCloudSize/2; indZ++)
-            {
-                BlockPos thePos = new BlockPos(indX, parY-1, indZ);
-                
-                // parWorld.setBlockToAir(thePos);
-                parWorld.setBlockState(thePos, MagicBeans.blockCloud.getDefaultState());
-            }
-        }
     }
 
     public void generate(Entity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
@@ -482,77 +642,15 @@ public class Structure implements IStructure
      * @param parOffsetY
      * @param parOffsetZ
      */
-    public void generate(TileEntity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
+    public void generate(TileEntity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ, boolean parSparse) 
     {
-        TileEntity theEntity = parEntity;
-        theWorld = theEntity.getWorld();
-
-        // DEBUG
-        System.out.println("Generating castle in the clouds. IsRemote = "+theWorld.isRemote);
-
-        if (theWorld.isRemote)
+        if (parSparse)
         {
-            return;
+            generateSparse(parEntity, parOffsetZ, parOffsetZ, parOffsetZ);
         }
-
-        startX = theEntity.getPos().getX()+parOffsetX;
-        startY = theEntity.getPos().getY()+parOffsetY;
-        startZ = theEntity.getPos().getZ()+parOffsetZ;
-        
-        // generate the cloud
-        generateCloud(theWorld, startX, startY, startZ, 75);
-        
-        for (int indY = 0; indY < dimY; indY++) // Y first to organize in vertical layers
+        else
         {
-            for (int indX = 0; indX < dimX; indX++)
-            {
-                for (int indZ = 0; indZ < dimZ; indZ++)
-                {
-                    if (blockMetaArray[indX][indY][indZ]==0)
-                    {
-                        String blockName = blockNameArray[indX][indY][indZ];
-                        if (!(blockName.equals("minecraft:tripwire"))) // tripwire/string needs to be placed after other blocks
-                        {
-                            BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
-                            theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
-                        }
-                    }                    
-                }
-            }
+            generate(theEntity, parOffsetZ, parOffsetZ, parOffsetZ);
         }
-        // best to place metadata blocks after non-metadata blocks as they need to attach, etc.
-        for (int indY = 0; indY < dimY; indY++) // Y first to organize in vertical layers
-        {
-            for (int indX = 0; indX < dimX; indX++)
-            {
-                for (int indZ = 0; indZ < dimZ; indZ++)
-                {
-                    if (!(blockMetaArray[indX][indY][indZ]==0))
-                    {
-                        BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
-                        theWorld.setBlockState(thePos, Block.getBlockFromName(blockNameArray[indX][indY][indZ])
-                                .getStateFromMeta(blockMetaArray[indX][indY][indZ]));
-                    }                    
-                }
-            }
-        }
-        // some blocks with 0 metadata, like string/tripwire, require other blocks to be placed already, so do them again as last pass.
-        for (int indY = 0; indY < dimY; indY++) // Y first to organize in vertical layers
-        {
-            for (int indX = 0; indX < dimX; indX++)
-            {
-                for (int indZ = 0; indZ < dimZ; indZ++)
-                {
-                    String blockName = blockNameArray[indX][indY][indZ];
-                    if (blockName.equals("minecraft:tripwire"))
-                    {
-                        BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
-                        theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
-                    }                    
-                }
-            }
-        }        
     }
-
-
 }

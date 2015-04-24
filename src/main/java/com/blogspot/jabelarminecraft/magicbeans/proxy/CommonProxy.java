@@ -100,7 +100,7 @@ public class CommonProxy
     protected void readStructures()
     {
         MagicBeans.structureCastle.readArrays(MagicBeans.structureCastle.getName());
-//        MagicBeans.structureCastle.makeSparseArray();
+        MagicBeans.structureCastle.makeSparseArray();
     }
 
     public void fmlLifeCycleEvent(FMLInitializationEvent event)
@@ -111,7 +111,7 @@ public class CommonProxy
         // register recipes here to allow use of items from other mods
         registerRecipes();
         
-        // register achievements here to allow use of items from other mods
+        // register achievements here to allow use of items and blocks from other mods
         registerAchievements();
     }
     

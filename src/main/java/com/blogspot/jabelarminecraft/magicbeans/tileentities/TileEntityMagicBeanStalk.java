@@ -52,7 +52,7 @@ public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlaye
 	@Override
 	public void update()
 	{
-		if (worldObj.isRemote || ModWorldData.get(worldObj).getHasCastleSpwaned())
+		if (worldObj.isRemote || ModWorldData.get(worldObj).getHasCastleSpawned())
 		{
 			return;
 		}
