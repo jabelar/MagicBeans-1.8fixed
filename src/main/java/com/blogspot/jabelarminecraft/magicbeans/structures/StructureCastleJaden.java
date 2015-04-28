@@ -55,15 +55,25 @@ public class StructureCastleJaden extends Structure
 	@Override
 	public void customizeTileEntity(BlockPos parPos) 
 	{
+	    // DEBUG
+	    System.out.println("Customizing tile entity");
 		Block theBlock = theWorld.getBlockState(parPos).getBlock();
 		if (theBlock == Blocks.dispenser)
 		{
+		    // DEBUG
+		    System.out.println("Populating dispenser");
 			TileEntityDispenser theTileEntity = (TileEntityDispenser) theWorld.getTileEntity(parPos);
 			if (theTileEntity != null)
 			{
+			    // DEBUG
+			    System.out.println("Found tile entity");
 				int inventorySize = theTileEntity.getSizeInventory();
+				// DEBUG
+				System.out.println("With inventory size = "+inventorySize);
 				for (int i=0; i < inventorySize; i++)
 				{
+				    // DEBUG
+				    System.out.println("Setting contents for slot = "+i);
 					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.arrow, 5));
 				}
 			}
