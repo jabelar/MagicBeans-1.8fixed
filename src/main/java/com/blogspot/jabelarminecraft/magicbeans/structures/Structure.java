@@ -25,7 +25,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 
 import net.minecraft.block.Block;
-import net.minecraft.block.state.IBlockState;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
@@ -270,82 +269,50 @@ public class Structure implements IStructure
         // DEBUG
         System.out.println("Starting to generate basic blocks");
         long startTime = System.currentTimeMillis();
+        Block theBlock = null;
+        BlockPos theBlockPos = null;
+        StructureSparseArrayElement theElement = null;
         for (int index = 0; index < numSparseElementsBasic; index++)
         {
-            Block theBlock = theSparseArrayBasic[index].theBlock;
-            theWorld.setBlockState(startPos, null)
-            theWorld.setBlock(
-                    startX+theSparseArrayBasic[index].posX, 
-                    startY+theSparseArrayBasic[index].posY, 
-                    startZ+theSparseArrayBasic[index].posZ, 
-                    theBlock, 
-                    0, 
-                    2
-                    );
+            theElement = theSparseArrayBasic[index];
+            theBlock = theElement.theBlock;
+            theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
+            theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(0));
             if (theBlock.hasTileEntity())
             {
-                customizeTileEntity(
-                        theBlock, 
-                        0, 
-                        startX+theSparseArrayMeta[index].posX, 
-                        startY+theSparseArrayMeta[index].posY, 
-                        startZ+theSparseArrayMeta[index].posZ
-                        );
+                customizeTileEntity(theBlockPos);
             }
         }
 
         // DEBUG
         System.out.println("Starting to generate meta blocks");
+        int theMetaData = 0;
         for (int index = 0; index < numSparseElementsMeta; index++)
         {
-            Block theBlock = theSparseArrayMeta[index].theBlock;
-            if (theBlock == null) System.out.println("Block is unexpectedly null at meta block index = "+index);
-            int theMetaData = theSparseArrayMeta[index].theMetaData;
-            theWorld.setBlock(
-                    startX+theSparseArrayMeta[index].posX, 
-                    startY+theSparseArrayMeta[index].posY, 
-                    startZ+theSparseArrayMeta[index].posZ, 
-                    theBlock, 
-                    theMetaData, 
-                    2
-                    );
-           if (theBlock.hasTileEntity(theMetaData))
-           {
-               customizeTileEntity(
-                       theBlock, 
-                       theMetaData, 
-                       startX+theSparseArrayMeta[index].posX, 
-                       startY+theSparseArrayMeta[index].posY, 
-                       startZ+theSparseArrayMeta[index].posZ
-                       );
-           }
+            theElement = theSparseArrayMeta[index];
+            theBlock = theElement.theBlock;
+            theMetaData = theElement.theMetaData;
+            theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
+            theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+            if (theBlock.hasTileEntity())
+            {
+                customizeTileEntity(theBlockPos);
+            }
         }
 
         // DEBUG
         System.out.println("Starting to generate special blocks");
         for (int index = 0; index < numSparseElementsSpecial; index++)
         {
-            Block theBlock = theSparseArraySpecial[index].theBlock;
-            if (theBlock == null) System.out.println("Block is unexpectedly null at special block index = "+index);
-            int theMetaData = theSparseArrayMeta[index].theMetaData;
-            theWorld.setBlock(
-                   startX+theSparseArraySpecial[index].posX, 
-                   startY+theSparseArraySpecial[index].posY, 
-                   startZ+theSparseArraySpecial[index].posZ, 
-                   theBlock, 
-                   theMetaData, 
-                   2
-                   );
-           if (theBlock.hasTileEntity(theMetaData))
-           {
-               customizeTileEntity(
-                       theBlock, 
-                       theMetaData, 
-                       startX+theSparseArraySpecial[index].posX, 
-                       startY+theSparseArraySpecial[index].posY, 
-                       startZ+theSparseArraySpecial[index].posZ
-                       );
-           }
+            theElement = theSparseArraySpecial[index];
+            theBlock = theElement.theBlock;
+            theMetaData = theElement.theMetaData;
+            theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
+            theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+            if (theBlock.hasTileEntity())
+            {
+                customizeTileEntity(theBlockPos);
+            }
         }
         long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
