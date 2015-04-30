@@ -368,32 +368,32 @@ public class Structure implements IStructure
         
         if (!finishedGeneratingBasic)
         {
-//            // DEBUG
-//            System.out.println("Generating basic blocks");
+            // DEBUG
+            System.out.println("Generating basic blocks");
             generateBasicBlocksTick();
         }
         else if (!finishedGeneratingMeta)
         {
-//            // DEBUG
-//            System.out.println("Generating metadata blocks");
+            // DEBUG
+            System.out.println("Generating metadata blocks");
             generateMetaBlocksTick();
         }
         else if (!finishedGeneratingSpecial)
         {
-//            // DEBUG
-//            System.out.println("Generating special blocks");
+            // DEBUG
+            System.out.println("Generating special blocks");
             generateSpecialBlocksTick();
         }
         else if (!finishedPopulatingItems)
         {
-//            // DEBUG
-//            System.out.println("Populating items");
+            // DEBUG
+            System.out.println("Populating items");
             populateItems();
         }
         else if (!finishedPopulatingEntities)
         {
-//            // DEBUG
-//            System.out.println("Populating Entities");
+            // DEBUG
+            System.out.println("Populating Entities");
             populateEntities();
         }
         else
@@ -538,18 +538,21 @@ public class Structure implements IStructure
         finishedPopulatingEntities = true;
     }
 
-    public void generate(Entity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
+    public void generate(TileEntity parEntity, int parOffsetX, int parOffsetY, int parOffsetZ) 
     {
-        Entity theEntity = parEntity;
-        theWorld = theEntity.worldObj;
+        TileEntity theEntity = parEntity;
+        theWorld = theEntity.getWorld();
         if (theWorld.isRemote)
         {
             return;
         }
 
-        startX = (int) theEntity.posX;
-        startY = (int) theEntity.posY;
-        startZ = (int) theEntity.posZ;
+        startX = theEntity.getPos().getX();
+        startY = theEntity.getPos().getY();
+        startZ = theEntity.getPos().getZ();
+        
+        BlockPos thePos = null;
+        Block theBlock = null;
         
         for (int indY = 0; indY < dimY; indY++) // Y first to organize in vertical layers
         {
@@ -562,8 +565,13 @@ public class Structure implements IStructure
                         String blockName = blockNameArray[indX][indY][indZ];
                         if (!(blockName.equals("minecraft:tripwire"))) // tripwire/string needs to be placed after other blocks
                         {
-                            BlockPos thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
-                            theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
+                            thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
+                            theBlock = Block.getBlockFromName(blockName);
+                            theWorld.setBlockState(thePos, theBlock.getDefaultState());
+                            if (theBlock.hasTileEntity())
+                            {
+                                customizeTileEntity(thePos);
+                            }
                         }
                     }                    
                 }
@@ -578,9 +586,13 @@ public class Structure implements IStructure
                 {
                     if (!(blockMetaArray[indX][indY][indZ]==0))
                     {
-                        BlockPos thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
-                        theWorld.setBlockState(thePos, Block.getBlockFromName(blockNameArray[indX][indY][indZ])
-                                .getStateFromMeta(blockMetaArray[indX][indY][indZ]));
+                        thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
+                        theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
+                        theWorld.setBlockState(thePos, theBlock.getStateFromMeta(blockMetaArray[indX][indY][indZ]));
+                        if (theBlock.hasTileEntity())
+                        {
+                            customizeTileEntity(thePos);
+                        }
                     }                    
                 }
             }
@@ -595,7 +607,7 @@ public class Structure implements IStructure
                     String blockName = blockNameArray[indX][indY][indZ];
                     if (blockName.equals("minecraft:tripwire"))
                     {
-                        BlockPos thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
+                        thePos = new BlockPos(startX+parOffsetX+indX, startY+parOffsetY+indY, startZ+parOffsetZ+indZ);
                         theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
                     }                    
                 }
@@ -617,7 +629,7 @@ public class Structure implements IStructure
         }
         else
         {
-            generate(theEntity, parOffsetZ, parOffsetZ, parOffsetZ);
+            generate(parEntity, parOffsetZ, parOffsetZ, parOffsetZ);
         }
     }
 }

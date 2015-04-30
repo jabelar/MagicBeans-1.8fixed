@@ -75,6 +75,8 @@ public class StructureCastleJaden extends Structure
 				    // DEBUG
 				    System.out.println("Setting contents for slot = "+i);
 					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.arrow, 5));
+					// DEBUG
+					System.out.println("The slot contents are "+theTileEntity.getStackInSlot(i));
 				}
 			}
 			else
