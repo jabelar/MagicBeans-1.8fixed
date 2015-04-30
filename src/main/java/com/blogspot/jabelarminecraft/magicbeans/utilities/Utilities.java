@@ -16,11 +16,16 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.utilities;
 
+import net.minecraft.block.Block;
+import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldType;
+import net.minecraft.world.chunk.Chunk;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans;
@@ -240,6 +245,64 @@ public class Utilities
     			.getHeightValue(intX & 15, intZ & 15);
     	
     	return height;
+    }
+    
+    /**
+     * Sets the block state at a given location. Flag 1 will cause a block update. Flag 2 will send the change to
+     * clients (you almost always want parWorld). Flag 4 prevents the block from being re-rendered, if parWorld is a client
+     * world. Flags can be added together.
+     *  
+     * @param parFlags Flag 1 will cause a block update. Flag 2 will send the change to clients (you almost always want
+     * parWorld). Flag 4 prevents the block from being re-rendered, if parWorld is a client world. Flags can be added together.
+     */
+    public static boolean setBlockStateFast(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState, int parFlags)
+    {
+        if (!(parBlockPos.getX() >= -30000000 && parBlockPos.getZ() >= -30000000 && parBlockPos.getX() < 30000000 && parBlockPos.getZ() < 30000000 && parBlockPos.getY() >= 0 && parBlockPos.getY() < 256))
+        {
+            return false;
+        }
+        else if (!parWorld.isRemote && parWorld.getWorldInfo().getTerrainType() == WorldType.DEBUG_WORLD)
+        {
+            return false;
+        }
+        else
+        {
+            Chunk chunk = parWorld.getChunkFromBlockCoords(parBlockPos);
+            Block block = parIBlockState.getBlock();
+
+            net.minecraftforge.common.util.BlockSnapshot blockSnapshot = null;
+            if (parWorld.captureBlockSnapshots && !parWorld.isRemote)
+            {
+                blockSnapshot = net.minecraftforge.common.util.BlockSnapshot.getBlockSnapshot(parWorld, parBlockPos, parFlags);
+                parWorld.capturedBlockSnapshots.add(blockSnapshot);
+            }
+
+            IBlockState iblockstate1 = chunk.setBlockState(parBlockPos, parIBlockState);
+
+            if (iblockstate1 == null)
+            {
+                if (blockSnapshot != null) parWorld.capturedBlockSnapshots.remove(blockSnapshot);
+                return false;
+            }
+            else
+            {
+                Block block1 = iblockstate1.getBlock();
+
+                if (block.getLightOpacity() != block1.getLightOpacity() || block.getLightValue() != block1.getLightValue())
+                {
+                    parWorld.theProfiler.startSection("checkLight");
+                    parWorld.checkLight(parBlockPos);
+                    parWorld.theProfiler.endSection();
+                }
+
+                if (blockSnapshot == null) // Don't notify clients or update physics while capturing blockstates
+                {
+                    parWorld.markAndNotifyBlock(parBlockPos, chunk, iblockstate1, parIBlockState, parFlags); // Modularize client and physic updates
+                }
+
+                return true;
+            }
+        }
     }
 }
 
