@@ -84,8 +84,8 @@ public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlaye
 			else // fully grown
 			{
 				MagicBeans.structureCastle.shouldGenerate = true;
-//				MagicBeans.structureCastle.generate(this, pos.getX(), pos.getY(), pos.getZ(), false);
-				MagicBeans.structureCastle.generateTick(this, 5, -2, 5);
+				MagicBeans.structureCastle.generate(this, pos.getX(), pos.getY(), pos.getZ(), true);
+//				MagicBeans.structureCastle.generateTick(this, 5, -2, 5);
 			}
 		}
 	}
