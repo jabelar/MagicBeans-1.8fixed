@@ -150,7 +150,7 @@ public class FMLEventHandler
 
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
 	public void onEvent(ClientTickEvent event) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
-	{
+	{ 
 
 	}
 

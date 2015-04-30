@@ -293,7 +293,7 @@ public class Structure implements IStructure
             theBlock = theElement.theBlock;
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
-            theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
             if (theBlock.hasTileEntity())
             {
                 customizeTileEntity(theBlockPos);
@@ -308,7 +308,7 @@ public class Structure implements IStructure
             theBlock = theElement.theBlock;
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
-            theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
             if (theBlock.hasTileEntity())
             {
                 customizeTileEntity(theBlockPos);
