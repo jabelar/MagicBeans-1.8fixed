@@ -272,7 +272,7 @@ public class Utilities
         else
         {
             Chunk theChunk = parWorld.getChunkFromBlockCoords(parBlockPos);
-            Block newBlock = parIBlockState.getBlock();
+//            Block newBlock = parIBlockState.getBlock();
 
             BlockSnapshot blockSnapshot = null;
             if (parWorld.captureBlockSnapshots && !parWorld.isRemote)

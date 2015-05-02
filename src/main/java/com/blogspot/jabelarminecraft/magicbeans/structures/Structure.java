@@ -277,7 +277,15 @@ public class Structure implements IStructure
             theElement = theSparseArrayBasic[index];
             theBlock = theElement.theBlock;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
-            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 2);
+            // need to set the occasional block with normal method to ensure lighting updates
+            if (index % 500 == 0) // every 500 blocks
+            {
+                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(0));
+            }
+            else
+            {
+                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 2);
+            }
             if (theBlock.hasTileEntity())
             {
                 customizeTileEntity(theBlockPos);
