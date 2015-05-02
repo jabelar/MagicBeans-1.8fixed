@@ -63,6 +63,7 @@ public class Structure implements IStructure
     public boolean finishedGeneratingBasic = false; // basic block generation
     public boolean finishedGeneratingMeta = false; // blocks with metadata generation
     public boolean finishedGeneratingSpecial = false; // special blocks like tripwire
+    public boolean finishedPopulatingTileEntities = false; // for putting stuff into tile entity containers
     public boolean finishedPopulatingItems = false; // items into inventories and such
     public boolean finishedPopulatingEntities = false; // default entities that inhabit structure
     protected int ticksGenerating = 0;
@@ -75,9 +76,12 @@ public class Structure implements IStructure
     StructureSparseArrayElement[] theSparseArrayBasic = new StructureSparseArrayElement[64 * 64 * 64];
     StructureSparseArrayElement[] theSparseArrayMeta = new StructureSparseArrayElement[64 * 64 * 64];
     StructureSparseArrayElement[] theSparseArraySpecial = new StructureSparseArrayElement[64 * 64 * 64];
+    StructureSparseArrayElement[] theSparseArrayTileEntities = new StructureSparseArrayElement[64 * 64 * 64];
+    
     int numSparseElementsBasic = 0;
     int numSparseElementsMeta = 0;
     int numSparseElementsSpecial = 0;
+    int numSparseElementsTileEntities = 0;
 
     public Structure(String parName)
     {
@@ -222,6 +226,19 @@ public class Structure implements IStructure
                                           );
                             numSparseElementsSpecial++;
                         }
+                        
+                        if (theBlock.hasTileEntity())
+                        {
+                            theSparseArrayTileEntities[numSparseElementsTileEntities] = 
+                                    new StructureSparseArrayElement(
+                                          theBlock,
+                                          blockMetaArray[indX][indY][indZ],
+                                          indX,
+                                          indY,
+                                          indZ
+                                          );
+                            numSparseElementsTileEntities++;
+                        }
                     }
                 }
             }
@@ -230,6 +247,7 @@ public class Structure implements IStructure
         System.out.println("Finished making sparse array for basic blocks, with number of elements = "+numSparseElementsBasic);
         System.out.println("Finished making sparse array for meta blocks, with number of elements = "+numSparseElementsMeta);
         System.out.println("Finished making sparse array for special blocks, with number of elements = "+numSparseElementsSpecial);
+        System.out.println("Finished making sparse array for tile entities, with number of elements = "+numSparseElementsTileEntities);
     }
     
     @Override
@@ -277,6 +295,7 @@ public class Structure implements IStructure
             theElement = theSparseArrayBasic[index];
             theBlock = theElement.theBlock;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
+<<<<<<< HEAD
             // need to set the occasional block with normal method to ensure lighting updates
             if (index % 500 == 0) // every 500 blocks
             {
@@ -290,6 +309,13 @@ public class Structure implements IStructure
             {
                 customizeTileEntity(theBlockPos);
             }
+=======
+            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 2);
+//            if (theBlock.hasTileEntity())
+//            {
+//                customizeTileEntity(theBlockPos);
+//            }
+>>>>>>> 82804b00a9ccd1d123fb6e60406d69f759091780
         }
 
         // DEBUG
@@ -302,10 +328,10 @@ public class Structure implements IStructure
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
             Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
-            if (theBlock.hasTileEntity())
-            {
-                customizeTileEntity(theBlockPos);
-            }
+//            if (theBlock.hasTileEntity())
+//            {
+//                customizeTileEntity(theBlockPos);
+//            }
         }
 
         // DEBUG
@@ -317,14 +343,18 @@ public class Structure implements IStructure
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
             Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
-            if (theBlock.hasTileEntity())
-            {
-                customizeTileEntity(theBlockPos);
-            }
+//            if (theBlock.hasTileEntity())
+//            {
+//                customizeTileEntity(theBlockPos);
+//            }
         }
         long endTime   = System.currentTimeMillis();
         long totalTime = endTime - startTime;
         System.out.println("Time to loop 11k blocks = "+totalTime+" milliseconds");
+        
+        // DEBUG
+        System.out.println("Populating tile entities");
+        populateTileEntities();
 
         // DEBUG
         System.out.println("Populating items");
@@ -531,13 +561,26 @@ public class Structure implements IStructure
             ticksGenerating = 0;
         }
     }
+    
+    @Override
+    public void populateTileEntities()
+    {
+        StructureSparseArrayElement theElement = null;
+        BlockPos theBlockPos = null;
+        for (int index = 0; index < numSparseElementsTileEntities; index++)
+        {
+            theElement = theSparseArrayTileEntities[index];
+            theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
+            customizeTileEntity(theBlockPos);
+        }
+        
+        finishedPopulatingTileEntities = true;
+    }
 
     @Override
     public void populateItems()
     {
-        // DEBUG
-        System.out.println("Finished populating items in structure.");
-        finishedPopulatingItems = true;
+         finishedPopulatingItems = true;
     }
     
     @Override

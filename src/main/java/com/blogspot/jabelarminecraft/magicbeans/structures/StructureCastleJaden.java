@@ -84,6 +84,8 @@ public class StructureCastleJaden extends Structure
 				// DEBUG
 				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
+			
+			theTileEntity.markDirty();
 		}
 		if (theBlock == Blocks.brewing_stand)
 		{
@@ -111,7 +113,9 @@ public class StructureCastleJaden extends Structure
 					}
 				}
 			}
-		}
+			
+			theTileEntity.markDirty();
+		}	
 	}
 
 	@Override
