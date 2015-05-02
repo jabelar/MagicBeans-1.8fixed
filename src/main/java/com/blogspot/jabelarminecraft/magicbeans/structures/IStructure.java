@@ -128,4 +128,9 @@ public interface IStructure
      */
     void generateSparse(TileEntity parEntity, int parOffsetX, int parOffsetY,
             int parOffsetZ);
+
+	/**
+	 * 
+	 */
+	void populateTileEntities();
 }
