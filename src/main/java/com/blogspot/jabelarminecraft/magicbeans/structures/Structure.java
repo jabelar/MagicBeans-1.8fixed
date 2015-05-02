@@ -295,9 +295,8 @@ public class Structure implements IStructure
             theElement = theSparseArrayBasic[index];
             theBlock = theElement.theBlock;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
-<<<<<<< HEAD
             // need to set the occasional block with normal method to ensure lighting updates
-            if (index % 500 == 0) // every 500 blocks
+            if (index % 100 == 0) // every 500 blocks
             {
                 theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(0));
             }
@@ -305,17 +304,10 @@ public class Structure implements IStructure
             {
                 Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 2);
             }
-            if (theBlock.hasTileEntity())
-            {
-                customizeTileEntity(theBlockPos);
-            }
-=======
-            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 2);
 //            if (theBlock.hasTileEntity())
 //            {
 //                customizeTileEntity(theBlockPos);
 //            }
->>>>>>> 82804b00a9ccd1d123fb6e60406d69f759091780
         }
 
         // DEBUG
@@ -327,7 +319,14 @@ public class Structure implements IStructure
             theBlock = theElement.theBlock;
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
-            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
+            if (index % 100 == 0) // every 500 blocks
+            {
+                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+            }
+            else
+            {
+                 Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
+            }
 //            if (theBlock.hasTileEntity())
 //            {
 //                customizeTileEntity(theBlockPos);
@@ -342,7 +341,14 @@ public class Structure implements IStructure
             theBlock = theElement.theBlock;
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
-            Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
+            if (index % 100 == 0) // every 500 blocks
+            {
+                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+            }
+            else
+            {
+                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
+            }
 //            if (theBlock.hasTileEntity())
 //            {
 //                customizeTileEntity(theBlockPos);
