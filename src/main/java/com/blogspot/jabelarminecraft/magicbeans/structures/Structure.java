@@ -483,7 +483,8 @@ public class Structure implements IStructure
                         }
                         else if (!(theWorld.getBlockState(thePos).getBlock() instanceof BlockMagicBeanStalk))
                         {
-                            theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
+                            Utilities.setBlockStateFast(theWorld, thePos, Block.getBlockFromName(blockName).getDefaultState(), 3);
+//                        	theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
                         }
                     }
                 }
@@ -517,7 +518,8 @@ public class Structure implements IStructure
                     Block theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
                     BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
                     int theMetadata = blockMetaArray[indX][indY][indZ];
-                    theWorld.setBlockState(thePos, theBlock.getStateFromMeta(theMetadata));
+                    Utilities.setBlockStateFast(theWorld, thePos, theBlock.getStateFromMeta(theMetadata), 3);
+//                    theWorld.setBlockState(thePos, theBlock.getStateFromMeta(theMetadata));
                     if (theBlock.hasTileEntity())
                     {
                         customizeTileEntity(thePos);
@@ -563,7 +565,8 @@ public class Structure implements IStructure
                 {
                     BlockPos thePos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
 
-                    theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
+                    Utilities.setBlockStateFast(theWorld, thePos, Block.getBlockFromName(blockName).getDefaultState(), 3);
+//                    theWorld.setBlockState(thePos, Block.getBlockFromName(blockName).getDefaultState());
                 }            
             }
         }
