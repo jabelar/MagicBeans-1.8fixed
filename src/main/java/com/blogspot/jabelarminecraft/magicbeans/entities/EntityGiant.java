@@ -57,7 +57,7 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
  * @author jabelar
  *
  */
-public class EntityGiant extends EntityCreature implements IEntityMagicBeans, IBossDisplayData, IEntityAdditionalSpawnData
+public class EntityGiant extends EntityCreature implements IEntity, IBossDisplayData, IEntityAdditionalSpawnData
 {
     private NBTTagCompound syncDataCompound = new NBTTagCompound();
 

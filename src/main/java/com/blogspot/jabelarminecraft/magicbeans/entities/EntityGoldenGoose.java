@@ -46,7 +46,7 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
-public class EntityGoldenGoose extends EntityAnimal implements IEntityMagicBeans, IEntityAdditionalSpawnData
+public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityAdditionalSpawnData
 {
     private NBTTagCompound syncDataCompound = new NBTTagCompound();
 

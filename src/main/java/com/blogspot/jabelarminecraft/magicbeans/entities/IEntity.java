@@ -21,7 +21,7 @@ package com.blogspot.jabelarminecraft.magicbeans.entities;
 
 import net.minecraft.nbt.NBTTagCompound;
 
-public interface IEntityMagicBeans 
+public interface IEntity 
 {
 	// set up AI tasks
 	void setupAI();

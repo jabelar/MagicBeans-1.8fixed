@@ -36,7 +36,7 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
  * @author jabelar
  *
  */
-public class EntityMysteriousStranger extends EntityCreature implements IEntityMagicBeans, IEntityAdditionalSpawnData
+public class EntityMysteriousStranger extends EntityCreature implements IEntity, IEntityAdditionalSpawnData
 {
     private NBTTagCompound syncDataCompound = new NBTTagCompound();
     private EntityFamilyCow cowSummonedBy = null;

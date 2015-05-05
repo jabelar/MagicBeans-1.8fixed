@@ -18,7 +18,7 @@ package com.blogspot.jabelarminecraft.magicbeans.networking;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -74,12 +74,21 @@ public class MessageGiantSpecialAttackToServer implements IMessage
         @Override
         public IMessage onMessage(MessageGiantSpecialAttackToServer message, MessageContext ctx) 
         {
-        	// DEBUG
-        	System.out.println("Message received");
-        	EntityPlayer thePlayer = MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-            Entity theEntity = thePlayer.worldObj.getEntityByID(entityID);
-            EntityGiant theGiant = (EntityGiant) theEntity;
-            theGiant.getSpecialAttack().doGiantAttack(maxAttackDamage);
+            // Know it will be on the server so make it thread-safe
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
+            thePlayer.getServerForPlayer().addScheduledTask(
+                    new Runnable()
+                    {
+                        @Override
+                        public void run() 
+                        {
+                            Entity theEntity = thePlayer.worldObj.getEntityByID(entityID);
+                            EntityGiant theGiant = (EntityGiant) theEntity;
+                            theGiant.getSpecialAttack().doGiantAttack(maxAttackDamage);
+                            return; 
+                        }
+                }
+            );
             return null; // no response in this case
         }
     }

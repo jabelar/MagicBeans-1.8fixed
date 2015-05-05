@@ -51,7 +51,7 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
  * @author jabelar
  *
  */
-public class EntityFamilyCow extends EntityCow implements IEntityMagicBeans, IEntityAdditionalSpawnData
+public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditionalSpawnData
 {
     public NBTTagCompound syncDataCompound = new NBTTagCompound();
     

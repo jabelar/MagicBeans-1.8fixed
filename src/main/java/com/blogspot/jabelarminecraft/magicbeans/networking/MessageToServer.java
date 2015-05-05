@@ -17,6 +17,7 @@
 package com.blogspot.jabelarminecraft.magicbeans.networking;
 
 import io.netty.buffer.ByteBuf;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
@@ -35,7 +36,7 @@ public class MessageToServer implements IMessage
 
     public MessageToServer() 
     { 
-    	// need this constructor
+        // need this constructor
     }
 
     public MessageToServer(String parText) 
@@ -49,8 +50,8 @@ public class MessageToServer implements IMessage
     public void fromBytes(ByteBuf buf) 
     {
         text = ByteBufUtils.readUTF8String(buf); // this class is very useful in general for writing more complex objects
-    	// DEBUG
-    	System.out.println("fromBytes = "+text);
+        // DEBUG
+        System.out.println("fromBytes = "+text);
     }
 
     @Override
@@ -65,9 +66,22 @@ public class MessageToServer implements IMessage
     {
         
         @Override
-        public IMessage onMessage(MessageToServer message, MessageContext ctx) 
+        public IMessage onMessage(final MessageToServer message, MessageContext ctx) 
         {
+            // DEBUG
             System.out.println(String.format("Received %s from %s", message.text, MagicBeans.proxy.getPlayerEntityFromContext(ctx).getDisplayName()));
+            // Know it will be on the server so make it thread-safe
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
+            thePlayer.getServerForPlayer().addScheduledTask(
+                    new Runnable()
+                    {
+                        @Override
+                        public void run() 
+                        {
+                            return; 
+                        }
+                }
+            );
             return null; // no response in this case
         }
     }

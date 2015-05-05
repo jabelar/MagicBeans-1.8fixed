@@ -32,7 +32,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.util.BlockSnapshot;
 
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.IEntity;
 import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToClient;
 import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToServer;
 
@@ -205,7 +205,7 @@ public class Utilities
 	 * Networking packet utilities
 	 */
 	
-    public static void sendEntitySyncPacketToClient(IEntityMagicBeans parEntity) 
+    public static void sendEntitySyncPacketToClient(IEntity parEntity) 
     {
     	Entity theEntity = (Entity)parEntity;
         if (!theEntity.worldObj.isRemote)
@@ -216,7 +216,7 @@ public class Utilities
         }
     }
 
-    public static void sendEntitySyncPacketToServer(IEntityMagicBeans parEntity) 
+    public static void sendEntitySyncPacketToServer(IEntity parEntity) 
     {
     	Entity theEntity = (Entity)parEntity;
         if (theEntity.worldObj.isRemote)

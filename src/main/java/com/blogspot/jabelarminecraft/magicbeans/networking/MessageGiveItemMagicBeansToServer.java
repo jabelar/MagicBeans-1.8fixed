@@ -18,7 +18,7 @@ package com.blogspot.jabelarminecraft.magicbeans.networking;
 
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
@@ -71,20 +71,29 @@ public class MessageGiveItemMagicBeansToServer implements IMessage
         @Override
         public IMessage onMessage(MessageGiveItemMagicBeansToServer message, MessageContext ctx) 
         {
-        	// DEBUG
-        	System.out.println("Message received");
-        	EntityPlayer thePlayer = MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-        	if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
-        	{
-	            thePlayer.inventory.addItemStackToInventory(new ItemStack(MagicBeans.magicBeans, 1));
-	            Entity theEntity = thePlayer.worldObj.getEntityByID(entityID);
-	            theEntity.setDead();       		
-        	}
-        	else
-        	{
-    			thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Come back for your "
-    					+Utilities.stringToRainbow("Magic Beans")+" later."));
-        	}
+            // Know it will be on the server so make it thread-safe
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
+            thePlayer.getServerForPlayer().addScheduledTask(
+                    new Runnable()
+                    {
+                        @Override
+                        public void run() 
+                        {
+                            if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
+                            {
+                                thePlayer.inventory.addItemStackToInventory(new ItemStack(MagicBeans.magicBeans, 1));
+                                Entity theEntity = thePlayer.worldObj.getEntityByID(entityID);
+                                theEntity.setDead();            
+                            }
+                            else
+                            {
+                                thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Come back for your "
+                                        +Utilities.stringToRainbow("Magic Beans")+" later."));
+                            }
+                            return; 
+                        }
+                }
+            );
             return null; // no response in this case
         }
     }

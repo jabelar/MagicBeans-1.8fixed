@@ -298,11 +298,11 @@ public class Structure implements IStructure
             // need to set the occasional block with normal method to ensure lighting updates
             if (index % 100 == 0) // every 500 blocks
             {
-                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(0));
+                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(0), 3);
             }
             else
             {
-                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 2);
+                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(0), 3);
             }
 //            if (theBlock.hasTileEntity())
 //            {
@@ -321,11 +321,11 @@ public class Structure implements IStructure
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
             if (index % 100 == 0) // every 500 blocks
             {
-                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData), 3);
             }
             else
             {
-                 Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
+                 Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 3);
             }
 //            if (theBlock.hasTileEntity())
 //            {
@@ -341,13 +341,23 @@ public class Structure implements IStructure
             theBlock = theElement.theBlock;
             theMetaData = theElement.theMetaData;
             theBlockPos = new BlockPos(startX+theElement.posX, startY+theElement.posY, startZ+theElement.posZ);
+            // DEBUG
+            System.out.println("Placing tripwire with meta data = "+theMetaData+"at position "+(startX+theElement.posX)+", "+(startY+theElement.posY)+", "+(startZ+theElement.posZ));
+//            if (index % 100 == 0) // every 500 blocks
+//            {
+//                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData), 3);
+//            }
+//            else
+//            {
+//                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 3);
+//            }
             if (index % 100 == 0) // every 500 blocks
             {
-                theWorld.setBlockState(theBlockPos, theBlock.getStateFromMeta(theMetaData));
+                theWorld.setBlockState(theBlockPos, theBlock.getDefaultState(), 3);
             }
             else
             {
-                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getStateFromMeta(theMetaData), 2);
+                Utilities.setBlockStateFast(theWorld, theBlockPos, theBlock.getDefaultState(), 3);
             }
 //            if (theBlock.hasTileEntity())
 //            {

@@ -17,7 +17,7 @@
 package com.blogspot.jabelarminecraft.magicbeans.networking;
 
 import io.netty.buffer.ByteBuf;
-import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ChatComponentText;
@@ -60,26 +60,35 @@ public class MessageGiveItemLeadToServer implements IMessage
         @Override
         public IMessage onMessage(MessageGiveItemLeadToServer message, MessageContext ctx) 
         {
-        	// DEBUG
-        	System.out.println("Message received");
-        	EntityPlayer thePlayer = MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-        	if (ModWorldData.get(thePlayer.worldObj).getFamilyCowHasGivenLead())
-        	{
-        		// DEBUG
-        		System.out.println("Player already got one free lead, so not giving another");
-        		return null; // no responding message
-        	}
-        	if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
-        	{
-	            thePlayer.inventory.addItemStackToInventory(new ItemStack(Items.lead, 1));
-	            ModWorldData.get(thePlayer.worldObj).setFamilyCowHasGivenLead(true);
-        	}
-        	else if (!thePlayer.inventory.hasItem(Items.lead)) // full but doesn't already have a lead         		
-        	{
-    			thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Interact again with the "
-    					+Utilities.stringToRainbow("Family Cow")
-    					+" later when you have room in your inventory to get a lead."));
-        	}
+            // Know it will be on the server so make it thread-safe
+            final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
+            thePlayer.getServerForPlayer().addScheduledTask(
+                    new Runnable()
+                    {
+                        @Override
+                        public void run() 
+                        {
+                            if (ModWorldData.get(thePlayer.worldObj).getFamilyCowHasGivenLead())
+                            {
+                                // DEBUG
+                                System.out.println("Player already got one free lead, so not giving another");
+                                return;
+                            }
+                            if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
+                            {
+                                thePlayer.inventory.addItemStackToInventory(new ItemStack(Items.lead, 1));
+                                ModWorldData.get(thePlayer.worldObj).setFamilyCowHasGivenLead(true);
+                            }
+                            else if (!thePlayer.inventory.hasItem(Items.lead)) // full but doesn't already have a lead              
+                            {
+                                thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Interact again with the "
+                                        +Utilities.stringToRainbow("Family Cow")
+                                        +" later when you have room in your inventory to get a lead."));
+                            }
+                            return; 
+                        }
+                }
+            );
             return null; // no response in this case
         }
     }
