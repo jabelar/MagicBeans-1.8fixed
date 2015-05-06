@@ -22,7 +22,7 @@ group= "com.blogspot.jabelarminecraft.magicbeans" // http://maven.apache.org/gui
 archivesBaseName = "magicbeans"
 
 minecraft {
-    version = "1.8-11.14.1.1361"
+    version = "1.8-11.14.1.1402"
     runDir = "../run/assets"
     mappings = "snapshot_20150411"
 }
