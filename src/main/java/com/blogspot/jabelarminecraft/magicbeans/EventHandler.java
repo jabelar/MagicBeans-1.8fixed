@@ -371,8 +371,6 @@ public class EventHandler
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(NameFormat event)
     {
-    	// DEBUG
-    	System.out.println("NameFormat event for username = "+event.username);
         if (event.username.equalsIgnoreCase("jnaejnae"))
         {
             event.displayname = event.username+" the Great and Powerful";
@@ -381,10 +379,14 @@ public class EventHandler
         {
             event.displayname = event.username+" the Wise";
         }    
-        else if (event.username.equalsIgnoreCase("Taliaailat"))
+        else if (event.username.equalsIgnoreCase("taliaailat"))
         {
             event.displayname = event.username+" the Beautiful";
         }    
+        else
+        {
+            event.displayname = event.username+" the Ugly";            
+        }
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
