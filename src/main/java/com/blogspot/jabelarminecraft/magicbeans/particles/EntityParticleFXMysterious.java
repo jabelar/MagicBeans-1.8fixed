@@ -44,5 +44,4 @@ public class EntityParticleFXMysterious extends EntityAuraFX
 		particleScale = 2.0F;
 		setRBGColorF(0x88, 0x00, 0x88);
 	}
-
 }
