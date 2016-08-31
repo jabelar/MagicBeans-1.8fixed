@@ -16,25 +16,24 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.utilities;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.IEntity;
+import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToClient;
+import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToServer;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.EnumChatFormatting;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldType;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraftforge.common.util.BlockSnapshot;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.IEntity;
-import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToClient;
-import com.blogspot.jabelarminecraft.magicbeans.networking.MessageSyncEntityToServer;
 
 /**
  * @author jabelar
@@ -54,16 +53,16 @@ public class Utilities
 			return "";
 		}
 		String outputString = "";
-		EnumChatFormatting[] colorChar = 
+		TextFormatting[] colorChar = 
 			{
-			EnumChatFormatting.RED,
-			EnumChatFormatting.GOLD,
-			EnumChatFormatting.YELLOW,
-			EnumChatFormatting.GREEN,
-			EnumChatFormatting.AQUA,
-			EnumChatFormatting.BLUE,
-			EnumChatFormatting.LIGHT_PURPLE,
-			EnumChatFormatting.DARK_PURPLE
+			TextFormatting.RED,
+			TextFormatting.GOLD,
+			TextFormatting.YELLOW,
+			TextFormatting.GREEN,
+			TextFormatting.AQUA,
+			TextFormatting.BLUE,
+			TextFormatting.LIGHT_PURPLE,
+			TextFormatting.DARK_PURPLE
 			};
 		for (int i = 0; i < stringLength; i++)
 		{
@@ -72,9 +71,9 @@ public class Utilities
 		// return color to a common one after (most chat is white, but for other GUI might want black)
 		if (parReturnToBlack)
 		{
-			return outputString+EnumChatFormatting.BLACK;
+			return outputString+TextFormatting.BLACK;
 		}
-		return outputString+EnumChatFormatting.WHITE;
+		return outputString+TextFormatting.WHITE;
 	}
 
 	// by default return to white (for chat formatting).
@@ -95,27 +94,27 @@ public class Utilities
 		{
 			if ((i+parShineLocation+Minecraft.getSystemTime()/20)%88==0)
 			{
-				outputString = outputString+EnumChatFormatting.WHITE+parString.substring(i, i+1);				
+				outputString = outputString+TextFormatting.WHITE+parString.substring(i, i+1);				
 			}
 			else if ((i+parShineLocation+Minecraft.getSystemTime()/20)%88==1)
 			{
-				outputString = outputString+EnumChatFormatting.YELLOW+parString.substring(i, i+1);				
+				outputString = outputString+TextFormatting.YELLOW+parString.substring(i, i+1);				
 			}
 			else if ((i+parShineLocation+Minecraft.getSystemTime()/20)%88==87)
 			{
-				outputString = outputString+EnumChatFormatting.YELLOW+parString.substring(i, i+1);				
+				outputString = outputString+TextFormatting.YELLOW+parString.substring(i, i+1);				
 			}
 			else
 			{
-				outputString = outputString+EnumChatFormatting.GOLD+parString.substring(i, i+1);								
+				outputString = outputString+TextFormatting.GOLD+parString.substring(i, i+1);								
 			}
 		}
 		// return color to a common one after (most chat is white, but for other GUI might want black)
 		if (parReturnToBlack)
 		{
-			return outputString+EnumChatFormatting.BLACK;
+			return outputString+TextFormatting.BLACK;
 		}
-		return outputString+EnumChatFormatting.WHITE;
+		return outputString+TextFormatting.WHITE;
 	}
 
 	// by default return to white (for chat formatting).
@@ -338,7 +337,7 @@ public class Utilities
 
             if (extendedblockstorage == null)
             {
-                if (newBlock == Blocks.air)
+                if (newBlock == Blocks.AIR)
                 {
                     return null;
                 }
@@ -365,7 +364,7 @@ public class Utilities
                 parChunk.getWorld().removeTileEntity(parBlockPos);
             }   
 
-            if (extendedblockstorage.getBlockByExtId(chunkX, chunkY & 15, chunkZ) != newBlock)
+            if (extendedblockstorage.get(chunkX, chunkY & 15, chunkZ) != newBlock)
             {
                 return null;
             }

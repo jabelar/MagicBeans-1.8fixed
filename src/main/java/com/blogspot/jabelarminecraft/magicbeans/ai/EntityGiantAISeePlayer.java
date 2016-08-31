@@ -16,14 +16,13 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.ai;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 
 
 public class EntityGiantAISeePlayer extends EntityAIBase
@@ -38,7 +37,7 @@ public class EntityGiantAISeePlayer extends EntityAIBase
         theGiant = parEntityGiant;
         worldObject = parEntityGiant.worldObj;
         // setMutexBits(2);
-    	followDistance = theGiant.getEntityAttribute(SharedMonsterAttributes.followRange).getAttributeValue();
+    	followDistance = theGiant.getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).getAttributeValue();
     }
 
     /**
@@ -49,7 +48,7 @@ public class EntityGiantAISeePlayer extends EntityAIBase
     {        
 
         thePlayer = worldObject.getClosestPlayerToEntity(theGiant, followDistance);
-        if (thePlayer == null || ((EntityPlayerMP)thePlayer).theItemInWorldManager.isCreative())
+        if (thePlayer == null || ((EntityPlayerMP)thePlayer).interactionManager.isCreative())
         {
           	return false;
         }
@@ -74,7 +73,7 @@ public class EntityGiantAISeePlayer extends EntityAIBase
     @Override
 	public boolean continueExecuting()
     {
-        if (thePlayer == null || ((EntityPlayerMP)thePlayer).theItemInWorldManager.isCreative()
+        if (thePlayer == null || ((EntityPlayerMP)thePlayer).interactionManager.isCreative()
         		|| thePlayer.isDead)
         {
         	return false;

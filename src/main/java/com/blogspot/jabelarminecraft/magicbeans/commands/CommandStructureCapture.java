@@ -27,8 +27,10 @@ import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.server.MinecraftServer;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 
 /**
@@ -41,7 +43,7 @@ public class CommandStructureCapture implements ICommand
 	
 	World theWorld;
 	Entity thePlayer;
-	public static String[][][] blockNameArray ;
+	public static ResourceLocation[][][] blockNameArray ;
     public static int[][][] blockMetaArray ;
     int startX ;
     int startY ;
@@ -61,12 +63,6 @@ public class CommandStructureCapture implements ICommand
 		    aliases = new ArrayList();
 		    aliases.add("capture");
 		    aliases.add("capt");
-	}
-	
-	@Override
-	public int compareTo(Object o) 
-	{
-		return 0;
 	}
 
 	@Override
@@ -88,7 +84,7 @@ public class CommandStructureCapture implements ICommand
 	}
 
 	@Override
-	public void processCommand(ICommandSender sender, String[] argString) 
+	public void execute(MinecraftServer server, ICommandSender sender, String[] argString) 
 	{
 		theWorld = sender.getEntityWorld();
 		
@@ -101,7 +97,7 @@ public class CommandStructureCapture implements ICommand
 
 			if(argString.length != 7)
 		    {
-		    	sender.addChatMessage(new ChatComponentText("Invalid argument"));
+		    	sender.addChatMessage(new TextComponentString("Invalid argument"));
 		    	return;
 		    }
 
@@ -135,13 +131,13 @@ public class CommandStructureCapture implements ICommand
 		    }
 			if(dimX*dimY*dimZ > 64*64*64)
 		    {
-		    	sender.addChatMessage(new ChatComponentText("Capture area too big"));
+		    	sender.addChatMessage(new TextComponentString("Capture area too big"));
 		    	return;
 		    }
 		    
-		    sender.addChatMessage(new ChatComponentText("Capturing Structure from "+startX+", "+startY+", "+
+		    sender.addChatMessage(new TextComponentString("Capturing Structure from "+startX+", "+startY+", "+
 		         startZ+" to "+endX+", "+endY+", "+endZ));
-		    blockNameArray = new String[dimX][dimY][dimZ];
+		    blockNameArray = new ResourceLocation[dimX][dimY][dimZ];
 		    blockMetaArray = new int[dimX][dimY][dimZ];
 
 		    for (int indY = 0; indY < dimY; indY++) // Y first to organize in vertical layers
@@ -151,7 +147,7 @@ public class CommandStructureCapture implements ICommand
 		    		for (int indZ = 0; indZ < dimZ; indZ++)
 		    		{
 		    			BlockPos theBlockPos = new BlockPos(startX+indX, startY+indY, startZ+indZ);
-		    			blockNameArray[indX][indY][indZ] = (String) Block.blockRegistry.getNameForObject(theWorld
+		    			blockNameArray[indX][indY][indZ] = Block.REGISTRY.getNameForObject(theWorld
 		    					.getBlockState(theBlockPos).getBlock());
 		    			blockMetaArray[indX][indY][indZ] = theWorld.getBlockState(theBlockPos)
 		    					.getBlock().getMetaFromState(theWorld.getBlockState(theBlockPos));		    			
@@ -280,26 +276,27 @@ public class CommandStructureCapture implements ICommand
 	}
 
 	@Override
-	public boolean canCommandSenderUseCommand(ICommandSender var1) 
-	{
-		return true;
-	}
-
-	@Override
 	public boolean isUsernameIndex(String[] var1, int var2) 
 	{
-		// TODO Auto-generated method stub
 		return false;
 	}
 
-	/* (non-Javadoc)
-	 * @see net.minecraft.command.ICommand#addTabCompletionOptions(net.minecraft.command.ICommandSender, java.lang.String[], net.minecraft.util.BlockPos)
-	 */
-	@Override
-	public List addTabCompletionOptions(ICommandSender sender, String[] args,
-			BlockPos pos) 
-	{
-		// TODO Auto-generated method stub
-		return null;
-	}
+    @Override
+    public int compareTo(ICommand o)
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean checkPermission(MinecraftServer server,
+            ICommandSender sender)
+    {
+        return true;
+    }
+    @Override
+    public List<String> getTabCompletionOptions(MinecraftServer server,
+            ICommandSender sender, String[] args, BlockPos pos)
+    {
+        return null;
+    }
 }

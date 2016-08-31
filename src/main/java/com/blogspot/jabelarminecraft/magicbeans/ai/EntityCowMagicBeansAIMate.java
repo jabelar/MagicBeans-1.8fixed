@@ -160,11 +160,11 @@ public class EntityCowMagicBeansAIMate extends EntityAIBase
 
             if (entityplayer != null)
             {
-                entityplayer.triggerAchievement(StatList.animalsBredStat);
+                entityplayer.addStat(StatList.ANIMALS_BRED);
 
                 if (theAnimal instanceof EntityCow)
                 {
-                    entityplayer.triggerAchievement(AchievementList.breedCow);
+                    entityplayer.addStat(AchievementList.BREED_COW);
                 }
             }
 
@@ -185,7 +185,7 @@ public class EntityCowMagicBeansAIMate extends EntityAIBase
                 theWorld.spawnParticle(EnumParticleTypes.HEART, theAnimal.posX + random.nextFloat() * theAnimal.width * 2.0F - theAnimal.width, theAnimal.posY + 0.5D + random.nextFloat() * theAnimal.height, theAnimal.posZ + random.nextFloat() * theAnimal.width * 2.0F - theAnimal.width, d0, d1, d2);
             }
 
-            if (theWorld.getGameRules().getGameRuleBooleanValue("doMobLoot"))
+            if (theWorld.getGameRules().getBoolean("doMobLoot"))
             {
                 theWorld.spawnEntityInWorld(new EntityXPOrb(theWorld, theAnimal.posX, theAnimal.posY, theAnimal.posZ, random.nextInt(7) + 1));
             }

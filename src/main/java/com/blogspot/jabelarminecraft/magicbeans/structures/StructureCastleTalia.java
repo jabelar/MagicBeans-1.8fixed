@@ -16,7 +16,7 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.structures;
 
-import static net.minecraftforge.common.ChestGenHooks.DUNGEON_CHEST;
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
@@ -28,12 +28,9 @@ import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.tileentity.TileEntityDispenser;
 import net.minecraft.tileentity.TileEntityFurnace;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.WeightedRandomChestContent;
-import net.minecraftforge.common.ChestGenHooks;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.storage.loot.LootTableList;
 
 /**
  * @author jabelar
@@ -63,13 +60,13 @@ public class StructureCastleTalia extends Structure
 	    // DEBUG
 	    System.out.println("Customizing tile entity");
 		Block theBlock = theWorld.getBlockState(parPos).getBlock();
-		if (theBlock == Blocks.chest)
+		if (theBlock == Blocks.CHEST)
 		{
-			TileEntityChest theTileEntity = (TileEntityChest) theWorld.getTileEntity(parPos);
 			// populate regular dungeon chest items
 			if (theTileEntity != null)
 			{
-				WeightedRandomChestContent.generateChestContents(theWorld.rand, ChestGenHooks.getItems(DUNGEON_CHEST, theWorld.rand), theTileEntity, ChestGenHooks.getCount(DUNGEON_CHEST, theWorld.rand));
+	            TileEntityChest theTileEntity = (TileEntityChest) theWorld.getTileEntity(parPos);
+			    theTileEntity.setLootTable(LootTableList.CHESTS_SPAWN_BONUS_CHEST, theWorld.rand.nextLong());
 			}
 			else
 			{
@@ -77,7 +74,7 @@ public class StructureCastleTalia extends Structure
 				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
 		}
-		if (theBlock == Blocks.furnace)
+		if (theBlock == Blocks.FURNACE)
 		{
 			TileEntityFurnace theTileEntity = (TileEntityFurnace) theWorld.getTileEntity(parPos);
 			if (theTileEntity != null)
@@ -85,18 +82,18 @@ public class StructureCastleTalia extends Structure
 				int chanceOfMeatType = theWorld.rand.nextInt(10);
 				if (chanceOfMeatType <= 3) // randomize meat
 				{
-					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.beef, 5));
-					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.BEEF, 5));
+					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.COAL, 1)); 
 				}
 				else if (chanceOfMeatType <=8)
 				{
-					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.chicken, 5));
-					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.CHICKEN, 5));
+					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.COAL, 1)); 
 				}
 				else
 				{
-					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.porkchop, 5));
-					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.coal, 1)); 
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.PORKCHOP, 5));
+					theTileEntity.setInventorySlotContents(1, new ItemStack(Items.COAL, 1)); 
 				}
 			}
 			else
@@ -105,7 +102,7 @@ public class StructureCastleTalia extends Structure
 				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
 		}
-		if (theBlock == Blocks.dispenser)
+		if (theBlock == Blocks.DISPENSER)
 		{
 		    // DEBUG
 		    System.out.println("Populating dispenser");
@@ -121,7 +118,7 @@ public class StructureCastleTalia extends Structure
 				{
 				    // DEBUG
 				    System.out.println("Filling slot = "+i);
-					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.arrow, 5));
+					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.ARROW, 5));
 				}
 			}
 			else
@@ -130,7 +127,7 @@ public class StructureCastleTalia extends Structure
 				System.out.println("StructureCastleTalia customizeTileEntity() the entity is null!");
 			}
 		}
-		if (theBlock == Blocks.brewing_stand)
+		if (theBlock == Blocks.BREWING_STAND)
 		{
 			TileEntityBrewingStand theTileEntity = (TileEntityBrewingStand) theWorld.getTileEntity(parPos);	
 			if (theTileEntity != null)
@@ -140,17 +137,17 @@ public class StructureCastleTalia extends Structure
 				if (chanceOfPotionType <= 3) // randomize potion
 				{
 					// fire resistance
-					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8259));
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.POTIONITEM, 3, 8259));
 				}
 				else if (chanceOfPotionType <= 8) 
 				{
 					// regeneration
-					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8257));
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.POTIONITEM, 3, 8257));
 				}
 				else
 				{
 					// water breathing
-					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.potionitem, 3, 8269));
+					theTileEntity.setInventorySlotContents(0, new ItemStack(Items.POTIONITEM, 3, 8269));
 				}
 			}
 			else
@@ -168,12 +165,12 @@ public class StructureCastleTalia extends Structure
 		{
 			String entityToSpawnName = "golden_goose";
 	        String entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
-	        if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
+	        if (EntityList.NAME_TO_CLASS.containsKey(entityToSpawnNameFull))
 	        {
 	            EntityLiving entityToSpawn = (EntityLiving) EntityList
 	                  .createEntityByName(entityToSpawnNameFull, theWorld);
 	            entityToSpawn.setLocationAndAngles(startX+12, startY+10, startZ+22, 
-	                  MathHelper.wrapAngleTo180_float(theWorld.rand.nextFloat()
+	                  MathHelper.wrapDegrees(theWorld.rand.nextFloat()
 	                  * 360.0F), 0.0F);
 	            ((EntityAgeable)entityToSpawn).setGrowingAge(0);
 	            theWorld.spawnEntityInWorld(entityToSpawn);
@@ -187,12 +184,12 @@ public class StructureCastleTalia extends Structure
 
 			entityToSpawnName = "giant";
 	        entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
-	        if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
+	        if (EntityList.NAME_TO_CLASS.containsKey(entityToSpawnNameFull))
 	        {
 	            EntityLiving entityToSpawn = (EntityLiving) EntityList
 	                  .createEntityByName(entityToSpawnNameFull, theWorld);
 	            entityToSpawn.setLocationAndAngles(startX+13, startY+9, startZ+20, 
-	                  MathHelper.wrapAngleTo180_float(theWorld.rand.nextFloat()
+	                  MathHelper.wrapDegrees(theWorld.rand.nextFloat()
 	                  * 360.0F), 0.0F);
 	            theWorld.spawnEntityInWorld(entityToSpawn);
 	            entityToSpawn.playLivingSound();

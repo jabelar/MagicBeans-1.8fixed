@@ -25,8 +25,8 @@ import net.minecraft.entity.projectile.EntityThrowable;
 import net.minecraft.init.Items;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.RayTraceResult;
 import net.minecraft.world.World;
 
 public class EntityGoldenEggThrown extends EntityThrowable
@@ -51,11 +51,11 @@ public class EntityGoldenEggThrown extends EntityThrowable
      * Called when this EntityThrowable hits a block or entity.
      */
     @Override
-    protected void onImpact(MovingObjectPosition par1MovingObjectPosition)
+    protected void onImpact(RayTraceResult parRayTraceResult)
     {
-        if (par1MovingObjectPosition.entityHit != null)
+        if (parRayTraceResult.entityHit != null)
         {
-            par1MovingObjectPosition.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 0.0F);
+            parRayTraceResult.entityHit.attackEntityFrom(DamageSource.causeThrownDamage(this, getThrower()), 0.0F);
         }
 
         if (!worldObj.isRemote) // never spawn entity on client side
@@ -72,7 +72,7 @@ public class EntityGoldenEggThrown extends EntityThrowable
         	}
         	else
         	{
-                dropItem(Items.gold_ingot, 1);
+                dropItem(Items.GOLD_INGOT, 1);
                 // DEBUG
                 System.out.println("Good as gold");
         	}

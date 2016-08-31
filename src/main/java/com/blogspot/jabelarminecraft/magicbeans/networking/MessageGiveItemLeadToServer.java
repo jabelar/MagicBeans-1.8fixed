@@ -16,18 +16,17 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.networking;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -62,7 +61,7 @@ public class MessageGiveItemLeadToServer implements IMessage
         {
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-            thePlayer.getServerForPlayer().addScheduledTask(
+            thePlayer.getServer().addScheduledTask(
                     new Runnable()
                     {
                         @Override
@@ -76,12 +75,12 @@ public class MessageGiveItemLeadToServer implements IMessage
                             }
                             if (thePlayer.inventory.getFirstEmptyStack() != -1) // check for room in inventory
                             {
-                                thePlayer.inventory.addItemStackToInventory(new ItemStack(Items.lead, 1));
+                                thePlayer.inventory.addItemStackToInventory(new ItemStack(Items.LEAD, 1));
                                 ModWorldData.get(thePlayer.worldObj).setFamilyCowHasGivenLead(true);
                             }
-                            else if (!thePlayer.inventory.hasItem(Items.lead)) // full but doesn't already have a lead              
+                            else if (!thePlayer.inventory.hasItemStack(new ItemStack(Items.LEAD))) // full but doesn't already have a lead              
                             {
-                                thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Interact again with the "
+                                thePlayer.addChatMessage(new TextComponentString("Your inventory is full!  Interact again with the "
                                         +Utilities.stringToRainbow("Family Cow")
                                         +" later when you have room in your inventory to get a lead."));
                             }

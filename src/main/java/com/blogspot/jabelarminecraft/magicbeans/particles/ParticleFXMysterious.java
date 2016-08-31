@@ -16,14 +16,17 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.particles;
 
-import net.minecraft.client.particle.EntityAuraFX;
+import net.minecraft.client.particle.ParticleCrit;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
 
 /**
  * @author jabelar
  *
  */
-public class EntityParticleFXMysterious extends EntityAuraFX
+@SideOnly(Side.CLIENT)
+public class ParticleFXMysterious extends ParticleCrit
 {
 
 	/**
@@ -35,13 +38,41 @@ public class EntityParticleFXMysterious extends EntityAuraFX
 	 * @param parMotionY
 	 * @param parMotionZ
 	 */
-	public EntityParticleFXMysterious(World parWorld,
+	public ParticleFXMysterious(World parWorld,
 			double parX, double parY, double parZ,
 			double parMotionX, double parMotionY, double parMotionZ) 
 	{
-		super(parWorld, parX, parY, parZ, parMotionX, parMotionY, parMotionZ);
+        super(parWorld, parX, parY, parZ, 0.0D, 0.0D, 0.0D);
+		motionX = parMotionX;
+		motionY = parMotionY;
+		motionZ = parMotionZ;
 		setParticleTextureIndex(82); // same as happy villager
 		particleScale = 2.0F;
 		setRBGColorF(0x88, 0x00, 0x88);
 	}
+	
+	@Override
+    public void onUpdate()
+	    {
+	        this.prevPosX = this.posX;
+	        this.prevPosY = this.posY;
+	        this.prevPosZ = this.posZ;
+
+	        if (this.particleAge++ >= this.particleMaxAge)
+	        {
+	            this.setExpired();
+	        }
+
+	        this.motionY -= 0.04D * this.particleGravity;
+	        this.moveEntity(this.motionX, this.motionY, this.motionZ);
+	        this.motionX *= 0.9800000190734863D;
+	        this.motionY *= 0.9800000190734863D;
+	        this.motionZ *= 0.9800000190734863D;
+
+	        if (this.isCollided)
+	        {
+	            this.motionX *= 0.699999988079071D;
+	            this.motionZ *= 0.699999988079071D;
+	        }
+	    }
 }

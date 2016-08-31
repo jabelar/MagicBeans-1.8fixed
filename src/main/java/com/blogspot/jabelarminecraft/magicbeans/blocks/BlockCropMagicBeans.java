@@ -21,22 +21,22 @@ package com.blogspot.jabelarminecraft.magicbeans.blocks;
 
 import java.util.Random;
 
-import net.minecraft.block.Block;
+import com.blogspot.jabelarminecraft.magicbeans.tileentities.TileEntityMagicBeanStalk;
 import net.minecraft.block.BlockBush;
 import net.minecraft.block.ITileEntityProvider;
+import net.minecraft.block.SoundType;
 import net.minecraft.block.material.Material;
 import net.minecraft.block.properties.IProperty;
 import net.minecraft.block.properties.PropertyInteger;
-import net.minecraft.block.state.BlockState;
+import net.minecraft.block.state.BlockStateContainer;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.init.Blocks;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumBlockRenderType;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 // import net.minecraft.util.IIcon;
-
-import com.blogspot.jabelarminecraft.magicbeans.tileentities.TileEntityMagicBeanStalk;
 
 public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvider
 {
@@ -47,7 +47,7 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
 
     public BlockCropMagicBeans()
     {
-    	this(Material.wood); // chop like wood and block movement
+    	this(Material.WOOD); // chop like wood and block movement
     }
     
     public BlockCropMagicBeans(Material parMaterial)
@@ -56,10 +56,9 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
         // Basic block setup
         setDefaultState(blockState.getBaseState().withProperty(AGE, Integer.valueOf(0)));
         setTickRandomly(false);
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         setCreativeTab((CreativeTabs)null);
         setHardness(0.0F);
-        setStepSound(soundTypeGrass);
+        setSoundType(SoundType.PLANT);
         disableStats();
     }
 
@@ -67,9 +66,9 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
      * is the block grass, dirt or farmland
      */
     @Override
-    protected boolean canPlaceBlockOn(Block parBlockToTest)
+    protected boolean canSustainBush(IBlockState parIBlockState)
     {
-        return parBlockToTest == Blocks.farmland;
+        return parIBlockState.getBlock() == Blocks.FARMLAND;
     }
 
     @Override
@@ -84,7 +83,7 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
     @Override
 	public boolean canBlockStay(World parWorld, BlockPos parBlockPos, IBlockState parIBlockState)
     {
-        return (parWorld.getLight(parBlockPos) >= 8 || parWorld.canSeeSky(parBlockPos)) && parWorld.getBlockState(parBlockPos.down()).getBlock().canSustainPlant(parWorld, parBlockPos.down(), net.minecraft.util.EnumFacing.UP, this);
+        return (parWorld.getLight(parBlockPos) >= 8 || parWorld.canSeeSky(parBlockPos)) && parWorld.getBlockState(parBlockPos.down()).getBlock().canSustainPlant(parIBlockState, parWorld, parBlockPos.down(), net.minecraft.util.EnumFacing.UP, this);
     }
 
 
@@ -97,9 +96,9 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
      * The type of render function that is called for this block
      */
     @Override
-     public int getRenderType()
+     public EnumBlockRenderType getRenderType(IBlockState state)
     {
-        return 3; // This has changed in 1.8.  1 seems to be liquids, 2 seems to be chest, 3 normal block
+        return EnumBlockRenderType.MODEL; // This has changed in 1.8.  1 seems to be liquids, 2 seems to be chest, 3 normal block
     }
 
 	public void grow(World parWorld, BlockPos parPos, int parGrowStage)
@@ -125,13 +124,13 @@ public class BlockCropMagicBeans extends BlockBush implements ITileEntityProvide
     @Override
 	public int getMetaFromState(IBlockState state)
     {
-        return ((Integer)state.getValue(AGE)).intValue();
+        return state.getValue(AGE).intValue();
     }
 
     @Override
-	protected BlockState createBlockState()
+	protected BlockStateContainer createBlockState()
     {
-        return new BlockState(this, new IProperty[] {AGE});
+        return new BlockStateContainer(this, new IProperty[] {AGE});
     }
     
 	@Override

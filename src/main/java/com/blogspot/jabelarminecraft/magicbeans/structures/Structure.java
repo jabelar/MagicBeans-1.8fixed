@@ -24,18 +24,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
-import net.minecraft.block.Block;
-import net.minecraft.entity.Entity;
-import net.minecraft.init.Blocks;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.world.World;
-
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
+import net.minecraft.block.Block;
+import net.minecraft.entity.Entity;
+import net.minecraft.init.Blocks;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.text.TextComponentString;
+import net.minecraft.world.World;
 
 public class Structure implements IStructure
 {
@@ -190,7 +189,7 @@ public class Structure implements IStructure
                         theBlock = Block.getBlockFromName(blockNameArray[indX][indY][indZ]);
                         if (theBlock == null) System.out.println("Block unexpectedly null at "+indX+", "+indY+", "+indZ);
                         if (blockMetaArray[indX][indY][indZ] == 0 
-                                && theBlock != Blocks.tripwire)
+                                && theBlock != Blocks.TRIPWIRE)
                         {
                             theSparseArrayBasic[numSparseElementsBasic] = 
                                     new StructureSparseArrayElement(
@@ -383,7 +382,7 @@ public class Structure implements IStructure
         // DEBUG
         System.out.println("Structure setting MagicBeansWorldData hasCastleBeenSpawned to true");
         ModWorldData.get(theWorld).setHasCastleSpawned(true);
-        theWorld.getClosestPlayer(startX, startY, startZ, -1).addChatMessage(new ChatComponentText(Utilities.stringToRainbow("Look up! Something happened at the top of the bean stalk.")));
+        theWorld.getClosestPlayer(startX, startY, startZ, -1, false).addChatMessage(new TextComponentString(Utilities.stringToRainbow("Look up! Something happened at the top of the bean stalk.")));
     }
     
     @Override

@@ -16,19 +16,18 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.networking;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.text.TextComponentString;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -73,7 +72,7 @@ public class MessageGiveItemMagicBeansToServer implements IMessage
         {
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-            thePlayer.getServerForPlayer().addScheduledTask(
+            thePlayer.getServer().addScheduledTask(
                     new Runnable()
                     {
                         @Override
@@ -87,7 +86,7 @@ public class MessageGiveItemMagicBeansToServer implements IMessage
                             }
                             else
                             {
-                                thePlayer.addChatMessage(new ChatComponentText("Your inventory is full!  Come back for your "
+                                thePlayer.addChatMessage(new TextComponentString("Your inventory is full!  Come back for your "
                                         +Utilities.stringToRainbow("Magic Beans")+" later."));
                             }
                             return; 

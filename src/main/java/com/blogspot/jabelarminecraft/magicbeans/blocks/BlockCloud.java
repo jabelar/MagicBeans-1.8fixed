@@ -19,21 +19,22 @@ package com.blogspot.jabelarminecraft.magicbeans.blocks;
 import java.util.ArrayList;
 import java.util.Random;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import net.minecraft.block.Block;
+import net.minecraft.block.SoundType;
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.EntityLiving.SpawnPlacementType;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.BlockPos;
+import net.minecraft.util.BlockRenderLayer;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumWorldBlockLayer;
+import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 
 /**
  * @author jabelar
@@ -49,11 +50,10 @@ public class BlockCloud extends Block
         System.out.println("BlockCloud constructor");
         // override default values of Block, where appropriate
         setUnlocalizedName("magicbeanscloud");
-        setCreativeTab(CreativeTabs.tabBlock);
-        stepSound = soundTypeSnow;
+        setCreativeTab(CreativeTabs.BUILDING_BLOCKS);
+        blockSoundType = SoundType.SNOW;
         blockParticleGravity = 1.0F;
         slipperiness = 0.6F;
-        setBlockBounds(0.0F, 0.0F, 0.0F, 1.0F, 1.0F, 1.0F);
         lightOpacity = 20; // cast a light shadow
         setBlockUnbreakable();
         setTickRandomly(false);
@@ -63,19 +63,11 @@ public class BlockCloud extends Block
 
     @Override
 	@SideOnly(Side.CLIENT)
-    public EnumWorldBlockLayer getBlockLayer()
+    public BlockRenderLayer getBlockLayer()
     {
-        return EnumWorldBlockLayer.TRANSLUCENT;
+        return BlockRenderLayer.TRANSLUCENT;
     }
     
-    // Ensure that you can see through the translucent block properly, i.e. render inside sides.
-    @Override
-    @SideOnly(Side.CLIENT)
-    public boolean shouldSideBeRendered(IBlockAccess parWorld, BlockPos parPos, EnumFacing parSide)
-    {
-    	return true;
-    }
-
     /**
      * Returns true if the given side of this block type should be rendered (if it's solid or not), if the adjacent
      * block is at the given coordinates. Args: blockAccess, x, y, z, side
@@ -83,24 +75,7 @@ public class BlockCloud extends Block
     @Override
 	public boolean isBlockSolid(IBlockAccess p_149747_1_, BlockPos parPos, EnumFacing parSide)
     {
-        return getMaterial().isSolid();
-    }
-
-    /**
-     * Is this block (a) opaque and (b) a full 1m cube?  This determines whether or not to render the shared face of two
-     * adjacent blocks and also whether the player can attach torches, redstone wire, etc to this block.
-     */
-    @Override
-	public boolean isOpaqueCube()
-    {
-        return getMaterial().isOpaque();
-    }
-
-    @Override
-	@SideOnly(Side.CLIENT)
-    public int getBlockColor()
-    {
-        return 0xFFFFFF; // white
+        return getMaterial(getDefaultState()).isSolid();
     }
 
     /**
@@ -108,9 +83,9 @@ public class BlockCloud extends Block
      * and stop pistons
      */
     @Override
-	public int getMobilityFlag()
+	public EnumPushReaction getMobilityFlag(IBlockState parIBlockState)
     {
-        return getMaterial().getMaterialMobility();
+        return getMaterial(parIBlockState).getMobilityFlag();
     }
 
     /**
@@ -124,19 +99,19 @@ public class BlockCloud extends Block
      * @return True if the block is solid on the specified side.
      */
     @Override
-	public boolean isSideSolid(IBlockAccess world, BlockPos parPos, EnumFacing parSide)
+	public boolean isSideSolid(IBlockState state, IBlockAccess world, BlockPos parPos, EnumFacing parSide)
     {
         return true; 
     }
     
     @Override
-	public boolean isNormalCube()
+	public boolean isNormalCube(IBlockState state)
     {
     	return true;
     }
     
     @Override
-	public boolean isNormalCube(IBlockAccess parWorld, BlockPos parPos)
+	public boolean isNormalCube(IBlockState parState, IBlockAccess parWorld, BlockPos parPos)
     {
     	return true;
     }
@@ -153,9 +128,9 @@ public class BlockCloud extends Block
      * @return True if the block is replaceable by another block
      */
     @Override
-	public boolean isReplaceable(World world, BlockPos parPos)
+    public boolean isReplaceableOreGen(IBlockState state, IBlockAccess world, BlockPos pos, com.google.common.base.Predicate<IBlockState> target)
     {
-        return getMaterial().isReplaceable();
+        return getMaterial(state).isReplaceable();
     }
 
     /**
@@ -237,7 +212,7 @@ public class BlockCloud extends Block
     }
 
     @Override
-	public boolean canCreatureSpawn(IBlockAccess parWorld, BlockPos parPos, SpawnPlacementType parType)
+	public boolean canCreatureSpawn(IBlockState state, IBlockAccess parWorld, BlockPos parPos, SpawnPlacementType parType)
     {
     	// TODO
     	// probably want to limit by creature type
@@ -245,7 +220,7 @@ public class BlockCloud extends Block
     }
 
     @Override
-	public boolean shouldCheckWeakPower(IBlockAccess parWorld, BlockPos parPos, EnumFacing parSide)
+	public boolean shouldCheckWeakPower(IBlockState state, IBlockAccess parWorld, BlockPos parPos, EnumFacing parSide)
     {
         return false;
     }

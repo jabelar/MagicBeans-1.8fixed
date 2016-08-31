@@ -19,12 +19,12 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.items;
 
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.item.ItemStack;
-import net.minecraft.util.StatCollector;
-
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.item.ItemStack;
+import net.minecraft.util.text.TextComponentTranslation;
+
 
 public class ItemMagicBeans extends ItemSeedFoodMagicBeans 
 {
@@ -32,12 +32,12 @@ public class ItemMagicBeans extends ItemSeedFoodMagicBeans
     {
         super(1, 0.3F, MagicBeans.blockMagicBeanStalk);
         setUnlocalizedName("magicbeans");
-        setCreativeTab(CreativeTabs.tabMaterials);
+        setCreativeTab(CreativeTabs.MATERIALS);
     }
     
     @Override
     public String getItemStackDisplayName(ItemStack parItemStack) 
     {
-        return (Utilities.stringToRainbow(StatCollector.translateToLocal(getUnlocalizedNameInefficiently(parItemStack) + ".name")).trim());
+        return new TextComponentTranslation(Utilities.stringToRainbow(getUnlocalizedNameInefficiently(parItemStack) + ".name").trim(), new Object[0]).getFormattedText();
     }
 }

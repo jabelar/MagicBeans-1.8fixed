@@ -16,6 +16,17 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.entities;
 
+import java.util.Set;
+
+import javax.annotation.Nullable;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.ai.EntityGiantAISeePlayer;
+import com.blogspot.jabelarminecraft.magicbeans.explosions.GiantAttack;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
+import com.google.common.base.Predicate;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Sets;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.enchantment.EnchantmentHelper;
@@ -23,7 +34,7 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.EntityAIAttackOnCollide;
+import net.minecraft.entity.ai.EntityAIAttackMelee;
 import net.minecraft.entity.ai.EntityAIBase;
 import net.minecraft.entity.ai.EntityAIHurtByTarget;
 import net.minecraft.entity.ai.EntityAILookIdle;
@@ -32,38 +43,50 @@ import net.minecraft.entity.ai.EntityAIMoveTowardsRestriction;
 import net.minecraft.entity.ai.EntityAISwimming;
 import net.minecraft.entity.ai.EntityAIWander;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
-import net.minecraft.entity.boss.IBossDisplayData;
 import net.minecraft.entity.passive.EntityTameable;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.init.Items;
+import net.minecraft.init.MobEffects;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemArmor;
+import net.minecraft.item.ItemAxe;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.potion.Potion;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.DamageSource;
-import net.minecraft.util.MathHelper;
+import net.minecraft.util.EntitySelectors;
+import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.util.SoundEvent;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.world.BossInfo;
+import net.minecraft.world.BossInfoServer;
 import net.minecraft.world.World;
 import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.ai.EntityGiantAISeePlayer;
-import com.blogspot.jabelarminecraft.magicbeans.explosions.GiantAttack;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
-
 /**
  * @author jabelar
  *
  */
-public class EntityGiant extends EntityCreature implements IEntity, IBossDisplayData, IEntityAdditionalSpawnData
+public class EntityGiant extends EntityCreature implements IEntity, IEntityAdditionalSpawnData
 {
-    private NBTTagCompound syncDataCompound = new NBTTagCompound();
+    protected NBTTagCompound syncDataCompound = new NBTTagCompound();
+    protected final BossInfoServer bossInfo = (new BossInfoServer(new TextComponentTranslation("entity.jabelar_giant.name", new Object[0]), BossInfo.Color.PINK, BossInfo.Overlay.PROGRESS));
+    protected static final Predicate<EntityPlayerMP> VALID_PLAYER = Predicates.<EntityPlayerMP>and(EntitySelectors.IS_ALIVE, EntitySelectors.<EntityPlayerMP>withinRange(0.0D, 128.0D, 0.0D, 192.0D));
+    protected static final SoundEvent SOUND_EVENT_AMBIENT = null;
+    protected static final SoundEvent SOUND_EVENT_HURT = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.giant.hurt"));
+    protected static final SoundEvent SOUND_EVENT_DEATH = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.giant.death"));
 
     // good to have instances of AI so task list can be modified, including in sub-classes
     protected EntityAIBase aiSwimming = new EntityAISwimming(this);
-    protected EntityAIBase aiAttackOnCollide = new EntityAIAttackOnCollide(this, EntityPlayer.class, 1.0D, true);
+    protected EntityAIBase aiAttackOnCollide = new EntityAIAttackMelee(this, 1.0D, true);
     protected EntityAIBase aiMoveTowardsRestriction = new EntityAIMoveTowardsRestriction(this, 1.0D);
     protected EntityAIBase aiMoveThroughVillage = new EntityAIMoveThroughVillage(this, 1.0D, false);
     protected EntityAIBase aiWander = new EntityAIWander(this, 1.0D);
@@ -106,15 +129,36 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
 		super.applyEntityAttributes(); 
 
 		// standard attributes registered to EntityLivingBase
-		getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(MagicBeans.configGiantHealth);
-		getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.23D); 
-		getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.9D); // hard to knock back
-		getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(32.0D);
+		getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(MagicBeans.configGiantHealth);
+		getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.23D); 
+		getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.9D); // hard to knock back
+		getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(32.0D);
 
 	    // need to register any additional attributes
-		getAttributeMap().registerAttribute(SharedMonsterAttributes.attackDamage);
-		getEntityAttribute(SharedMonsterAttributes.attackDamage).setBaseValue(MagicBeans.configGiantAttackDamage);
+		getAttributeMap().registerAttribute(SharedMonsterAttributes.ATTACK_DAMAGE);
+		getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).setBaseValue(MagicBeans.configGiantAttackDamage);
 	}
+	
+    public void updateProgressBar()
+    {
+        bossInfo.setPercent(getHealth() / getMaxHealth());
+        Set<EntityPlayerMP> set = Sets.<EntityPlayerMP>newHashSet();
+
+        for (EntityPlayerMP entityplayermp : this.worldObj.getPlayers(EntityPlayerMP.class, VALID_PLAYER))
+        {
+            this.bossInfo.addPlayer(entityplayermp);
+            set.add(entityplayermp);
+        }
+
+        Set<EntityPlayerMP> set1 = Sets.newHashSet(this.bossInfo.getPlayers());
+        set1.removeAll(set);
+
+        for (EntityPlayerMP entityplayermp1 : set1)
+        {
+            this.bossInfo.removePlayer(entityplayermp1);
+        }
+    }
+
 	
 	@Override
 	public void onUpdate()
@@ -126,6 +170,8 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
 		{
 			setHealth(getHealth()+1);
 		}
+		
+		updateProgressBar();
 		
         // create particles
         if (ticksExisted % 5 == 0)
@@ -150,17 +196,16 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
         isAirBorne = true;
         ForgeHooks.onLivingJump(this);
     }	
-    
-	@Override
-	public boolean interact(EntityPlayer parPlayer)
-	{
-		collideWithNearbyEntities();;
-		if (parPlayer.worldObj.isRemote)
-		{
-			// Minecraft.getMinecraft().displayGuiScreen(new GuiMysteriousStranger(this));
-		}
-		return false;
-	}
+
+    /**
+     * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
+     */
+    @Override
+    public EnumActionResult applyPlayerInteraction(EntityPlayer player, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+    {
+        collideWithNearbyEntities();        // check if have already spawned castle
+        return EnumActionResult.SUCCESS;
+    }
 
 	/* (non-Javadoc)
 	 * @see com.blogspot.jabelarminecraft.magicbeans.entities.IEntityMagicBeans#setupAI()
@@ -197,13 +242,13 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
     	// System.out.println("EntityGiant attackEntityAsMob");
     	
     	entityAttacked = parEntity;
-        attackDamage = (float)getEntityAttribute(SharedMonsterAttributes.attackDamage).getAttributeValue();
+        attackDamage = (float)getEntityAttribute(SharedMonsterAttributes.ATTACK_DAMAGE).getAttributeValue();
         knockback = 0;
 
         if (entityAttacked instanceof EntityLivingBase)
         {
-            attackDamage += EnchantmentHelper.func_152377_a(getHeldItem(), ((EntityLivingBase)parEntity).getCreatureAttribute());
-            knockback += EnchantmentHelper.getRespiration(this); // the getRespiration() method is mis-named, it is getKnockback.
+            attackDamage += EnchantmentHelper.getModifierForCreature(getHeldItem(swingingHand), ((EntityLivingBase)parEntity).getCreatureAttribute());
+            knockback += EnchantmentHelper.getRespirationModifier(this); // the getRespiration() method is mis-named, it is getKnockback.
         }
 
         wasDamageDone = entityAttacked.attackEntityFrom(DamageSource.causeMobDamage(this), attackDamage);
@@ -213,7 +258,7 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
         {
             if (rand.nextInt(10) < 2)
             {
-            	playSound(MagicBeans.MODID+":mob.giant.attack", getSoundVolume(), getSoundPitch());
+            	playSound(new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.giant.attack")), getSoundVolume(), getSoundPitch());
             }
 
             if (knockback > 0)
@@ -230,12 +275,25 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
             	entityAttacked.setFire(fireModifier * 4);
             }
 
-            if (entityAttacked instanceof EntityLivingBase)
+            if (entityAttacked instanceof EntityPlayer)
             {
-                EnchantmentHelper.func_151384_a((EntityLivingBase)entityAttacked, this);
+                EntityPlayer entityplayer = (EntityPlayer)entityAttacked;
+                ItemStack itemstack = getHeldItemMainhand();
+                ItemStack itemstack1 = entityplayer.isHandActive() ? entityplayer.getActiveItemStack() : null;
+
+                if (itemstack != null && itemstack1 != null && itemstack.getItem() instanceof ItemAxe && itemstack1.getItem() == Items.SHIELD)
+                {
+                    float f1 = 0.25F + EnchantmentHelper.getEfficiencyModifier(this) * 0.05F;
+
+                    if (this.rand.nextFloat() < f1)
+                    {
+                        entityplayer.getCooldownTracker().setCooldown(Items.SHIELD, 100);
+                        this.worldObj.setEntityState(entityplayer, (byte)30);
+                    }
+                }
             }
 
-            EnchantmentHelper.func_151385_b(this, entityAttacked);
+            applyEnchantments(this, entityAttacked);
         }
                 
         return wasDamageDone;
@@ -357,7 +415,7 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
             }
         }
         
-        if (riddenByEntity != entityAttackedBy && ridingEntity != entityAttackedBy)
+        if (getRidingEntity() != entityAttackedBy && getRidingEntity() != entityAttackedBy)
           {
               if (entityAttackedBy != this)
               {
@@ -371,7 +429,7 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
 	 */
 	private void playHurtOrDeathSound() 
 	{
-        String soundName;
+        SoundEvent soundName;
 
         if (getHealth() <= 0.0F)
         {
@@ -418,27 +476,27 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
      * Returns the sound this mob makes while it's alive.
      */
     @Override
-	protected String getLivingSound()
+	protected SoundEvent getAmbientSound()
     {
-        return MagicBeans.MODID+":mob.giant.living";
+        return SOUND_EVENT_AMBIENT;
     }
 
     /**
      * Returns the sound this mob makes when it is hurt.
      */
     @Override
-	protected String getHurtSound()
+	protected SoundEvent getHurtSound()
     {
-        return MagicBeans.MODID+":mob.giant.hurt";
+        return SOUND_EVENT_HURT;
     }
 
     /**
      * Returns the sound this mob makes on death.
      */
     @Override
-	protected String getDeathSound()
+	protected SoundEvent getDeathSound()
     {
-        return MagicBeans.MODID+":mob.giant.death";
+        return SOUND_EVENT_DEATH;
     }
 
 	/**
@@ -450,9 +508,9 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
 			float parDamageAmount) 
 	{       
         // Check if helmet protects from anvil or falling block, and damage helmet
-        if ((damageSource == DamageSource.anvil || damageSource == DamageSource.fallingBlock) && getEquipmentInSlot(4) != null)
+        if ((damageSource == DamageSource.anvil || damageSource == DamageSource.fallingBlock) && getItemStackFromSlot(EntityEquipmentSlot.HEAD) != null)
         {
-            getEquipmentInSlot(4).damageItem((int)(damageAmount * 4.0F + rand.nextFloat() * damageAmount * 2.0F), this);
+            getItemStackFromSlot(EntityEquipmentSlot.HEAD).damageItem((int)(damageAmount * 4.0F + rand.nextFloat() * damageAmount * 2.0F), this);
             damageAmount *= 0.75F;
         }
 
@@ -511,7 +569,7 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
         }
 
         // Check if damage is from fire but resistant
-        if (damageSource.isFireDamage() && isPotionActive(Potion.fireResistance))
+        if (damageSource.isFireDamage() && isPotionActive(MobEffects.FIRE_RESISTANCE))
         {
             return true;
         }
@@ -543,7 +601,7 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
             {
                 float f2 = getHealth();
                 setHealth(f2 - parDamageAmount);
-                getCombatTracker().func_94547_a(parDamageSource, f2, parDamageAmount);
+                getCombatTracker().trackDamage(parDamageSource, f2, parDamageAmount);
                 setAbsorptionAmount(getAbsorptionAmount() - parDamageAmount);
             }
         }
@@ -572,20 +630,8 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
     @Override
 	public int getTotalArmorValue() // like he's wearing set of iron armor
     {
-        int totalArmorValue = Items.iron_chestplate.damageReduceAmount+Items.iron_helmet.damageReduceAmount+Items.iron_leggings.damageReduceAmount+Items.iron_boots.damageReduceAmount;
+        int totalArmorValue = Items.IRON_CHESTPLATE.damageReduceAmount+Items.IRON_HELMET.damageReduceAmount+Items.IRON_LEGGINGS.damageReduceAmount+Items.IRON_BOOTS.damageReduceAmount;
         return totalArmorValue;
-    }
-    
-    @Override
-	public boolean allowLeashing()
-    {
-    	return false;
-    }
-    
-    @Override
-	public boolean canBePushed()
-    {
-    	return false;
     }
     
     @Override
@@ -756,4 +802,15 @@ public class EntityGiant extends EntityCreature implements IEntity, IBossDisplay
 	    int blockZ = MathHelper.floor_double(parEntity.posZ);
 	    return parEntity.worldObj.getBlockState(new BlockPos(blockX, blockY, blockZ)).getBlock();
 	}
+
+    /**
+     * Returns false if this Entity is a boss, true otherwise.
+     */
+    @Override
+    public boolean isNonBoss()
+    {
+        return false; // giant is a boss
+    }
+
 }
+

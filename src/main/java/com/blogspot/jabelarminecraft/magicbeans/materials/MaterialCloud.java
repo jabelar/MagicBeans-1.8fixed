@@ -16,6 +16,7 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.materials;
 
+import net.minecraft.block.material.EnumPushReaction;
 import net.minecraft.block.material.MapColor;
 import net.minecraft.block.material.Material;
 
@@ -27,7 +28,7 @@ public class MaterialCloud extends Material
 {
 	public MaterialCloud() 
 	{
-		super(MapColor.snowColor);
+		super(MapColor.SNOW);
 	}
 
     /**
@@ -95,8 +96,8 @@ public class MaterialCloud extends Material
      * immobility and stop pistons.
      */
     @Override
-	public int getMaterialMobility()
+	public EnumPushReaction getMobilityFlag()
     {
-        return 1;
+        return EnumPushReaction.BLOCK;
     }
 }

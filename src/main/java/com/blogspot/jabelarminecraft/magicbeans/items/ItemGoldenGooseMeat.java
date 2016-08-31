@@ -16,17 +16,16 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.items;
 
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.MobEffects;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -62,9 +61,9 @@ public class ItemGoldenGooseMeat extends ItemFood
     {
         if (!parWorld.isRemote)
         {
-            parPlayer.addPotionEffect(new PotionEffect(Potion.absorption.id, 2400, 0)); // absorption
-            parPlayer.addPotionEffect(new PotionEffect(Potion.heal.id, 2400, 0)); // instant health
-            parPlayer.addPotionEffect(new PotionEffect(Potion.damageBoost.id, 2400, 0)); // strength
+            parPlayer.addPotionEffect(new PotionEffect(MobEffects.ABSORPTION, 2400, 0)); // absorption
+            parPlayer.addPotionEffect(new PotionEffect(MobEffects.HEALTH_BOOST, 2400, 0)); // instant health
+            parPlayer.addPotionEffect(new PotionEffect(MobEffects.STRENGTH, 2400, 0)); // strength
         }
     }
     

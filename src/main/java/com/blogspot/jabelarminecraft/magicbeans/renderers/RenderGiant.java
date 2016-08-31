@@ -16,20 +16,17 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.renderers;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.boss.BossStatus;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
-
 import org.lwjgl.opengl.GL11;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 
 /**
  * @author jabelar
@@ -56,9 +53,7 @@ public class RenderGiant extends RenderLiving
     }
   
     protected void preRenderCallbackGiant(EntityGiant entity, float f)
-    {
-    	BossStatus.setBossStatus(entity, true);
-    	
+    {    	
         // some people do some G11 transformations or blends here, like you can do
         // GL11.glScalef(2F, 2F, 2F); to scale up the entity
         // which is used for Slime entities.  I suggest having the entity cast to

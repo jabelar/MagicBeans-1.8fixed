@@ -16,6 +16,12 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.entities;
 
+import javax.annotation.Nullable;
+
+import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
+import com.blogspot.jabelarminecraft.magicbeans.ai.EntityCowMagicBeansAIMate;
+import com.blogspot.jabelarminecraft.magicbeans.gui.GuiFamilyCow;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.Entity;
@@ -32,20 +38,16 @@ import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.ChatComponentText;
-import net.minecraft.util.MathHelper;
-import net.minecraft.util.MovingObjectPosition;
-import net.minecraft.util.Vec3;
+import net.minecraft.util.EnumHand;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
-
-import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
-import com.blogspot.jabelarminecraft.magicbeans.ai.EntityCowMagicBeansAIMate;
-import com.blogspot.jabelarminecraft.magicbeans.gui.GuiFamilyCow;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -73,7 +75,7 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
         tasks.addTask(0, new EntityAISwimming(this));
         tasks.addTask(1, new EntityAIPanic(this, 2.0D));
         tasks.addTask(2, new EntityCowMagicBeansAIMate(this, 1.0D));
-        tasks.addTask(3, new EntityAITempt(this, 1.25D, Items.wheat, false));
+        tasks.addTask(3, new EntityAITempt(this, 1.25D, Items.WHEAT, false));
         tasks.addTask(4, new EntityAIFollowParent(this, 1.25D));
         tasks.addTask(5, new EntityAIWander(this, 1.0D));
         tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));
@@ -93,7 +95,7 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
         		if (entityLeashedTo instanceof EntityPlayer)
         		{
 	    			EntityPlayer playerLeashedTo = (EntityPlayer) entityLeashedTo;
-	    			Vec3 playerLookVector = playerLeashedTo.getLookVec();
+	    			Vec3d playerLookVector = playerLeashedTo.getLookVec();
 	
 	    			EntityMysteriousStranger entityToSpawn = new EntityMysteriousStranger(worldObj, this, playerLeashedTo);
 	                double spawnX = playerLeashedTo.posX+5*playerLookVector.xCoord;
@@ -108,12 +110,12 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
 	                if (worldObj.canBlockSeeSky(spawnPos))
 	                {
 	                	entityToSpawn.setLocationAndAngles(spawnX, spawnY, spawnZ, 
-		                      MathHelper.wrapAngleTo180_float(rand.nextFloat()
+		                      MathHelper.wrapDegrees(rand.nextFloat()
 		                      * 360.0F), 0.0F);
 		                worldObj.spawnEntityInWorld(entityToSpawn);
 		                entityToSpawn.playLivingSound();
 		                setHasSpawnedMysteriousStranger(true);
-		    			playerLeashedTo.addChatMessage(new ChatComponentText(Utilities.stringToRainbow("A mysterious stranger appears!")));
+		    			playerLeashedTo.addChatMessage(new TextComponentTranslation(Utilities.stringToRainbow("A mysterious stranger appears!")));
 		        		// DEBUG
 		        		System.out.println("A mysterious stranger appears with entity ID = "+entityToSpawn.getEntityId());
 	                }
@@ -121,30 +123,11 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
     		}
     	}
     }
-    
-    protected MovingObjectPosition getMovingObjectPositionFromPlayer(World parWorld, EntityPlayer parPlayer, double parDistance, boolean parUseLiquids)
-    {
-        float f = parPlayer.prevRotationPitch + (parPlayer.rotationPitch - parPlayer.prevRotationPitch);
-        float f1 = parPlayer.prevRotationYaw + (parPlayer.rotationYaw - parPlayer.prevRotationYaw);
-        double vecX = parPlayer.posX ;
-        double vecY = parPlayer.posY + parPlayer.getEyeHeight();
-        double vecZ = parPlayer.posZ ;
-        Vec3 vec3 = new Vec3(vecX, vecY, vecZ);
-        float f2 = MathHelper.cos(-f1 * 0.017453292F - (float)Math.PI);
-        float f3 = MathHelper.sin(-f1 * 0.017453292F - (float)Math.PI);
-        float f4 = -MathHelper.cos(-f * 0.017453292F);
-        float f5 = MathHelper.sin(-f * 0.017453292F);
-        float f6 = f3 * f4;
-        float f7 = f2 * f4;
-        Vec3 vec31 = vec3.addVector(f6 * parDistance, f5 * parDistance, f7 * parDistance);
-        return parWorld.rayTraceBlocks(vec3, vec31, parUseLiquids, !parUseLiquids, false);
-    }
-
 
     @Override
 	protected Item getDropItem()
     {
-        return Items.leather;
+        return Items.LEATHER;
     }
  
     /**
@@ -163,11 +146,11 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
         {
             if (isBurning())
             {
-                dropItem(Items.cooked_beef, 1);
+                dropItem(Items.COOKED_BEEF, 1);
             }
             else
             {
-                dropItem(Items.beef, 1);
+                dropItem(Items.BEEF, 1);
             }
         }
     }
@@ -176,7 +159,7 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
      * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
      */
     @Override
-	public boolean interact(EntityPlayer parPlayer)
+    public boolean processInteract(EntityPlayer player, EnumHand hand, @Nullable ItemStack stack)
     {
     	// check if have already spawned castle
     	if (!ModWorldData.get(worldObj).getHasCastleSpawned())
@@ -184,24 +167,26 @@ public class EntityFamilyCow extends EntityCow implements IEntity, IEntityAdditi
 	    	// Family cow doesn't provide milk (that's why your mother wants you to sell it)
 	    	// don't open gui if holding items, e.g. wheat that should incite mating instead
 	    	// also don't open gui if already gone through gui to get a lead
-	    	if (parPlayer.getCurrentEquippedItem() == null || parPlayer.getCurrentEquippedItem().getItem() == Items.bucket)
+	    	if (player.getHeldItemMainhand() == null && player.getHeldItemOffhand() == null)
 	    	{
 				collideWithNearbyEntities();
-				if (parPlayer.worldObj.isRemote)
+				
+				if (player.worldObj.isRemote)
 				{
 					Minecraft.getMinecraft().displayGuiScreen(new GuiFamilyCow());
 				}
+				
+				return true;
 	    	}
 	    	else // act like normal cow
 	    	{
-	    		super.interact(parPlayer);
+	            return super.processInteract(player, hand, stack);
 	    	}
     	}
     	else // act like normal cow
     	{
-    		super.interact(parPlayer);
+            return super.processInteract(player, hand, stack);
     	}
-		return false;
     }
     
     /**

@@ -16,6 +16,7 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.structures;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
 import net.minecraft.entity.EntityList;
@@ -25,10 +26,8 @@ import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.tileentity.TileEntityDispenser;
-import net.minecraft.util.BlockPos;
-import net.minecraft.util.MathHelper;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.MathHelper;
 
 /**
  * @author jabelar
@@ -58,7 +57,7 @@ public class StructureCastleJaden extends Structure
 	    // DEBUG
 	    System.out.println("Customizing tile entity");
 		Block theBlock = theWorld.getBlockState(parPos).getBlock();
-		if (theBlock == Blocks.dispenser)
+		if (theBlock == Blocks.DISPENSER)
 		{
 		    // DEBUG
 		    System.out.println("Populating dispenser");
@@ -74,7 +73,7 @@ public class StructureCastleJaden extends Structure
 				{
 				    // DEBUG
 				    System.out.println("Setting contents for slot = "+i);
-					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.arrow, 5));
+					theTileEntity.setInventorySlotContents(i, new ItemStack(Items.ARROW, 5));
 					// DEBUG
 					System.out.println("The slot contents are "+theTileEntity.getStackInSlot(i));
 				}
@@ -87,7 +86,7 @@ public class StructureCastleJaden extends Structure
 			
 			theTileEntity.markDirty();
 		}
-		if (theBlock == Blocks.brewing_stand)
+		if (theBlock == Blocks.BREWING_STAND)
 		{
 			TileEntityBrewingStand theTileEntity = (TileEntityBrewingStand) theWorld.getTileEntity(parPos);	
 			if (theTileEntity != null)
@@ -99,17 +98,17 @@ public class StructureCastleJaden extends Structure
 					if (chanceOfPotionType <= 3) // randomize potion
 					{
 						// fire resistance
-						theTileEntity.setInventorySlotContents(slot, new ItemStack(Items.potionitem, 1, 8259));
+						theTileEntity.setInventorySlotContents(slot, new ItemStack(Items.POTIONITEM, 1, 8259));
 					}
 					else if (chanceOfPotionType <= 8) 
 					{
 						// regeneration
-						theTileEntity.setInventorySlotContents(slot, new ItemStack(Items.potionitem, 1, 8257));
+						theTileEntity.setInventorySlotContents(slot, new ItemStack(Items.POTIONITEM, 1, 8257));
 					}
 					else
 					{
 						// water breathing
-						theTileEntity.setInventorySlotContents(slot, new ItemStack(Items.potionitem, 1, 8269));
+						theTileEntity.setInventorySlotContents(slot, new ItemStack(Items.POTIONITEM, 1, 8269));
 					}
 				}
 			}
@@ -125,12 +124,12 @@ public class StructureCastleJaden extends Structure
 		{
 			String entityToSpawnName = "golden_goose";
 	        String entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
-	        if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
+	        if (EntityList.NAME_TO_CLASS.containsKey(entityToSpawnNameFull))
 	        {
 	            EntityLiving entityToSpawn = (EntityLiving) EntityList
 	                  .createEntityByName(entityToSpawnNameFull, theWorld);
 	            entityToSpawn.setLocationAndAngles(startX+24, startY+10, startZ+22, 
-	                  MathHelper.wrapAngleTo180_float(theWorld.rand.nextFloat()
+	                  MathHelper.wrapDegrees(theWorld.rand.nextFloat()
 	                  * 360.0F), 0.0F);
 	            ((EntityAgeable)entityToSpawn).setGrowingAge(0);
 	            theWorld.spawnEntityInWorld(entityToSpawn);
@@ -146,12 +145,12 @@ public class StructureCastleJaden extends Structure
 
 			entityToSpawnName = "giant";
 	        entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
-	        if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
+	        if (EntityList.NAME_TO_CLASS.containsKey(entityToSpawnNameFull))
 	        {
 	            EntityLiving entityToSpawn = (EntityLiving) EntityList
 	                  .createEntityByName(entityToSpawnNameFull, theWorld);
 	            entityToSpawn.setLocationAndAngles(startX+24, startY+9, startZ+32, 
-	                  MathHelper.wrapAngleTo180_float(theWorld.rand.nextFloat()
+	                  MathHelper.wrapDegrees(theWorld.rand.nextFloat()
 	                  * 360.0F), 0.0F);
 	            theWorld.spawnEntityInWorld(entityToSpawn);
 	            entityToSpawn.playLivingSound();
