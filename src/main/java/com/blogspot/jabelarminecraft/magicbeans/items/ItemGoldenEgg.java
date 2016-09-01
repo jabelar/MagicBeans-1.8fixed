@@ -19,44 +19,38 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.items;
 
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenEggThrown;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
 import net.minecraft.world.World;
+
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenEggThrown;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 public class ItemGoldenEgg extends Item
 {
-    protected static final SoundEvent SOUND_EVENT_EQUIP = new SoundEvent(new ResourceLocation("random.bow"));
     protected EntityGoldenEggThrown entityEgg;
 
     public ItemGoldenEgg() 
     {
         setUnlocalizedName("golden_egg");
     	maxStackSize = 16; // same as regular egg
-        setCreativeTab(CreativeTabs.MATERIALS);
+        setCreativeTab(CreativeTabs.tabMaterials);
     }
 
 	/**
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
     @Override
-    public ActionResult<ItemStack> onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer, EnumHand parHand)
+    public ItemStack onItemRightClick(ItemStack par1ItemStack, World par2World, EntityPlayer par3EntityPlayer)
     {
         if (!par3EntityPlayer.capabilities.isCreativeMode)
         {
             --par1ItemStack.stackSize;
         }
 
-        par2World.playSound(par3EntityPlayer.posX,par3EntityPlayer.posY, par3EntityPlayer.posZ, SOUND_EVENT_EQUIP, SoundCategory.PLAYERS, 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F), true);
+        par2World.playSoundAtEntity(par3EntityPlayer, "random.bow", 0.5F, 0.4F / (itemRand.nextFloat() * 0.4F + 0.8F));
 
         if (!par2World.isRemote)
         {
@@ -64,7 +58,7 @@ public class ItemGoldenEgg extends Item
             par2World.spawnEntityInWorld(entityEgg);
         }
 
-        return new ActionResult(EnumActionResult.PASS, par1ItemStack);
+        return par1ItemStack;
     }
     
 //    @Override

@@ -19,28 +19,13 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.proxy;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.VersionChecker;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenEggThrown;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenGoose;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityMysteriousStranger;
-import com.blogspot.jabelarminecraft.magicbeans.models.ModelGiant;
-import com.blogspot.jabelarminecraft.magicbeans.models.ModelGoldenGoose;
-import com.blogspot.jabelarminecraft.magicbeans.particles.ParticleFXMysterious;
-import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderCowMagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGiant;
-import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGoldenEggThrown;
-import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGoldenGoose;
-import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderMysteriousStranger;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.model.ModelCow;
 import net.minecraft.client.model.ModelVillager;
-import net.minecraft.client.particle.Particle;
-import net.minecraft.client.renderer.RenderItem;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
+import net.minecraft.client.particle.EntityFX;
+import net.minecraft.client.renderer.entity.RenderItem;
 import net.minecraft.client.renderer.entity.RenderManager;
+import net.minecraft.client.resources.model.ModelResourceLocation;
 import net.minecraft.client.settings.KeyBinding;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -52,10 +37,27 @@ import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
 import org.lwjgl.input.Keyboard;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.util.glu.GLU;
 import org.lwjgl.util.glu.Sphere;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.VersionChecker;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenEggThrown;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenGoose;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityMysteriousStranger;
+import com.blogspot.jabelarminecraft.magicbeans.models.ModelGiant;
+import com.blogspot.jabelarminecraft.magicbeans.models.ModelGoldenGoose;
+import com.blogspot.jabelarminecraft.magicbeans.particles.EntityParticleFXMysterious;
+import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderCowMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGiant;
+import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGoldenEggThrown;
+import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderGoldenGoose;
+import com.blogspot.jabelarminecraft.magicbeans.renderers.RenderMysteriousStranger;
 
 
 public class ClientProxy extends CommonProxy 
@@ -250,7 +252,7 @@ public class ClientProxy extends CommonProxy
         double var4 = theEntity.worldObj.rand.nextGaussian() * 0.02D;
         double var6 = theEntity.worldObj.rand.nextGaussian() * 0.02D;
         double var8 = theEntity.worldObj.rand.nextGaussian() * 0.02D;
-        Particle particleMysterious = new ParticleFXMysterious(theEntity.worldObj, 
+        EntityFX particleMysterious = new EntityParticleFXMysterious(theEntity.worldObj, 
                 theEntity.posX + theEntity.worldObj.rand.nextFloat() * theEntity.width * 2.0F - theEntity.width, 
                 theEntity.posY + 0.5D + theEntity.worldObj.rand.nextFloat() * theEntity.height, 
                 theEntity.posZ + theEntity.worldObj.rand.nextFloat() * theEntity.width * 2.0F - theEntity.width, 

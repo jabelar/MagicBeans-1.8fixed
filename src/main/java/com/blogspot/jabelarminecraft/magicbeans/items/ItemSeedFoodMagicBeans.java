@@ -25,10 +25,8 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.ItemFood;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumPlantType;
@@ -46,8 +44,8 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
     }
 
     @Override
-    public EnumActionResult onItemUse(ItemStack parItemStack, EntityPlayer parPlayer, 
-          World parWorld, BlockPos parPos, EnumHand parHand, EnumFacing parSide, float parHitX, 
+    public boolean onItemUse(ItemStack parItemStack, EntityPlayer parPlayer, 
+          World parWorld, BlockPos parPos, EnumFacing parSide, float parHitX, 
           float parHitY, float parHitZ)
     {
 //    	// DEBUG
@@ -59,7 +57,7 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
 //        	// DEBUG
 //        	System.out.println("Can't plant since not top of block");
         	
-            return EnumActionResult.FAIL;
+            return false;
         }        
         // check if player can edit the block on ground and block where
         // plant will grow.  Note that the canPlayerEdit class doesn't seem to 
@@ -72,7 +70,7 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
         	
             // check that the soil is a type that can sustain the plant
             // and check that there is air above to give plant room to grow
-            if (parWorld.getBlockState(parPos).getBlock() == Blocks.FARMLAND 
+            if (parWorld.getBlockState(parPos).getBlock() == Blocks.farmland 
             		&& parWorld.isAirBlock(parPos.offset(parSide)))
             {
 //            	// DEBUG
@@ -86,14 +84,14 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
                 parWorld.setBlockState(parPos.offset(parSide), theBlockPlant);
                 // decrement the seed item stack                
                 --parItemStack.stackSize;
-                return EnumActionResult.PASS;
+                return true;
             }
             else
             {
 //            	// DEBUG
 //            	System.out.println("This block cannot sustain the plant");
             	
-                return EnumActionResult.FAIL;
+                return false;
             }
         }
         else
@@ -101,7 +99,7 @@ public class ItemSeedFoodMagicBeans extends ItemFood implements IPlantable
 //        	// DEBUG
 //        	System.out.println("Player is not allowed to edit");
         	
-            return EnumActionResult.FAIL;
+            return false;
         }
     }
 

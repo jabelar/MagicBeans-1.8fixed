@@ -20,9 +20,9 @@
 package com.blogspot.jabelarminecraft.magicbeans;
 
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.event.ClickEvent;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatStyle;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.OnConfigChangedEvent;
 import net.minecraftforge.fml.client.event.ConfigChangedEvent.PostConfigChangedEvent;
@@ -164,9 +164,9 @@ public class FMLEventHandler
 		if (!MagicBeans.haveWarnedVersionOutOfDate && world.isRemote && !MagicBeans.versionChecker.isLatestVersion())
 		{
 			ClickEvent versionCheckChatClickEvent = new ClickEvent(ClickEvent.Action.OPEN_URL, "http://jabelarminecraft.blogspot.com");
-			Style clickableChatStyle = new Style().setClickEvent(versionCheckChatClickEvent);
-			TextComponentString versionWarningChatComponent = new TextComponentString("Your Magic Beans Mod is not latest version!  Click here to update.");
-			versionWarningChatComponent.setStyle(clickableChatStyle);
+			ChatStyle clickableChatStyle = new ChatStyle().setChatClickEvent(versionCheckChatClickEvent);
+			ChatComponentText versionWarningChatComponent = new ChatComponentText("Your Magic Beans Mod is not latest version!  Click here to update.");
+			versionWarningChatComponent.setChatStyle(clickableChatStyle);
 			thePlayer.addChatMessage(versionWarningChatComponent);
 			MagicBeans.haveWarnedVersionOutOfDate = true;
 		}
@@ -190,9 +190,9 @@ public class FMLEventHandler
 	{
 		// DEBUG
 		System.out.println("OnConfigChangedEvent");
-		if(eventArgs.getModID().equals(MagicBeans.MODID))
+		if(eventArgs.modID.equals(MagicBeans.MODID))
 		{
-			System.out.println("Syncing config for mod ="+eventArgs.getModID());
+			System.out.println("Syncing config for mod ="+eventArgs.modID);
 			MagicBeans.config.save();
 			MagicBeans.proxy.syncConfig();
 	    }

@@ -19,28 +19,26 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.blocks;
 
-import java.util.List;
 import java.util.Random;
 
-import javax.annotation.Nullable;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
-import net.minecraft.entity.Entity;
 // import net.minecraft.client.renderer.texture.IIconRegister;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.init.Blocks;
 import net.minecraft.item.Item;
-import net.minecraft.util.EnumBlockRenderType;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.AxisAlignedBB;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.EnumFacing;
 // import net.minecraft.util.IIcon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
+import net.minecraftforge.common.IPlantable;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 
 public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITileEntityProvider
 {
-    protected static final AxisAlignedBB BOUNDING_BOX = new AxisAlignedBB(0.5F-0.125F, 0.0F, 0.5F-0.125F, 0.5F+0.125F, 1.0F, 0.5F+0.125F);
 
     public BlockMagicBeanStalk()
     {
@@ -50,6 +48,7 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
 
     	// Basic block setup
         setUnlocalizedName("magicbeanstalk");
+    	setBlockBounds(0.5F-0.125F, 0.0F, 0.5F-0.125F, 0.5F+0.125F, 1.0F, 0.5F+0.125F);
     }
     
     // identifies what food (ItemFood or ItemSeedFood type) is harvested from this
@@ -69,10 +68,10 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
     }
      
     @Override
-    public boolean canPlaceBlockAt(World worldIn, BlockPos pos)
+	public boolean canPlaceBlockAt(World parWorld, BlockPos parPos) 
     {
-        IBlockState soil = worldIn.getBlockState(pos.down());
-        return super.canPlaceBlockAt(worldIn, pos) && soil.getBlock().canSustainPlant(soil, worldIn, pos.down(), net.minecraft.util.EnumFacing.UP, this);
+        Block block = parWorld.getBlockState(parPos).getBlock();
+        return block.canSustainPlant(parWorld, parPos.add(0, -1, 0), EnumFacing.UP, this) || block == this;
     }
     
     @Override
@@ -81,14 +80,23 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
         return null; // anything can harvest this block. should change to hatchet later
     }
         
+    /**
+     * is the block grass, dirt or farmland
+     */
+    // can plant on itself as this allows the bean stalk to grow very tall
+    @Override
+	protected boolean canPlaceBlockOn(Block parBlock)
+    {
+        return parBlock == MagicBeans.blockMagicBeanStalk || parBlock == Blocks.grass || parBlock == Blocks.dirt || parBlock == Blocks.farmland;
+    }
 
     /**
      * The type of render function that is called for this block
      */
     @Override
-    public EnumBlockRenderType getRenderType(IBlockState state)
+    public int getRenderType()
     {
-        return EnumBlockRenderType.MODEL; // 1 seems to be for liquids, 2 for chests, 3 for normal.
+        return 3; // 1 seems to be for liquids, 2 for chests, 3 for normal.
     }
 
     /**
@@ -111,15 +119,15 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
      * @return True to allow the plant to be planted/stay.
      */
     @Override
-	public boolean canSustainBush(IBlockState state)
+	public boolean canSustainPlant(IBlockAccess parWorld, BlockPos parPos, EnumFacing parSide, IPlantable parPlantable)
     {
-        if (state.getBlock() == MagicBeans.blockMagicBeanStalk || state.getBlock() == Blocks.GRASS || state.getBlock() == Blocks.DIRT || state.getBlock() == Blocks.FARMLAND)
+        if (parWorld.getBlockState(parPos.add(0, 1, 0)) == MagicBeans.blockMagicBeanStalk)
         {
         	return true;
         }
         else
         {
-        	return super.canSustainBush(state);
+        	return super.canSustainPlant(parWorld, parPos, parSide, parPlantable);
         }
     }
 
@@ -128,15 +136,9 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
      * cleared to be reused)
      */
     @Override
-    public void addCollisionBoxToList(IBlockState state, World worldIn, BlockPos pos, AxisAlignedBB entityBox, List<AxisAlignedBB> collidingBoxes, @Nullable Entity entityIn)
+	public AxisAlignedBB getCollisionBoundingBox(World parWorld, BlockPos parPos, IBlockState parState)
     {
-        addCollisionBoxToList(pos, entityBox, collidingBoxes, BOUNDING_BOX);
-    }
-
-    @Override
-    public AxisAlignedBB getBoundingBox(IBlockState state, IBlockAccess source, BlockPos pos)
-    {
-        return BOUNDING_BOX;
+        return AxisAlignedBB.fromBounds(parPos.getX() + minX, parPos.getY() + minY, parPos.getZ() + minZ, parPos.getX() + maxX, parPos.getY() + maxY, parPos.getZ() + maxZ);
     }
 
     /**
@@ -149,7 +151,7 @@ public class BlockMagicBeanStalk extends BlockCropMagicBeans // implements ITile
     }
 
 	@Override
-    public boolean isLadder(IBlockState state, IBlockAccess world, BlockPos pos, EntityLivingBase entity)
+	public boolean isLadder(IBlockAccess parWord, BlockPos parPos, EntityLivingBase parEntity)
 	{
 		return true;
 	}

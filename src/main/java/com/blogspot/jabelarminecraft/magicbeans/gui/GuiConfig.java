@@ -16,8 +16,6 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.gui;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 /**
  * @author jabelar
  *
@@ -25,7 +23,7 @@ import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
 import net.minecraftforge.common.config.ConfigElement;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.client.config.GuiMessageDialog;
@@ -35,6 +33,9 @@ import net.minecraftforge.fml.client.event.ConfigChangedEvent.PostConfigChangedE
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.eventhandler.Event.Result;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig 
 {
@@ -84,7 +85,7 @@ public class GuiConfig extends net.minecraftforge.fml.client.config.GuiConfig
                         {
                             flag = false;
                             mc.displayGuiScreen(new GuiMessageDialog(parentScreen, "fml.configgui.gameRestartTitle", 
-                                    new TextComponentString(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
+                                    new ChatComponentText(I18n.format("fml.configgui.gameRestartRequired")), "fml.configgui.confirmRestartMessage"));
                         }
                         
                         if (parentScreen instanceof GuiConfig)

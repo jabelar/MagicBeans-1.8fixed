@@ -18,20 +18,18 @@ package com.blogspot.jabelarminecraft.magicbeans.explosions;
 
 import java.util.List;
 
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenGoose;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
+import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundCategory;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.AxisAlignedBB;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.Vec3;
 import net.minecraft.world.World;
+
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGoldenGoose;
 
 /**
  * @author jabelar
@@ -39,9 +37,7 @@ import net.minecraft.world.World;
  */
 public class GiantAttack 
 {
-    protected static final SoundEvent SOUND_EFFECT_ATTACK = new SoundEvent(new ResourceLocation("random.explode"));
-    
-    protected final World worldObj;
+    private final World worldObj;
     public double attackOriginX;
     public double attackOriginY;
     public double attackOriginZ;
@@ -90,8 +86,8 @@ public class GiantAttack
         // DEBUG
         System.out.println("Attack region = "+minX+", "+minY+", "+minZ+" to "+maxX+", "+maxY+", "+maxZ);
         
-        List entityList = worldObj.getEntitiesWithinAABBExcludingEntity(theGiant, new AxisAlignedBB(minX, minY, minZ, maxX, maxY, maxZ));
-        Vec3d vec3 = new Vec3d(attackOriginX, attackOriginY, attackOriginZ);
+        List entityList = worldObj.getEntitiesWithinAABBExcludingEntity(theGiant, AxisAlignedBB.fromBounds(minX, minY, minZ, maxX, maxY, maxZ));
+        Vec3 vec3 = new Vec3(attackOriginX, attackOriginY, attackOriginZ);
 
         // DEBUG
         System.out.println("Found "+entityList.size()+" entities in attack range");
@@ -132,7 +128,7 @@ public class GiantAttack
                 }
             }
         }
-        worldObj.playSound(attackOriginX, attackOriginY, attackOriginZ, SOUND_EFFECT_ATTACK, SoundCategory.AMBIENT, 4.0F, (1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F, true);
+        worldObj.playSoundEffect(attackOriginX, attackOriginY, attackOriginZ, "random.explode", 4.0F, (1.0F + (worldObj.rand.nextFloat() - worldObj.rand.nextFloat()) * 0.2F) * 0.7F);
         worldObj.spawnParticle(EnumParticleTypes.EXPLOSION_LARGE, attackOriginX, attackOriginY, attackOriginZ, 1.0D, 0.0D, 0.0D, new int[0]);
     }
 

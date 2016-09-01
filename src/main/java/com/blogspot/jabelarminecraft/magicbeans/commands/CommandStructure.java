@@ -26,16 +26,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.structures.Structure;
 import net.minecraft.block.Block;
 import net.minecraft.command.ICommand;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.entity.Entity;
-import net.minecraft.server.MinecraftServer;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.structures.Structure;
 
 public class CommandStructure implements ICommand
 {
@@ -63,7 +63,7 @@ public class CommandStructure implements ICommand
 	}
 	
 	@Override
-	public int compareTo(ICommand parICommand) 
+	public int compareTo(Object o) 
 	{
 		return 0;
 	}
@@ -87,7 +87,7 @@ public class CommandStructure implements ICommand
 	}
 
 	@Override
-	public void execute(MinecraftServer server, ICommandSender sender, String[] argString) 
+	public void processCommand(ICommandSender sender, String[] argString) 
 	{
 		theWorld = sender.getEntityWorld();
 	    thePlayer = sender.getCommandSenderEntity();
@@ -108,7 +108,7 @@ public class CommandStructure implements ICommand
 			}
 			if(argString.length == 1)
 			{
-			    sender.addChatMessage(new TextComponentString("Generating Structure"));
+			    sender.addChatMessage(new ChatComponentText("Generating Structure"));
 
 			    readArrays(argString[0]);
 			    regenerate(0, 0, 0);
@@ -232,6 +232,12 @@ public class CommandStructure implements ICommand
 	}
 
 	@Override
+	public boolean canCommandSenderUseCommand(ICommandSender var1) 
+	{
+		return true;
+	}
+
+	@Override
 	public boolean isUsernameIndex(String[] var1, int var2) 
 	{
 		// TODO Auto-generated method stub
@@ -239,16 +245,11 @@ public class CommandStructure implements ICommand
 	}
 
 	@Override
-    public boolean checkPermission(MinecraftServer server,
-            ICommandSender sender)
-    {
-        return true;
-    }
+	public List addTabCompletionOptions(ICommandSender sender, String[] args,
+			BlockPos pos) 
+	{
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-    @Override
-    public List<String> getTabCompletionOptions(MinecraftServer server,
-            ICommandSender sender, String[] args, BlockPos pos)
-    {
-        return null;
-    }
 }

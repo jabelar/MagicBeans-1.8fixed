@@ -19,6 +19,33 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.proxy;
 
+import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EnumCreatureType;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.init.Items;
+import net.minecraft.item.Item;
+import net.minecraft.item.ItemStack;
+import net.minecraft.stats.Achievement;
+import net.minecraft.world.biome.BiomeGenBase;
+import net.minecraftforge.common.AchievementPage;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.common.config.Configuration;
+import net.minecraftforge.fml.common.FMLCommonHandler;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
+import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
+import net.minecraftforge.fml.common.network.NetworkRegistry;
+import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
+import net.minecraftforge.fml.relauncher.Side;
+
 import com.blogspot.jabelarminecraft.magicbeans.EventHandler;
 import com.blogspot.jabelarminecraft.magicbeans.FMLEventHandler;
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
@@ -40,30 +67,8 @@ import com.blogspot.jabelarminecraft.magicbeans.networking.MessageToClient;
 import com.blogspot.jabelarminecraft.magicbeans.networking.MessageToServer;
 import com.blogspot.jabelarminecraft.magicbeans.tileentities.TileEntityMagicBeanStalk;
 import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
-import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityLiving;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.init.Items;
-import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.stats.Achievement;
-import net.minecraftforge.common.AchievementPage;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.common.config.Configuration;
-import net.minecraftforge.fml.common.FMLCommonHandler;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerAboutToStartEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppedEvent;
-import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
-import net.minecraftforge.fml.common.network.NetworkRegistry;
-import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
-import net.minecraftforge.fml.common.registry.EntityRegistry;
-import net.minecraftforge.fml.common.registry.GameRegistry;
-import net.minecraftforge.fml.relauncher.Side;
+import com.google.common.base.Predicates;
+import com.google.common.collect.Iterators;
 
 public class CommonProxy 
 {
@@ -299,7 +304,7 @@ public class CommonProxy
                     "AAA",
                     "ABA",
                     "AAA",
-                    'A', Items.GOLD_INGOT, 'B', Items.CHICKEN
+                    'A', Items.gold_ingot, 'B', Items.chicken
                 });
     }
 
@@ -387,22 +392,20 @@ public class CommonProxy
         // EntityRegistry.addSpawn(EntityElephant.class, 10, 1, 5, EnumCreatureType.creature, BiomeGenBase.savanna); //change the values to vary the spawn rarity, biome, etc.              
      }
  
-     // TO DO
-     // With move to 1.10.2 looks like need to iterate through registry instead
      protected void addSpawnAllBiomes(EntityLiving parEntity, int parChance, int parMinGroup, int parMaxGroup)
      {
-//         
-//         /*
-//          *  For the biome type you can use an list, but unfortunately the built-in biomeList contains
-//          * null entries and will crash, so you need to clean up that list.
-//          * diesieben07 suggested the following code to remove the nulls and create list of all biomes
-//          */
-//         Biome[] allBiomes = Iterators.toArray(Biome.REGISTRY.iterator());
-//         for (int i=0; i<allBiomes.length; i++)
-//         {
-//             EntityRegistry.addSpawn(parEntity.getClass(), parChance, parMinGroup, parMaxGroup, EnumCreatureType.CREATURE, 
-//                     allBiomes[i]); //change the values to vary the spawn rarity, biome, etc.                 
-//         }
+         
+         /*
+          *  For the biome type you can use an list, but unfortunately the built-in biomeList contains
+          * null entries and will crash, so you need to clean up that list.
+          * diesieben07 suggested the following code to remove the nulls and create list of all biomes
+          */
+         BiomeGenBase[] allBiomes = Iterators.toArray(Iterators.filter(Iterators.forArray(BiomeGenBase.getBiomeGenArray()), Predicates.notNull()), BiomeGenBase.class);
+         for (int i=0; i<allBiomes.length; i++)
+         {
+             EntityRegistry.addSpawn(parEntity.getClass(), parChance, parMinGroup, parMaxGroup, EnumCreatureType.CREATURE, 
+                     allBiomes[i]); //change the values to vary the spawn rarity, biome, etc.                 
+         }
      }
      
      

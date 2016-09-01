@@ -16,12 +16,14 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.models;
 
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 import net.minecraft.client.model.ModelBiped;
 import net.minecraft.client.model.ModelRenderer;
 import net.minecraft.entity.Entity;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
+
 import org.lwjgl.opengl.GL11;
+
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 
 /**
  * @author jabelar
@@ -142,8 +144,15 @@ public class ModelGiant extends ModelBiped
             bipedLeftLeg.rotateAngleY = -((float)Math.PI / 10F);
         }
 
-            bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F - ((float)Math.PI / 10F);
-            bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - ((float)Math.PI / 10F);
+        if (heldItemLeft != 0)
+        {
+            bipedLeftArm.rotateAngleX = bipedLeftArm.rotateAngleX * 0.5F - ((float)Math.PI / 10F) * heldItemLeft;
+        }
+
+        if (heldItemRight != 0)
+        {
+            bipedRightArm.rotateAngleX = bipedRightArm.rotateAngleX * 0.5F - ((float)Math.PI / 10F) * heldItemRight;
+        }
 
         bipedRightArm.rotateAngleY = 0.0F;
         bipedLeftArm.rotateAngleY = 0.0F;
@@ -187,28 +196,28 @@ public class ModelGiant extends ModelBiped
         bipedRightArm.rotateAngleX += MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
         bipedLeftArm.rotateAngleX -= MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
 
-//        if (aimedBow)
-//        {
-//            f6 = 0.0F;
-//            f7 = 0.0F;
-//            bipedRightArm.rotateAngleZ = 0.0F;
-//            bipedLeftArm.rotateAngleZ = 0.0F;
-//            bipedRightArm.rotateAngleY = -(0.1F - f6 * 0.6F) + bipedHead.rotateAngleY;
-//            bipedLeftArm.rotateAngleY = 0.1F - f6 * 0.6F + bipedHead.rotateAngleY + 0.4F;
-//            bipedRightArm.rotateAngleX = -((float)Math.PI / 2F) + bipedHead.rotateAngleX;
-//            bipedLeftArm.rotateAngleX = -((float)Math.PI / 2F) + bipedHead.rotateAngleX;
-//            bipedRightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
-//            bipedLeftArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
-//            bipedRightArm.rotateAngleZ += MathHelper.cos(p_78087_3_ * 0.09F) * 0.05F + 0.05F;
-//            bipedLeftArm.rotateAngleZ -= MathHelper.cos(p_78087_3_ * 0.09F) * 0.05F + 0.05F;
-//            bipedRightArm.rotateAngleX += MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
-//            bipedLeftArm.rotateAngleX -= MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
-//        }
+        if (aimedBow)
+        {
+            f6 = 0.0F;
+            f7 = 0.0F;
+            bipedRightArm.rotateAngleZ = 0.0F;
+            bipedLeftArm.rotateAngleZ = 0.0F;
+            bipedRightArm.rotateAngleY = -(0.1F - f6 * 0.6F) + bipedHead.rotateAngleY;
+            bipedLeftArm.rotateAngleY = 0.1F - f6 * 0.6F + bipedHead.rotateAngleY + 0.4F;
+            bipedRightArm.rotateAngleX = -((float)Math.PI / 2F) + bipedHead.rotateAngleX;
+            bipedLeftArm.rotateAngleX = -((float)Math.PI / 2F) + bipedHead.rotateAngleX;
+            bipedRightArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
+            bipedLeftArm.rotateAngleX -= f6 * 1.2F - f7 * 0.4F;
+            bipedRightArm.rotateAngleZ += MathHelper.cos(p_78087_3_ * 0.09F) * 0.05F + 0.05F;
+            bipedLeftArm.rotateAngleZ -= MathHelper.cos(p_78087_3_ * 0.09F) * 0.05F + 0.05F;
+            bipedRightArm.rotateAngleX += MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
+            bipedLeftArm.rotateAngleX -= MathHelper.sin(p_78087_3_ * 0.067F) * 0.05F;
+        }
         
         if (parGiant.getSpecialAttackTimer() > 0)
         {
-//        	// DEBUG
-//        	System.out.println("Rendering during special attack with attack timer = "+parGiant.getSpecialAttackTimer());
+        	// DEBUG
+        	System.out.println("Rendering during special attack with attack timer = "+parGiant.getSpecialAttackTimer());
         	bipedRightArm.rotateAngleZ = degToRad(cycleSpecialAttack[parGiant.getSpecialAttackTimer()][0]);
         	bipedLeftArm.rotateAngleZ = degToRad(cycleSpecialAttack[parGiant.getSpecialAttackTimer()][1]);
         	bipedRightArm.rotateAngleX = -degToRad(cycleSpecialAttack[parGiant.getSpecialAttackTimer()][0])/2.0F;

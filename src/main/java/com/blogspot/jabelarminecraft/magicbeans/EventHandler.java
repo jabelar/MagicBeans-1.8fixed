@@ -19,20 +19,14 @@
 
 package com.blogspot.jabelarminecraft.magicbeans;
 
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
-import com.blogspot.jabelarminecraft.magicbeans.gui.GuiConfig;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
-import net.minecraft.client.gui.GuiOptions;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.monster.EntityCreeper;
 import net.minecraft.entity.passive.EntityCow;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.client.event.ClientChatReceivedEvent;
 import net.minecraftforge.client.event.DrawBlockHighlightEvent;
@@ -47,14 +41,16 @@ import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderLivingEvent;
 import net.minecraftforge.client.event.RenderPlayerEvent;
+import net.minecraftforge.client.event.RenderWorldEvent;
 import net.minecraftforge.client.event.RenderWorldLastEvent;
 import net.minecraftforge.client.event.TextureStitchEvent;
 import net.minecraftforge.common.ForgeChunkManager.ForceChunkEvent;
 import net.minecraftforge.common.ForgeChunkManager.UnforceChunkEvent;
+import net.minecraftforge.common.IExtendedEntityProperties;
 import net.minecraftforge.event.AnvilUpdateEvent;
 import net.minecraftforge.event.CommandEvent;
 import net.minecraftforge.event.ServerChatEvent;
-import net.minecraftforge.event.brewing.PotionBrewEvent;
+import net.minecraftforge.event.brewing.PotionBrewedEvent;
 import net.minecraftforge.event.entity.EntityEvent.EnteringChunk;
 import net.minecraftforge.event.entity.EntityEvent.EntityConstructing;
 import net.minecraftforge.event.entity.EntityJoinWorldEvent;
@@ -83,10 +79,10 @@ import net.minecraftforge.event.entity.player.ArrowLooseEvent;
 import net.minecraftforge.event.entity.player.ArrowNockEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.EntityInteractEvent;
 import net.minecraftforge.event.entity.player.EntityItemPickupEvent;
 import net.minecraftforge.event.entity.player.FillBucketEvent;
 import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.event.entity.player.PlayerContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerDestroyItemEvent;
 import net.minecraftforge.event.entity.player.PlayerDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerEvent.BreakSpeed;
@@ -95,10 +91,10 @@ import net.minecraftforge.event.entity.player.PlayerEvent.HarvestCheck;
 import net.minecraftforge.event.entity.player.PlayerEvent.NameFormat;
 import net.minecraftforge.event.entity.player.PlayerFlyableFallEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteract;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent.EntityInteractSpecific;
+import net.minecraftforge.event.entity.player.PlayerOpenContainerEvent;
 import net.minecraftforge.event.entity.player.PlayerPickupXpEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
+import net.minecraftforge.event.entity.player.PlayerUseItemEvent;
 import net.minecraftforge.event.entity.player.UseHoeEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
 import net.minecraftforge.event.world.BlockEvent;
@@ -113,11 +109,16 @@ import net.minecraftforge.fluids.FluidEvent.FluidFillingEvent;
 import net.minecraftforge.fluids.FluidEvent.FluidMotionEvent;
 import net.minecraftforge.fluids.FluidEvent.FluidSpilledEvent;
 import net.minecraftforge.fluids.FluidRegistry.FluidRegisterEvent;
+import net.minecraftforge.fml.client.GuiIngameModOptions;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 import net.minecraftforge.oredict.OreDictionary.OreRegisterEvent;
+
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityFamilyCow;
+import com.blogspot.jabelarminecraft.magicbeans.gui.GuiConfig;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 public class EventHandler 
 {
@@ -162,7 +163,7 @@ public class EventHandler
      */
         
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(PotionBrewEvent event)
+    public void onEvent(PotionBrewedEvent event)
     {
         
     }
@@ -180,27 +181,27 @@ public class EventHandler
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(EntityConstructing event)
     {
-//        // Register extended entity properties
-//
-//        if (event.getEntity() instanceof IExtendedEntityProperties)
-//        {
-//            // DEBUG
-//            System.out.println("EntityConstructing registering IEntityMagicBeans extended properties");
-////            ((IEntityMagicBeans)event.getEntity()).initExtProps();
-////            event.getEntity().registerExtendedProperties(MagicBeans.EXT_PROPS_NAME, (IExtendedEntityProperties) event.getEntity());
-//        }
+        // Register extended entity properties
+
+        if (event.entity instanceof IExtendedEntityProperties)
+        {
+            // DEBUG
+            System.out.println("EntityConstructing registering IEntityMagicBeans extended properties");
+//            ((IEntityMagicBeans)event.entity).initExtProps();
+//            event.entity.registerExtendedProperties(MagicBeans.EXT_PROPS_NAME, (IExtendedEntityProperties) event.entity);
+        }
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(EntityJoinWorldEvent event)
     {
-    	World world = event.getWorld();
+    	World world = event.world;
     	if (world.isRemote)
     	{
     		return;
     	}
     	
-    	Entity theEntity = event.getEntity();
+    	Entity theEntity = event.entity;
     	if (theEntity instanceof EntityCreeper)
     	{
 //    		// DEBUG
@@ -255,8 +256,8 @@ public class EventHandler
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(LivingUpdateEvent event)
     {
-        // This event has an Entity variable, access it like this: event.getEntity();
-        // and can check if for player with if (event.getEntity() instanceof EntityPlayer)
+        // This event has an Entity variable, access it like this: event.entity;
+        // and can check if for player with if (event.entity instanceof EntityPlayer)
     }
 
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -286,10 +287,10 @@ public class EventHandler
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(LivingFallEvent event)
     {
-    	if (!event.getEntityLiving().worldObj.isRemote && event.getEntityLiving() instanceof EntityPlayer)
+    	if (!event.entityLiving.worldObj.isRemote && event.entityLiving instanceof EntityPlayer)
     	{    		
-	    	EntityPlayer thePlayer = (EntityPlayer) event.getEntityLiving();
-	    	boolean isWearingBootsOfSafeFalling = thePlayer.getItemStackFromSlot(EntityEquipmentSlot.FEET) != null && thePlayer.getItemStackFromSlot(EntityEquipmentSlot.FEET).getItem() == MagicBeans.bootsOfSafeFalling;
+	    	EntityPlayer thePlayer = (EntityPlayer) event.entityLiving;
+	    	boolean isWearingBootsOfSafeFalling = thePlayer.getCurrentArmor(0) != null && thePlayer.getCurrentArmor(0).getItem() == MagicBeans.bootsOfSafeFalling;
 	    	// boolean isWearingLeggingsOfSafeFalling = thePlayer.getCurrentArmor(1) != null && thePlayer.getCurrentArmor(1).getItem() == MagicBeans.leggingsOfSafeFalling;
 	    	// boolean isWearingChestPlateOfSafeFalling = thePlayer.getCurrentArmor(2) != null && thePlayer.getCurrentArmor(2).getItem() == MagicBeans.chestplateOfSafeFalling;
 	    	// boolean isWearingHelmetOfSafeFalling = thePlayer.getCurrentArmor(3) != null && thePlayer.getCurrentArmor(3).getItem() == MagicBeans.helmetOfSafeFalling;
@@ -298,7 +299,7 @@ public class EventHandler
 			{
 				// DEBUG
 				System.out.println("LivingFallEvent handled due to having safe falling armor equipped");
-				event.setDistance(0.0F) ;
+				event.distance = 0.0F ;
 			}  
     	}
     }
@@ -370,21 +371,21 @@ public class EventHandler
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(NameFormat event)
     {
-        if (event.getUsername().equalsIgnoreCase("jnaejnae"))
+        if (event.username.equalsIgnoreCase("jnaejnae"))
         {
-            event.setDisplayname(event.getUsername()+" the Great and Powerful");
+            event.displayname = event.username+" the Great and Powerful";
         }        
-        else if (event.getUsername().equalsIgnoreCase("MistMaestro"))
+        else if (event.username.equalsIgnoreCase("MistMaestro"))
         {
-            event.setDisplayname(event.getUsername()+" the Wise");
+            event.displayname = event.username+" the Wise";
         }    
-        else if (event.getUsername().equalsIgnoreCase("taliaailat"))
+        else if (event.username.equalsIgnoreCase("taliaailat"))
         {
-            event.setDisplayname(event.getUsername()+" the Beautiful");
+            event.displayname = event.username+" the Beautiful";
         }    
         else
         {
-            event.setDisplayname(event.getUsername()+" the Ugly");            
+            event.displayname = event.username+" the Ugly";            
         }
     }
     
@@ -413,40 +414,27 @@ public class EventHandler
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(EntityInteractSpecific event)
+    public void onEvent(EntityInteractEvent event)
     {
-		World world = event.getWorld();
+		World world = event.entityLiving.worldObj;
 		if (world.isRemote)
 		{
-		    // DEBUG
-	        System.out.println("EntityInteractSpecific event on client side");
-
 			return;
 		}
 		
     	// DEBUG
-		System.out.println("EntityInteractSpecific entity event on server side");
-        
-        if (event.getHand() == EnumHand.OFF_HAND)
-        {
-            // DEBUG
-            System.out.println("Interacting with off hand");
-            return;
-        }
-        
-        // DEBUG
-        System.out.println("Interacting with main hand");
+    	// System.out.println("Player interact event on server side");
     	
-    	Entity theEntity = event.getTarget();
+    	Entity theEntity = event.target;
 
         if (theEntity instanceof EntityCow && !(theEntity instanceof EntityFamilyCow))
         {
         	// DEBUG
-        	System.out.println("Interacting with cow");
-        	ItemStack theItemStack = event.getEntityPlayer().getHeldItemMainhand();
+        	// System.out.println("Interacting with cow");
+        	ItemStack theItemStack = event.entityPlayer.getCurrentEquippedItem();
         	if (theItemStack != null)
         	{
-	        	if (theItemStack.getItem() == Items.GOLDEN_CARROT)
+	        	if (theItemStack.getItem()==Items.golden_carrot)
 	        	{
 	        		// DEBUG
 	        		// System.out.println("While holding a golden carrot");
@@ -455,15 +443,15 @@ public class EventHandler
 	        			// DEBUG
 	        			// System.out.println("Haven't spawned castle yet so okay to make a family cow");
 	        				        	    		
-        	    		EntityPlayer thePlayer = event.getEntityPlayer();
+        	    		EntityPlayer thePlayer = event.entityPlayer;
     	    		
         	    		if (!((EntityCow) theEntity).isChild())
         	    		{
-		    	    		thePlayer.addChatMessage(new TextComponentString(Utilities.stringToRainbow("This cow is now your Family Cow!")));
+		    	    		thePlayer.addChatMessage(new ChatComponentText(Utilities.stringToRainbow("This cow is now your Family Cow!")));
 			        
 		    	    		EntityFamilyCow entityToSpawn = new EntityFamilyCow(world);
 			        		entityToSpawn.setLocationAndAngles(theEntity.posX, theEntity.posY, theEntity.posZ, 
-			                    MathHelper.wrapDegrees(world.rand.nextFloat()
+			                    MathHelper.wrapAngleTo180_float(world.rand.nextFloat()
 			                    * 360.0F), 0.0F);
 			        		world.spawnEntityInWorld(entityToSpawn);
 			        		
@@ -475,12 +463,6 @@ public class EventHandler
         		}      		
         	}
         }       
-    }
-    
-    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(EntityInteract event)
-    {
-        
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
@@ -526,7 +508,7 @@ public class EventHandler
     }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-    public void onEvent(PlayerContainerEvent event)
+    public void onEvent(PlayerOpenContainerEvent event)
     {
         
     }
@@ -543,29 +525,29 @@ public class EventHandler
         
     }
     
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Finish event)
-//    {
-//        
-//    }
-//    
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Start event)
-//    {
-//    	
-//    }
-//    
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Stop event)
-//    {
-//        
-//    }
-//    
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(PlayerUseItemEvent.Tick event)
-//    {
-//        
-//    }
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(PlayerUseItemEvent.Finish event)
+    {
+        
+    }
+    
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(PlayerUseItemEvent.Start event)
+    {
+    	
+    }
+    
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(PlayerUseItemEvent.Stop event)
+    {
+        
+    }
+    
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(PlayerUseItemEvent.Tick event)
+    {
+        
+    }
     
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(UseHoeEvent event)
@@ -721,7 +703,7 @@ public class EventHandler
     {
     	if(true) 
     	{
-	        event.setDensity((float) Math.abs(Math.pow(((event.getEntity().posY-63)/(255-63)),4)));
+	        event.density = (float) Math.abs(Math.pow(((event.entity.posY-63)/(255-63)),4));
 	        event.setCanceled(true); // must be canceled to affect the fog density   		
     	}
     }
@@ -745,9 +727,9 @@ public class EventHandler
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
     public void onEvent(GuiOpenEvent event)
     {
-        if (event.getGui() instanceof GuiOptions)
+        if (event.gui instanceof GuiIngameModOptions)
         {
-        	event.setGui(new GuiConfig(null));        
+        	event.gui = new GuiConfig(null);        
         }
     }
 
@@ -860,19 +842,19 @@ public class EventHandler
         
     }
 
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderWorldEvent.Post event)
-//    {
-//        
-//    }
-//
-//    @SideOnly(Side.CLIENT)
-//    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-//    public void onEvent(RenderWorldEvent.Pre event)
-//    {
-//        
-//    }
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(RenderWorldEvent.Post event)
+    {
+        
+    }
+
+    @SideOnly(Side.CLIENT)
+    @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
+    public void onEvent(RenderWorldEvent.Pre event)
+    {
+        
+    }
 
     @SideOnly(Side.CLIENT)
     @SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)

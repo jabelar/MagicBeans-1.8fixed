@@ -16,9 +16,6 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.renderers;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityMysteriousStranger;
-import com.blogspot.jabelarminecraft.magicbeans.proxy.ClientProxy;
 import net.minecraft.client.model.ModelBase;
 import net.minecraft.client.renderer.entity.RenderLiving;
 import net.minecraft.client.renderer.entity.RenderManager;
@@ -27,7 +24,12 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.opengl.GL11;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityMysteriousStranger;
+import com.blogspot.jabelarminecraft.magicbeans.proxy.ClientProxy;
 
 /**
  * @author jabelar
@@ -76,9 +78,9 @@ public class RenderMysteriousStranger extends RenderLiving
     }
     
     @Override
-	public void renderName(EntityLivingBase parEntity, double parX, double parY, double parZ)
+	public void passSpecialRender(EntityLivingBase parEntity, double parX, double parY, double parZ)
     {
-		super.renderName(parEntity, parX, parY, parZ);
+		super.passSpecialRender(parEntity, parX, parY, parZ);
 		if (parEntity.ticksExisted < 20 * 2)
 		{
 			GL11.glPushMatrix();

@@ -19,17 +19,18 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.tileentities;
 
+import net.minecraft.block.state.IBlockState;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.server.gui.IUpdatePlayerListBox;
+import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.World;
+
 import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import com.blogspot.jabelarminecraft.magicbeans.ModWorldData;
 import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockCropMagicBeans;
-import net.minecraft.block.state.IBlockState;
-import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.ITickable;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.World;
 
-public class TileEntityMagicBeanStalk extends TileEntity implements ITickable
+public class TileEntityMagicBeanStalk extends TileEntity implements IUpdatePlayerListBox
 {
 	protected int ticksExisted = 0 ;
 	protected int growStage = 0 ;
@@ -42,11 +43,10 @@ public class TileEntityMagicBeanStalk extends TileEntity implements ITickable
     }
 
     @Override
-	public NBTTagCompound writeToNBT(NBTTagCompound parTagCompound)
+	public void writeToNBT(NBTTagCompound parTagCompound)
     {
     	super.writeToNBT(parTagCompound);
         parTagCompound.setInteger("ticksExisted", ticksExisted);
-        return parTagCompound;
     }
     	
 	@Override

@@ -16,16 +16,16 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.armor;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.item.EntityItem;
-import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.EnumRarity;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 
 
@@ -39,14 +39,15 @@ public class ItemArmorSafeFalling extends ItemArmor
 	
 	public String textureName;
 
-	public ItemArmorSafeFalling(ArmorMaterial parMaterial, int parRenderIndex, EntityEquipmentSlot parArmorType) 
+	public ItemArmorSafeFalling(String parUnlocalizedName, ArmorMaterial parMaterial, int parArmorType) 
 	{
 	    super(parMaterial, 0, parArmorType);
 	    
 	    // DEBUG
 	    // System.out.println("Constructor for ItemArmorSafeFalling");
 	    
-	    textureName = getUnlocalizedName();
+	    setUnlocalizedName(parUnlocalizedName);
+	    textureName = parUnlocalizedName;
 	}
 	
     @Override
@@ -74,7 +75,7 @@ public class ItemArmorSafeFalling extends ItemArmor
     }
 	
 	@Override
-	public String getArmorTexture(ItemStack parStack, Entity parEntity, EntityEquipmentSlot parSlot, String parType)
+	public String getArmorTexture(ItemStack stack, Entity entity, int slot, String type)
 	{
 	    return MagicBeans.MODID + ":armor/" + textureName + ".png";
 	}
@@ -82,19 +83,19 @@ public class ItemArmorSafeFalling extends ItemArmor
 	@Override
 	public String getItemStackDisplayName(ItemStack parItemStack)
 	{
-		if (armorType == EntityEquipmentSlot.FEET) // boots
+		if (armorType == 3) // boots
 		{
 			return Utilities.stringToRainbow("Boots of Safe Falling", true);
 		}
-		else if (armorType == EntityEquipmentSlot.LEGS) // leggings
+		else if (armorType == 2) // leggings
 		{
 			return Utilities.stringToRainbow("Leggings of Safe Falling", true);
 		}
-		else if (armorType == EntityEquipmentSlot.CHEST) // chestplate
+		else if (armorType == 1) // chestplate
 		{
 			return Utilities.stringToRainbow("Chestplate of Safe Falling", true);
 		}
-		else // helmet (may need to handle case of being main or offhand weapon)
+		else // helmet
 		{
 			return Utilities.stringToRainbow("Helmet of Safe Falling", true);
 		}

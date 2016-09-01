@@ -17,7 +17,7 @@
 package com.blogspot.jabelarminecraft.magicbeans.structures;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 
 /**
  * @author jabelar

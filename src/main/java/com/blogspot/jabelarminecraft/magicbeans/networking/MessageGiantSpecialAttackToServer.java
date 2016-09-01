@@ -16,8 +16,6 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.networking;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -25,6 +23,9 @@ import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.entities.EntityGiant;
 
 /**
  * @author jabelar
@@ -75,7 +76,7 @@ public class MessageGiantSpecialAttackToServer implements IMessage
         {
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-            thePlayer.getServer().addScheduledTask(
+            thePlayer.getServerForPlayer().addScheduledTask(
                     new Runnable()
                     {
                         @Override

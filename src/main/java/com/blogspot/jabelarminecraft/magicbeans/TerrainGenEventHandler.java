@@ -26,9 +26,9 @@ import net.minecraftforge.event.terraingen.BiomeEvent.GetFoliageColor;
 import net.minecraftforge.event.terraingen.BiomeEvent.GetGrassColor;
 import net.minecraftforge.event.terraingen.BiomeEvent.GetVillageBlockID;
 import net.minecraftforge.event.terraingen.BiomeEvent.GetWaterColor;
-import net.minecraftforge.event.terraingen.ChunkGeneratorEvent;
-import net.minecraftforge.event.terraingen.ChunkGeneratorEvent.InitNoiseField;
-import net.minecraftforge.event.terraingen.ChunkGeneratorEvent.ReplaceBiomeBlocks;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent.InitNoiseField;
+import net.minecraftforge.event.terraingen.ChunkProviderEvent.ReplaceBiomeBlocks;
 import net.minecraftforge.event.terraingen.DecorateBiomeEvent;
 import net.minecraftforge.event.terraingen.InitMapGenEvent;
 import net.minecraftforge.event.terraingen.PopulateChunkEvent;
@@ -92,7 +92,7 @@ public class TerrainGenEventHandler
 	}
 	
 	@SubscribeEvent(priority=EventPriority.NORMAL, receiveCanceled=true)
-	public void onEvent(ChunkGeneratorEvent event)
+	public void onEvent(ChunkProviderEvent event)
 	{
 		
 	}

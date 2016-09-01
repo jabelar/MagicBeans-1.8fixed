@@ -16,28 +16,21 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.entities;
 
-import javax.annotation.Nullable;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.gui.GuiMysteriousStranger;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.client.Minecraft;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.SharedMonsterAttributes;
 import net.minecraft.entity.ai.EntityAIWatchClosest;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.gui.GuiMysteriousStranger;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -45,14 +38,9 @@ import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
  */
 public class EntityMysteriousStranger extends EntityCreature implements IEntity, IEntityAdditionalSpawnData
 {
-    protected static final SoundEvent SOUND_EVENT_HAGGLE = new SoundEvent(new ResourceLocation("mob.villager.haggle"));
-    protected static final SoundEvent SOUND_EVENT_AMBIENT = new SoundEvent(new ResourceLocation("mob.villager.idle"));
-    protected static final SoundEvent SOUND_EVENT_HURT = new SoundEvent(new ResourceLocation("mob.villager.hit"));
-    protected static final SoundEvent SOUND_EVENT_DEATH = new SoundEvent(new ResourceLocation("mob.villager.death"));
-
-    protected NBTTagCompound syncDataCompound = new NBTTagCompound();
-    protected EntityFamilyCow cowSummonedBy = null;
-    protected EntityPlayer thePlayer = null;
+    private NBTTagCompound syncDataCompound = new NBTTagCompound();
+    private EntityFamilyCow cowSummonedBy = null;
+    private EntityPlayer thePlayer = null;
 
 	public EntityMysteriousStranger(World parWorld) 
 	{
@@ -85,10 +73,10 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntity,
 	    super.applyEntityAttributes(); 
 
 	    // standard attributes registered to EntityLivingBase
-	    getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(10.0D);
-	    getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.0D); // doesnt' move
-	    getEntityAttribute(SharedMonsterAttributes.KNOCKBACK_RESISTANCE).setBaseValue(0.8D);
-	    getEntityAttribute(SharedMonsterAttributes.FOLLOW_RANGE).setBaseValue(16.0D);
+	    getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(10.0D);
+	    getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.0D); // doesnt' move
+	    getEntityAttribute(SharedMonsterAttributes.knockbackResistance).setBaseValue(0.8D);
+	    getEntityAttribute(SharedMonsterAttributes.followRange).setBaseValue(16.0D);
 	}
 	
 	@Override
@@ -109,7 +97,7 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntity,
 			{
 				if (worldObj.isRemote)
 				{
-					getPlayerSummonedBy().addChatMessage(new TextComponentString(Utilities.stringToRainbow("When your family cow died, the mysterious stranger vanished as quickly as he appeared!")));				
+					getPlayerSummonedBy().addChatMessage(new ChatComponentText(Utilities.stringToRainbow("When your family cow died, the mysterious stranger vanished as quickly as he appeared!")));				
 				}
 				else
 				{
@@ -129,19 +117,16 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntity,
 		super.setDead();
 	}
 	
-    /**
-     * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
-     */
-    @Override
-    public EnumActionResult applyPlayerInteraction(EntityPlayer parPlayer, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+	@Override
+	public boolean interact(EntityPlayer parPlayer)
 	{
 		this.collideWithNearbyEntities();;
 		if (parPlayer.worldObj.isRemote)
 		{
-			playSound(SOUND_EVENT_HAGGLE, 1.0F, 1.0F);
+			playSound("mob.villager.haggle", 1.0F, 1.0F);
 			Minecraft.getMinecraft().displayGuiScreen(new GuiMysteriousStranger(this));
 		}
-		return EnumActionResult.SUCCESS;
+		return false;
 		
 	}
 
@@ -174,27 +159,27 @@ public class EntityMysteriousStranger extends EntityCreature implements IEntity,
      * Returns the sound this mob makes while it's alive.
      */
     @Override
-	protected SoundEvent getAmbientSound()
+	protected String getLivingSound()
     {
-        return SOUND_EVENT_AMBIENT;
+        return "mob.villager.idle";
     }
 
     /**
      * Returns the sound this mob makes when it is hurt.
      */
     @Override
-	protected SoundEvent getHurtSound()
+	protected String getHurtSound()
     {
-        return SOUND_EVENT_HURT;
+        return "mob.villager.hit";
     }
 
     /**
      * Returns the sound this mob makes on death.
      */
     @Override
-	protected SoundEvent getDeathSound()
+	protected String getDeathSound()
     {
-        return SOUND_EVENT_DEATH;
+        return "mob.villager.death";
     }
 	
     @Override

@@ -19,10 +19,6 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.entities;
 
-import javax.annotation.Nullable;
-
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.entity.EntityAgeable;
@@ -42,27 +38,18 @@ import net.minecraft.init.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
-import net.minecraft.util.EnumActionResult;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.SoundEvent;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.Vec3d;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.registry.IEntityAdditionalSpawnData;
 
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
+
 public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityAdditionalSpawnData
 {
-    protected NBTTagCompound syncDataCompound = new NBTTagCompound();
-    
-    protected static final SoundEvent SOUND_EVENT_EAT = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.goose.eat"));
-    protected static final SoundEvent SOUND_EVENT_LAY_EGG = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.chicken.plop"));
-    protected static final SoundEvent SOUND_EVENT_AMBIENT = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.goose.honk"));    
-    protected static final SoundEvent SOUND_EVENT_HURT = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.goose.death"));    
-    protected static final SoundEvent SOUND_EVENT_DEATH = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.goose.death"));    
-    protected static final SoundEvent SOUND_EVENT_STEP = new SoundEvent(new ResourceLocation(MagicBeans.MODID+":mob.chicken.step"));    
-    
+    private NBTTagCompound syncDataCompound = new NBTTagCompound();
+
     public float rotationFloat1;
     public float destPos;
     public float rotationFloat2;
@@ -84,8 +71,8 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
 	protected void applyEntityAttributes()
     {
         super.applyEntityAttributes();
-        getEntityAttribute(SharedMonsterAttributes.MAX_HEALTH).setBaseValue(4.0D);
-        getEntityAttribute(SharedMonsterAttributes.MOVEMENT_SPEED).setBaseValue(0.25D);
+        getEntityAttribute(SharedMonsterAttributes.maxHealth).setBaseValue(4.0D);
+        getEntityAttribute(SharedMonsterAttributes.movementSpeed).setBaseValue(0.25D);
     }
 
     /**
@@ -132,7 +119,7 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
             if (!isChild() && --timeUntilNextEgg <= 0)
             {
 
-                playSound(SOUND_EVENT_LAY_EGG, 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
+                playSound("mob.chicken.plop", 1.0F, (rand.nextFloat() - rand.nextFloat()) * 0.2F + 1.0F);
                 dropItem(MagicBeans.itemGoldenEgg, 1);
                 // DEBUG
                 System.out.println("Laid golden egg");
@@ -147,48 +134,45 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
     @Override
     public void fall(float par1, float par2) { } // Does not fall normally, doesn't take fall damage.
 
-    /**
-     * Called when a player interacts with a mob. e.g. gets milk from a cow, gets into the saddle on a pig.
-     */
     @Override
-    public EnumActionResult applyPlayerInteraction(EntityPlayer parPlayer, Vec3d vec, @Nullable ItemStack stack, EnumHand hand)
+	public boolean interact(EntityPlayer parPlayer) 
     {
-    	if (parPlayer.getHeldItemMainhand() == null)
+    	if (parPlayer.getCurrentEquippedItem() == null)
 		{
-			return EnumActionResult.SUCCESS; 
+			return false; 
 		}
     	
-    	Item theItem = parPlayer.getHeldItemMainhand().getItem(); 
+    	Item theItem = parPlayer.getCurrentEquippedItem().getItem(); 
     	float healAmount = 0.0F;
         short growAmount = 0; // this is multiplied by 20 for actual age change
         boolean usedItem = false;
 
-        if (theItem == Items.GOLD_INGOT)
+        if (theItem == Items.gold_ingot)
         {
             healAmount = 2.0F;
             growAmount = 60;
         }
-        else if (theItem == Items.GOLD_NUGGET)
+        else if (theItem == Items.gold_nugget)
         {
             healAmount = 1.0F;
             growAmount = 30;
         }
-        else if (Block.getBlockFromItem(theItem) == Blocks.GOLD_BLOCK)
+        else if (Block.getBlockFromItem(theItem) == Blocks.gold_block)
         {
             healAmount = 7.0F;
             growAmount = 180;
         }
-        else if (Block.getBlockFromItem(theItem) == Blocks.HAY_BLOCK)
+        else if (Block.getBlockFromItem(theItem) == Blocks.hay_block)
         {
             healAmount = 20.0F;
             growAmount = 180;
         }
-        else if (theItem == Items.APPLE)
+        else if (theItem == Items.apple)
         {
             healAmount = 3.0F;
             growAmount = 60;
         }
-        else if (theItem == Items.GOLDEN_CARROT)
+        else if (theItem == Items.golden_carrot)
         {
             healAmount = 4.0F;
             growAmount = 60;
@@ -198,7 +182,7 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
             	setInLove(parPlayer); // mating item
             }
         }
-        else if (theItem == Items.GOLDEN_APPLE)
+        else if (theItem == Items.golden_apple)
         {
             healAmount = 10.0F;
             growAmount = 240;
@@ -223,20 +207,20 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
 
         if (usedItem)
         {
-            playSound(SOUND_EVENT_EAT, 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
+            worldObj.playSoundAtEntity(this, MagicBeans.MODID+":mob.goose.eat", 1.0F, 1.0F + (this.rand.nextFloat() - this.rand.nextFloat()) * 0.2F);
         }
 
         if (usedItem)
         {
-            if (!parPlayer.capabilities.isCreativeMode && --parPlayer.getHeldItemMainhand().stackSize == 0)
+            if (!parPlayer.capabilities.isCreativeMode && --parPlayer.getCurrentEquippedItem().stackSize == 0)
             {
                 parPlayer.inventory.setInventorySlotContents(parPlayer.inventory.currentItem, (ItemStack)null);
             }
 
-            return EnumActionResult.SUCCESS;
+            return true;
         }
 
-        return super.applyPlayerInteraction(parPlayer, vec, stack, hand);
+        return super.interact(parPlayer);
     }
 
     @Override
@@ -244,7 +228,7 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
     {
     	if (parItemStack != null)
     	{
-    		if (parItemStack.getItem() == Items.GOLDEN_APPLE || parItemStack.getItem() == Items.GOLDEN_CARROT)
+    		if (parItemStack.getItem() == Items.golden_apple || parItemStack.getItem() == Items.golden_carrot)
     		{
     			return true;
     		}
@@ -265,33 +249,33 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
      * Returns the sound this mob makes while it's alive.
      */
     @Override
-	protected SoundEvent getAmbientSound()
+	protected String getLivingSound()
     {
-        return SOUND_EVENT_AMBIENT;
+        return "magicbeans:mob.goose.honk";
     }
 
     /**
      * Returns the sound this mob makes when it is hurt.
      */
     @Override
-	protected SoundEvent getHurtSound()
+	protected String getHurtSound()
     {
-        return SOUND_EVENT_HURT;
+        return "magicbeans:mob.goose.death";
     }
 
     /**
      * Returns the sound this mob makes on death.
      */
     @Override
-	protected SoundEvent getDeathSound()
+	protected String getDeathSound()
     {
-        return SOUND_EVENT_DEATH;
+        return "magicbeans:mob.goose.death";
     }
 
     @Override
 	protected void playStepSound(BlockPos parPos, Block parBlock)
     {
-        playSound(SOUND_EVENT_STEP, 0.15F, 1.0F);
+        playSound("mob.chicken.step", 0.15F, 1.0F);
     }
 
     @Override
@@ -322,7 +306,7 @@ public class EntityGoldenGoose extends EntityAnimal implements IEntity, IEntityA
         tasks.addTask(0, new EntityAISwimming(this));
         tasks.addTask(1, new EntityAIPanic(this, 1.4D));
         tasks.addTask(2, new EntityAIMate(this, 1.0D));
-        tasks.addTask(3, new EntityAITempt(this, 1.0D, Items.WHEAT_SEEDS, false));
+        tasks.addTask(3, new EntityAITempt(this, 1.0D, Items.wheat_seeds, false));
         tasks.addTask(4, new EntityAIFollowParent(this, 1.1D));
         tasks.addTask(5, new EntityAIWander(this, 1.0D));
         tasks.addTask(6, new EntityAIWatchClosest(this, EntityPlayer.class, 6.0F));

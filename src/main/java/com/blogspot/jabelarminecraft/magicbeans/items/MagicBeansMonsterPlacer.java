@@ -18,8 +18,6 @@ package com.blogspot.jabelarminecraft.magicbeans.items;
 
 import java.util.List;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 import net.minecraft.block.BlockFence;
 import net.minecraft.block.BlockLiquid;
 import net.minecraft.block.state.IBlockState;
@@ -37,17 +35,17 @@ import net.minecraft.stats.StatList;
 import net.minecraft.tileentity.MobSpawnerBaseLogic;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityMobSpawner;
-import net.minecraft.util.ActionResult;
-import net.minecraft.util.EnumActionResult;
+import net.minecraft.util.BlockPos;
 import net.minecraft.util.EnumFacing;
-import net.minecraft.util.EnumHand;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.StatCollector;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.utilities.Utilities;
 
 /**
  * @author jabelar
@@ -72,7 +70,7 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         setUnlocalizedName("spawn_egg_"+parEntityToSpawnName);
         setHasSubtypes(false);
         maxStackSize = 64;
-        setCreativeTab(CreativeTabs.MISC);
+        setCreativeTab(CreativeTabs.tabMisc);
         setEntityToSpawnName(parEntityToSpawnName);
         colorBase = parPrimaryColor;
         colorSpots = parSecondaryColor;
@@ -96,37 +94,37 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
      * @param side The side being right-clicked
      */
     @Override
-	public EnumActionResult onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumHand hand, EnumFacing side, float hitX, float hitY, float hitZ)
+	public boolean onItemUse(ItemStack stack, EntityPlayer playerIn, World worldIn, BlockPos pos, EnumFacing side, float hitX, float hitY, float hitZ)
     {
         if (worldIn.isRemote)
         {
-            return EnumActionResult.PASS;
+            return true;
         }
         else if (!playerIn.canPlayerEdit(pos.offset(side), side, stack))
         {
-            return EnumActionResult.FAIL;
+            return false;
         }
         else
         {
             IBlockState iblockstate = worldIn.getBlockState(pos);
 
-            if (iblockstate.getBlock() == Blocks.MOB_SPAWNER)
+            if (iblockstate.getBlock() == Blocks.mob_spawner)
             {
                 TileEntity tileentity = worldIn.getTileEntity(pos);
 
                 if (tileentity instanceof TileEntityMobSpawner)
                 {
                     MobSpawnerBaseLogic mobspawnerbaselogic = ((TileEntityMobSpawner)tileentity).getSpawnerBaseLogic();
-                    mobspawnerbaselogic.setEntityName(getEntityIdFromItem(stack));
+                    mobspawnerbaselogic.setEntityName(EntityList.getStringFromID(stack.getMetadata()));
                     tileentity.markDirty();
-                    worldIn.notifyBlockUpdate(pos, iblockstate, iblockstate, 3);
+                    worldIn.markBlockForUpdate(pos);
 
                     if (!playerIn.capabilities.isCreativeMode)
                     {
                         --stack.stackSize;
                     }
 
-                    return EnumActionResult.PASS;
+                    return true;
                 }
             }
 
@@ -153,7 +151,7 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
                 }
             }
 
-            return EnumActionResult.PASS;
+            return true;
         }
     }
 
@@ -161,34 +159,34 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
      * Called whenever this item is equipped and the right mouse button is pressed. Args: itemStack, world, entityPlayer
      */
     @Override
-	public ActionResult<ItemStack> onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn, EnumHand hand)
+	public ItemStack onItemRightClick(ItemStack itemStackIn, World worldIn, EntityPlayer playerIn)
     {
         if (worldIn.isRemote)
         {
-            return new ActionResult(EnumActionResult.PASS, itemStackIn);
+            return itemStackIn;
         }
         else
         {
-            RayTraceResult rayTraceResult = this.rayTrace(worldIn, playerIn, true);
+            MovingObjectPosition movingobjectposition = this.getMovingObjectPositionFromPlayer(worldIn, playerIn, true);
 
-            if (rayTraceResult == null)
+            if (movingobjectposition == null)
             {
-                return new ActionResult(EnumActionResult.PASS, itemStackIn);
+                return itemStackIn;
             }
             else
             {
-                if (rayTraceResult.typeOfHit == RayTraceResult.Type.BLOCK)
+                if (movingobjectposition.typeOfHit == MovingObjectPosition.MovingObjectType.BLOCK)
                 {
-                    BlockPos blockpos = rayTraceResult.getBlockPos();
+                    BlockPos blockpos = movingobjectposition.getBlockPos();
 
                     if (!worldIn.isBlockModifiable(playerIn, blockpos))
                     {
-                        return new ActionResult(EnumActionResult.PASS, itemStackIn);
+                        return itemStackIn;
                     }
 
-                    if (!playerIn.canPlayerEdit(blockpos, rayTraceResult.sideHit, itemStackIn))
+                    if (!playerIn.canPlayerEdit(blockpos, movingobjectposition.sideHit, itemStackIn))
                     {
-                        return new ActionResult(EnumActionResult.PASS, itemStackIn);
+                        return itemStackIn;
                     }
 
                     if (worldIn.getBlockState(blockpos).getBlock() instanceof BlockLiquid)
@@ -207,11 +205,11 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
                                 --itemStackIn.stackSize;
                             }
 
-                            playerIn.addStat(StatList.getObjectUseStats(this));
+                            playerIn.triggerAchievement(StatList.objectUseStats[Item.getIdFromItem(this)]);
                         }
                     }
                 }
-                return new ActionResult(EnumActionResult.PASS, itemStackIn);
+                return itemStackIn;
             }
         }
     }
@@ -227,12 +225,12 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
        if (!parWorld.isRemote) // never spawn entity on client side
        {
             entityToSpawnNameFull = MagicBeans.MODID+"."+entityToSpawnName;
-            if (EntityList.NAME_TO_CLASS.containsKey(entityToSpawnNameFull))
+            if (EntityList.stringToClassMapping.containsKey(entityToSpawnNameFull))
             {
                 entityToSpawn = (EntityLiving) EntityList
                       .createEntityByName(entityToSpawnNameFull, parWorld);
                 entityToSpawn.setLocationAndAngles(parX, parY, parZ, 
-                      MathHelper.wrapDegrees(parWorld.rand.nextFloat()
+                      MathHelper.wrapAngleTo180_float(parWorld.rand.nextFloat()
                       * 360.0F), 0.0F);
                 parWorld.spawnEntityInWorld(entityToSpawn);
                 entityToSpawn.playLivingSound();
@@ -247,20 +245,19 @@ public class MagicBeansMonsterPlacer extends ItemMonsterPlacer
         return entityToSpawn;
     }
 
-//    @Override
-//    @SideOnly(Side.CLIENT)
-//    public int getColorFromItemStack(ItemStack par1ItemStack, int parRenderPass)
-//    {
-//        this.
-//        return (parRenderPass == 0) ? colorBase : colorSpots;
-//    }
+    @Override
+    @SideOnly(Side.CLIENT)
+    public int getColorFromItemStack(ItemStack par1ItemStack, int parRenderPass)
+    {
+        return (parRenderPass == 0) ? colorBase : colorSpots;
+    }
    
     @Override
     // Doing this override means that there is no localization for language
     // unless you specifically check for localization here and convert
     public String getItemStackDisplayName(ItemStack par1ItemStack)
     {
-        return Utilities.stringToRainbow("Spawn "+new TextComponentTranslation("entity."+MagicBeans.MODID+"."+entityToSpawnName+".name").getFormattedText());
+        return Utilities.stringToRainbow("Spawn "+StatCollector.translateToLocal("entity."+MagicBeans.MODID+"."+entityToSpawnName+".name"));
     }  
     
     public void setColors(int parColorBase, int parColorSpots)

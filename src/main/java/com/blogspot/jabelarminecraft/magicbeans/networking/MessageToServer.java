@@ -16,13 +16,14 @@
 
 package com.blogspot.jabelarminecraft.magicbeans.networking;
 
-import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 import io.netty.buffer.ByteBuf;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraftforge.fml.common.network.ByteBufUtils;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessage;
 import net.minecraftforge.fml.common.network.simpleimpl.IMessageHandler;
 import net.minecraftforge.fml.common.network.simpleimpl.MessageContext;
+
+import com.blogspot.jabelarminecraft.magicbeans.MagicBeans;
 
 /**
  * @author jabelar
@@ -71,7 +72,7 @@ public class MessageToServer implements IMessage
             System.out.println(String.format("Received %s from %s", message.text, MagicBeans.proxy.getPlayerEntityFromContext(ctx).getDisplayName()));
             // Know it will be on the server so make it thread-safe
             final EntityPlayerMP thePlayer = (EntityPlayerMP) MagicBeans.proxy.getPlayerEntityFromContext(ctx);
-            thePlayer.getServer().addScheduledTask(
+            thePlayer.getServerForPlayer().addScheduledTask(
                     new Runnable()
                     {
                         @Override

@@ -34,14 +34,13 @@ public class ModWorldData extends WorldSavedData
 	}
 
 	@Override
-	public NBTTagCompound writeToNBT(NBTTagCompound nbt) 
+	public void writeToNBT(NBTTagCompound nbt) 
 	{
 		// DEBUG
 		System.out.println("MagicBeansWorldData writeToNBT");
 		
 		nbt.setBoolean("hasCastleSpawned", hasCastleSpawned);
 		nbt.setBoolean("familyCowHasGivenLead", familyCowHasGivenLead);
-		return nbt;
 	}
 	
 	public boolean getHasCastleSpawned() 

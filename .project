@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>MagicBeans-1.10.2</name>
-	<comment></comment>
+	<name>MagicBeans-1.8</name>
+	<comment/>
 	<projects/>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
