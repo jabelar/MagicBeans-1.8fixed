@@ -1,4 +1,5 @@
 /**
+
     Copyright (C) 2014 by jabelar
 
     This file is part of jabelar's Minecraft Forge modding examples; as such,
@@ -21,6 +22,17 @@ package com.blogspot.jabelarminecraft.magicbeans;
 
 import java.io.File;
 
+import com.blogspot.jabelarminecraft.magicbeans.armor.ItemArmorSafeFalling;
+import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockCloud;
+import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
+import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenEgg;
+import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenGooseMeat;
+import com.blogspot.jabelarminecraft.magicbeans.items.ItemMagicBeans;
+import com.blogspot.jabelarminecraft.magicbeans.items.MagicBeansMonsterPlacer;
+import com.blogspot.jabelarminecraft.magicbeans.materials.MaterialCloud;
+import com.blogspot.jabelarminecraft.magicbeans.proxy.CommonProxy;
+import com.blogspot.jabelarminecraft.magicbeans.structures.Structure;
+import com.blogspot.jabelarminecraft.magicbeans.structures.StructureCastleJaden;
 import net.minecraft.block.Block;
 import net.minecraft.block.material.Material;
 import net.minecraft.item.Item;
@@ -45,23 +57,11 @@ import net.minecraftforge.fml.common.event.FMLServerStoppingEvent;
 import net.minecraftforge.fml.common.network.FMLEventChannel;
 import net.minecraftforge.fml.common.network.simpleimpl.SimpleNetworkWrapper;
 
-import com.blogspot.jabelarminecraft.magicbeans.armor.ItemArmorSafeFalling;
-import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockCloud;
-import com.blogspot.jabelarminecraft.magicbeans.blocks.BlockMagicBeanStalk;
-import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenEgg;
-import com.blogspot.jabelarminecraft.magicbeans.items.ItemGoldenGooseMeat;
-import com.blogspot.jabelarminecraft.magicbeans.items.ItemMagicBeans;
-import com.blogspot.jabelarminecraft.magicbeans.items.MagicBeansMonsterPlacer;
-import com.blogspot.jabelarminecraft.magicbeans.materials.MaterialCloud;
-import com.blogspot.jabelarminecraft.magicbeans.proxy.CommonProxy;
-import com.blogspot.jabelarminecraft.magicbeans.structures.Structure;
-import com.blogspot.jabelarminecraft.magicbeans.structures.StructureCastleJaden;
-
-@Mod(modid = 
-      MagicBeans.MODID, 
+@Mod( modid = MagicBeans.MODID, 
       name = MagicBeans.MODNAME, 
       version = MagicBeans.MODVERSION,
-      guiFactory = "com.blogspot.jabelarminecraft."+MagicBeans.MODID+".gui.GuiFactory")
+      guiFactory = "com.blogspot.jabelarminecraft."+MagicBeans.MODID+".gui.GuiFactory",
+      acceptedMinecraftVersions = "[1.8,1.8.9]")
 public class MagicBeans
 {
     public static final String MODID = "magicbeans";
